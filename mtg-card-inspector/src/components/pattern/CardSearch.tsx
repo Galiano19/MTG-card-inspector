@@ -2,10 +2,8 @@
 
 import React, { useState } from "react";
 import { useCardQuery } from "../../hooks/use-card-query";
-import { CardDisplay } from "./CardDisplay";
-import { Spinner } from "../ui/Spinner";
-import { ErrorBox } from "./ErrorBox";
-import { Button } from "../ui/Button";
+import { Button, Spinner } from "../ui";
+import { ErrorBox, CardDisplay } from ".";
 
 export function CardSearch() {
   const [cardName, setCardName] = useState("");

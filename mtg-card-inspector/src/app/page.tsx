@@ -1,6 +1,6 @@
 "use client";
 
-import { CardSearch } from "../components/pattern/CardSearch";
+import { CardSearch } from "../components/pattern";
 
 export default function Home() {
   return (
