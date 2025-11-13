@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useCardQuery } from "../../hooks/use-card-query";
 import { Button, Spinner } from "../ui";
-import { ErrorBox, CardDisplay } from "../pattern";
+import { ErrorBox, CardDisplay } from ".";
 
 export function CardSearch() {
   const [cardName, setCardName] = useState("");
