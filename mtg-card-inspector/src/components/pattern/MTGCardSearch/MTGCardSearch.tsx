@@ -38,16 +38,16 @@ const MTGCardSearch = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50">
-      {/* Background decoration */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      <div
+        id="background-decoration"
+        className="fixed inset-0 overflow-hidden pointer-events-none"
+      >
         <div className="absolute -top-40 -right-40 w-60 md:w-80 h-60 md:h-80 bg-teal-100 rounded-full blur-3xl opacity-50" />
         <div className="absolute top-1/2 -left-40 w-60 md:w-80 h-60 md:h-80 bg-emerald-100 rounded-full blur-3xl opacity-50" />
         <div className="absolute -bottom-40 right-1/3 w-60 md:w-80 h-60 md:h-80 bg-cyan-100 rounded-full blur-3xl opacity-30" />
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10">
-        {/* Header */}
+      <div id="main-content" className="relative z-10">
         <header className="pt-6 pb-4 px-4 md:pt-8 md:pb-6 lg:pt-12 lg:pb-8">
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
@@ -64,21 +64,16 @@ const MTGCardSearch = () => {
           </div>
         </header>
 
-        {/* Search Section */}
-        <section className="px-4 pb-6 md:pb-8">
+        <section id="search-section" className="px-4 pb-6 md:pb-8">
           <SearchBar onSearch={handleSearch} isSearching={showLoading} />
         </section>
 
-        {/* Results Section */}
-        <main className="px-4 pb-8 md:pb-12">
+        <main id="results-section" className="px-4 pb-8 md:pb-12">
           <div className="max-w-5xl mx-auto space-y-4 md:space-y-6">
-            {/* Loading State */}
             {showLoading && <LoadingState />}
 
-            {/* Error State */}
             {showError && <ErrorState error={error} onRetry={handleRetry} />}
 
-            {/* Card Display */}
             {showCard && (
               <>
                 <CardDisplay card={card} />
@@ -89,13 +84,14 @@ const MTGCardSearch = () => {
               </>
             )}
 
-            {/* Welcome State */}
             {showWelcome && <WelcomeState />}
           </div>
         </main>
 
-        {/* Footer */}
-        <footer className="py-4 md:py-6 px-4 border-t border-slate-100 bg-white/50 backdrop-blur">
+        <footer
+          id="footer"
+          className="py-4 md:py-6 px-4 border-t border-slate-100 bg-white/50 backdrop-blur"
+        >
           <div className="max-w-4xl mx-auto text-center text-xs md:text-sm text-slate-400">
             <p>
               Powered by{" "}

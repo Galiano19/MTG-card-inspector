@@ -125,8 +125,10 @@ const CardDisplay = ({ card }: { card: any }) => {
     <Card className="bg-white/80 backdrop-blur border-slate-200 shadow-xl shadow-slate-200/30 overflow-hidden">
       <CardContent className="p-0">
         <div className="flex flex-col lg:flex-row">
-          {/* Card Image Section */}
-          <div className="relative lg:w-[320px] flex-shrink-0 bg-gradient-to-br from-slate-100 to-slate-50 p-4 md:p-6 flex items-center justify-center">
+          <div
+            id="image-section"
+            className="relative lg:w-[320px] flex-shrink-0 bg-gradient-to-br from-slate-100 to-slate-50 p-4 md:p-6 flex items-center justify-center"
+          >
             <div className="relative group">
               <img
                 src={getImageUrl()}
@@ -159,10 +161,11 @@ const CardDisplay = ({ card }: { card: any }) => {
             )}
           </div>
 
-          {/* Card Details Section */}
-          <div className="flex-1 p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6">
-            {/* Header */}
-            <div className="space-y-2 md:space-y-3">
+          <div
+            id="details-section"
+            className="flex-1 p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6"
+          >
+            <div id="header" className="space-y-2 md:space-y-3">
               <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3">
                 <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-800">
                   {isDoubleFaced ? getCurrentFace()?.name : card.name}
@@ -179,9 +182,8 @@ const CardDisplay = ({ card }: { card: any }) => {
               </div>
             </div>
 
-            {/* Oracle Text */}
             {getOracleText() && (
-              <div className="space-y-2">
+              <div id="oracle-text" className="space-y-2">
                 <div className="flex items-center gap-2 text-slate-500">
                   <BookOpen className="w-4 h-4" />
                   <span className="text-sm font-medium uppercase tracking-wide">
@@ -196,9 +198,8 @@ const CardDisplay = ({ card }: { card: any }) => {
               </div>
             )}
 
-            {/* Flavor Text */}
             {card.flavor_text && !isDoubleFaced && (
-              <div className="space-y-2">
+              <div id="flavor-text" className="space-y-2">
                 <div className="flex items-center gap-2 text-slate-500">
                   <Sparkles className="w-4 h-4" />
                   <span className="text-sm font-medium uppercase tracking-wide">
@@ -211,8 +212,10 @@ const CardDisplay = ({ card }: { card: any }) => {
               </div>
             )}
 
-            {/* Card Info Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+            <div
+              id="info-grid"
+              className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4"
+            >
               <div className="space-y-1">
                 <div className="flex items-center gap-2 text-slate-400">
                   <Layers className="w-4 h-4" />

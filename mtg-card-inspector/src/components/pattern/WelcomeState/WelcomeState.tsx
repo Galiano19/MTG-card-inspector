@@ -33,8 +33,7 @@ const WelcomeState = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto text-center py-6 md:py-8 lg:py-12 px-4">
-      {/* Hero Section */}
-      <div className="mb-8 md:mb-12">
+      <div id="hero-section" className="mb-8 md:mb-12">
         <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-6 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-teal-500/20">
           <Sparkles className="w-8 h-8 md:w-10 md:h-10 text-white" />
         </div>
@@ -47,8 +46,10 @@ const WelcomeState = () => {
         </p>
       </div>
 
-      {/* Features Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
+      <div
+        id="features-grid"
+        className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12"
+      >
         {features.map((feature, index) => (
           <Card
             key={feature.title}
@@ -70,8 +71,10 @@ const WelcomeState = () => {
         ))}
       </div>
 
-      {/* Popular Searches */}
-      <Card className="bg-white/40 backdrop-blur border-slate-100">
+      <Card
+        id="popular-searches"
+        className="bg-white/40 backdrop-blur border-slate-100"
+      >
         <CardContent className="p-4 md:p-6">
           <h3 className="text-xs md:text-sm font-medium text-slate-400 uppercase tracking-wide mb-3 md:mb-4">
             Popular Searches
