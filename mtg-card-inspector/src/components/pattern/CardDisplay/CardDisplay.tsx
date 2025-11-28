@@ -9,67 +9,11 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "../../ui/card";
 import { Badge } from "../../ui/badge";
-
-/* ManaSymbol Component - Renders mana cost symbols, for now, only styled for basic colors */
-const ManaSymbol = ({ symbol }: { symbol: string }) => {
-  const manaColors: { [key: string]: string } = {
-    W: "bg-amber-100 text-amber-800",
-    U: "bg-blue-100 text-blue-800",
-    B: "bg-slate-700 text-white",
-    R: "bg-red-100 text-red-800",
-    G: "bg-green-100 text-green-800",
-    C: "bg-slate-200 text-slate-700",
-  };
-
-  const match = symbol?.match(/\{([^}]+)\}/g);
-  if (!match) return <span>{symbol}</span>;
-
-  return (
-    <span className="inline-flex items-center gap-1 flex-wrap">
-      {match.map((m, i) => {
-        const char = m.replace(/[{}]/g, "");
-        const isNumber = !isNaN(Number(char));
-        const isHybrid = char.includes("/");
-        return (
-          <span
-            key={i}
-            className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${
-              isNumber || isHybrid
-                ? "bg-slate-200 text-slate-700"
-                : manaColors[char] || "bg-slate-200 text-slate-700"
-            }`}
-          >
-            {char}
-          </span>
-        );
-      })}
-    </span>
-  );
-};
-
-const RarityBadge = ({ rarity }: { rarity: string }) => {
-  const rarityStyles = {
-    common: "bg-slate-100 text-slate-700 border-slate-200",
-    uncommon: "bg-slate-200 text-slate-800 border-slate-300",
-    rare: "bg-amber-100 text-amber-800 border-amber-200",
-    mythic: "bg-orange-100 text-orange-800 border-orange-200",
-    special: "bg-purple-100 text-purple-800 border-purple-200",
-    bonus: "bg-violet-100 text-violet-800 border-violet-200",
-  };
-
-  return (
-    <Badge
-      className={`${
-        rarityStyles[rarity as keyof typeof rarityStyles] || rarityStyles.common
-      } capitalize font-medium`}
-    >
-      {rarity}
-    </Badge>
-  );
-};
+import { ManaSymbol } from "./ManaSymbol";
+import { RarityBadge } from "./RarityBadge";
 
 // TODO: enhance types
-const CardDisplay = ({ card }: { card: any }) => {
+export default function CardDisplay({ card }: { card: any }) {
   const [showBackFace, setShowBackFace] = useState(false);
   const isDoubleFaced = card.card_faces && card.card_faces.length > 1;
 
@@ -125,8 +69,10 @@ const CardDisplay = ({ card }: { card: any }) => {
     <Card className="bg-white/80 backdrop-blur border-slate-200 shadow-xl shadow-slate-200/30 overflow-hidden">
       <CardContent className="p-0">
         <div className="flex flex-col lg:flex-row">
-          {/* Card Image Section */}
-          <div className="relative lg:w-[320px] flex-shrink-0 bg-gradient-to-br from-slate-100 to-slate-50 p-4 md:p-6 flex items-center justify-center">
+          <div
+            id="image-section"
+            className="relative lg:w-[320px] flex-shrink-0 bg-gradient-to-br from-slate-100 to-slate-50 p-4 md:p-6 flex items-center justify-center"
+          >
             <div className="relative group">
               <img
                 src={getImageUrl()}
@@ -159,10 +105,11 @@ const CardDisplay = ({ card }: { card: any }) => {
             )}
           </div>
 
-          {/* Card Details Section */}
-          <div className="flex-1 p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6">
-            {/* Header */}
-            <div className="space-y-2 md:space-y-3">
+          <div
+            id="details-section"
+            className="flex-1 p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6"
+          >
+            <div id="header" className="space-y-2 md:space-y-3">
               <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3">
                 <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-800">
                   {isDoubleFaced ? getCurrentFace()?.name : card.name}
@@ -179,9 +126,8 @@ const CardDisplay = ({ card }: { card: any }) => {
               </div>
             </div>
 
-            {/* Oracle Text */}
             {getOracleText() && (
-              <div className="space-y-2">
+              <div id="oracle-text" className="space-y-2">
                 <div className="flex items-center gap-2 text-slate-500">
                   <BookOpen className="w-4 h-4" />
                   <span className="text-sm font-medium uppercase tracking-wide">
@@ -196,9 +142,8 @@ const CardDisplay = ({ card }: { card: any }) => {
               </div>
             )}
 
-            {/* Flavor Text */}
             {card.flavor_text && !isDoubleFaced && (
-              <div className="space-y-2">
+              <div id="flavor-text" className="space-y-2">
                 <div className="flex items-center gap-2 text-slate-500">
                   <Sparkles className="w-4 h-4" />
                   <span className="text-sm font-medium uppercase tracking-wide">
@@ -211,8 +156,10 @@ const CardDisplay = ({ card }: { card: any }) => {
               </div>
             )}
 
-            {/* Card Info Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+            <div
+              id="info-grid"
+              className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4"
+            >
               <div className="space-y-1">
                 <div className="flex items-center gap-2 text-slate-400">
                   <Layers className="w-4 h-4" />
@@ -259,6 +206,4 @@ const CardDisplay = ({ card }: { card: any }) => {
       </CardContent>
     </Card>
   );
-};
-
-export default CardDisplay;
+}
