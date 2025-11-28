@@ -3,13 +3,13 @@ import { AlertCircle, SearchX, RefreshCw } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Alert, AlertDescription, AlertTitle } from "../../ui/alert";
 
-const ErrorState = ({
+export default function ErrorState({
   error,
   onRetry,
 }: {
   error: any;
   onRetry?: () => void;
-}) => {
+}) {
   const errorMessage =
     error?.message || error || "An unexpected error occurred";
   const isNotFound =
@@ -75,6 +75,4 @@ const ErrorState = ({
       </Alert>
     </div>
   );
-};
-
-export default ErrorState;
+}

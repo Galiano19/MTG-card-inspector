@@ -9,67 +9,11 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "../../ui/card";
 import { Badge } from "../../ui/badge";
-
-/* ManaSymbol Component - Renders mana cost symbols, for now, only styled for basic colors */
-const ManaSymbol = ({ symbol }: { symbol: string }) => {
-  const manaColors: { [key: string]: string } = {
-    W: "bg-amber-100 text-amber-800",
-    U: "bg-blue-100 text-blue-800",
-    B: "bg-slate-700 text-white",
-    R: "bg-red-100 text-red-800",
-    G: "bg-green-100 text-green-800",
-    C: "bg-slate-200 text-slate-700",
-  };
-
-  const match = symbol?.match(/\{([^}]+)\}/g);
-  if (!match) return <span>{symbol}</span>;
-
-  return (
-    <span className="inline-flex items-center gap-1 flex-wrap">
-      {match.map((m, i) => {
-        const char = m.replace(/[{}]/g, "");
-        const isNumber = !isNaN(Number(char));
-        const isHybrid = char.includes("/");
-        return (
-          <span
-            key={i}
-            className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${
-              isNumber || isHybrid
-                ? "bg-slate-200 text-slate-700"
-                : manaColors[char] || "bg-slate-200 text-slate-700"
-            }`}
-          >
-            {char}
-          </span>
-        );
-      })}
-    </span>
-  );
-};
-
-const RarityBadge = ({ rarity }: { rarity: string }) => {
-  const rarityStyles = {
-    common: "bg-slate-100 text-slate-700 border-slate-200",
-    uncommon: "bg-slate-200 text-slate-800 border-slate-300",
-    rare: "bg-amber-100 text-amber-800 border-amber-200",
-    mythic: "bg-orange-100 text-orange-800 border-orange-200",
-    special: "bg-purple-100 text-purple-800 border-purple-200",
-    bonus: "bg-violet-100 text-violet-800 border-violet-200",
-  };
-
-  return (
-    <Badge
-      className={`${
-        rarityStyles[rarity as keyof typeof rarityStyles] || rarityStyles.common
-      } capitalize font-medium`}
-    >
-      {rarity}
-    </Badge>
-  );
-};
+import { ManaSymbol } from "./ManaSymbol";
+import { RarityBadge } from "./RarityBadge";
 
 // TODO: enhance types
-const CardDisplay = ({ card }: { card: any }) => {
+export default function CardDisplay({ card }: { card: any }) {
   const [showBackFace, setShowBackFace] = useState(false);
   const isDoubleFaced = card.card_faces && card.card_faces.length > 1;
 
@@ -262,6 +206,4 @@ const CardDisplay = ({ card }: { card: any }) => {
       </CardContent>
     </Card>
   );
-};
-
-export default CardDisplay;
+}
