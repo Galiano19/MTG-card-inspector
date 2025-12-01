@@ -7,13 +7,13 @@ export default function LoadingState() {
     <div className="w-full max-w-5xl mx-auto space-y-6">
       <Card
         id="card-skeleton"
-        className="bg-white/80 backdrop-blur border-slate-200 shadow-xl overflow-hidden"
+        className="bg-[--clr-surface-a20] backdrop-blur shadow-xl overflow-hidden"
       >
         <CardContent className="p-0">
           <div className="flex flex-col lg:flex-row">
             <div
               id="image-skeleton"
-              className="lg:w-[320px] flex-shrink-0 bg-slate-100 p-4 md:p-6 flex items-center justify-center"
+              className="lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center"
             >
               <Skeleton className="w-full max-w-[280px] aspect-[5/7] rounded-xl" />
             </div>
@@ -29,7 +29,7 @@ export default function LoadingState() {
 
               <div id="oracle-text-skeleton" className="space-y-2">
                 <Skeleton className="h-4 w-24" />
-                <div className="bg-slate-50 rounded-xl p-4 space-y-2">
+                <div className="bg-background rounded-xl p-4 space-y-2">
                   <Skeleton className="h-4 w-full" />
                   <Skeleton className="h-4 w-5/6" />
                   <Skeleton className="h-4 w-4/6" />
@@ -59,7 +59,7 @@ export default function LoadingState() {
 
       <Card
         id="price-skeleton"
-        className="bg-white/80 backdrop-blur border-slate-200 shadow-xl"
+        className="bg-[--clr-surface-a20] backdrop-blur shadow-xl"
       >
         <CardHeader className="pb-4">
           <div className="flex items-center gap-3">
@@ -72,7 +72,7 @@ export default function LoadingState() {
             {[1, 2, 3, 4, 5].map((i) => (
               <div
                 key={i}
-                className="bg-slate-50 rounded-xl p-3 md:p-4 space-y-2"
+                className="bg-[--clr-surface-a30] rounded-xl p-3 md:p-4 space-y-2"
               >
                 <Skeleton className="h-4 w-20" />
                 <Skeleton className="h-8 w-16" />

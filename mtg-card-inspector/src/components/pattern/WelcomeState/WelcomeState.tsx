@@ -7,7 +7,6 @@ export default function WelcomeState() {
     <div className="w-full max-w-4xl mx-auto text-center py-6 md:py-8 lg:py-12 px-4">
       <HeroSection />
       <FeaturesGrid />
-      <FeaturesGrid />
     </div>
   );
 }

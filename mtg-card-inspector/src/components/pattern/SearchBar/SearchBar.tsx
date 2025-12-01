@@ -112,7 +112,7 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
     <div className="w-full max-w-2xl mx-auto relative">
       <form onSubmit={handleSubmit} className="relative">
         <div className="relative flex items-center">
-          <Search className="absolute left-4 w-5 h-5 text-slate-400 pointer-events-none" />
+          <Search className="absolute left-4 w-5 h-5 text-[--clr-dark-a0] pointer-events-none" />
           <Input
             ref={inputRef}
             type="text"
@@ -127,7 +127,7 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
             onKeyDown={handleKeyDown}
             onFocus={() => query.length >= 2 && setShowSuggestions(true)}
             placeholder="Search for a Magic card..."
-            className="pl-12 pr-24 h-14 text-base md:text-lg bg-white/90 backdrop-blur border-slate-200 rounded-2xl shadow-lg shadow-slate-200/50 focus:shadow-xl focus:shadow-teal-500/10 transition-all duration-300 placeholder:text-slate-400"
+            className="pl-5 pr-28 h-14 text-base md:text-lg bg-[--clr-surface-a20] backdrop-blur rounded-2xl shadow-lg shadow-[--clr-surface-a0]/50 focus:shadow-xl focus:shadow-[--clr-primary-a0]/10 transition-all duration-300"
             aria-label="Search for Magic: The Gathering cards"
             aria-describedby="search-hint"
             aria-autocomplete="list"
@@ -138,7 +138,7 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
             <button
               type="button"
               onClick={clearInput}
-              className="absolute right-20 p-2 text-slate-400 hover:text-slate-600 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+              className="absolute right-20 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
               aria-label="Clear search"
             >
               <X className="w-5 h-5" />
@@ -147,7 +147,7 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
           <Button
             type="submit"
             disabled={isSearching || !query.trim()}
-            className="absolute right-2 h-10 px-4 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white rounded-xl font-medium transition-all duration-300 disabled:opacity-50 min-w-[80px]"
+            className="absolute right-2"
           >
             {isSearching ? (
               <Loader2 className="w-5 h-5 animate-spin" />
