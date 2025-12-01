@@ -39,10 +39,10 @@ export default function MTGCardSearch() {
   const showWelcome = !searchQuery && !showLoading && !error;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50">
+    <div className="bg-[--clr-surface-a10] from-slate-50 via-white to-teal-50 rounded-2xl">
       <BackgroundDecoration />
 
-      <div id="main-content" className="relative z-10">
+      <div id="main-content" className="relative z-10 ">
         <Header />
 
         <section id="search-section" className="px-4 pb-6 md:pb-8">

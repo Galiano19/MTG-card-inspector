@@ -11,6 +11,7 @@ import { Card, CardContent } from "../../ui/card";
 import { Badge } from "../../ui/badge";
 import { ManaSymbol } from "./ManaSymbol";
 import { RarityBadge } from "./RarityBadge";
+import { Button } from "@/components/ui/button";
 
 // TODO: enhance types
 export default function CardDisplay({ card }: { card: any }) {
@@ -66,39 +67,42 @@ export default function CardDisplay({ card }: { card: any }) {
   };
 
   return (
-    <Card className="bg-white/80 backdrop-blur border-slate-200 shadow-xl shadow-slate-200/30 overflow-hidden">
+    <Card className="bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30 overflow-hidden">
       <CardContent className="p-0">
         <div className="flex flex-col lg:flex-row">
           <div
             id="image-section"
-            className="relative lg:w-[320px] flex-shrink-0 bg-gradient-to-br from-slate-100 to-slate-50 p-4 md:p-6 flex items-center justify-center"
+            className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center"
           >
             <div className="relative group">
               <img
                 src={getImageUrl()}
                 alt={card.name}
-                className="w-full max-w-[280px] rounded-xl shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]"
+                className="w-full max-w-[280px] rounded-xl shadow-2xl transition-transform duration-500"
+                onClick={
+                  isDoubleFaced && (() => setShowBackFace(!showBackFace))
+                }
                 loading="lazy"
               />
               {isDoubleFaced && (
-                <button
+                <Button
                   onClick={() => setShowBackFace(!showBackFace)}
-                  className="absolute bottom-4 right-4 p-3 bg-white/90 backdrop-blur rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 min-w-[48px] min-h-[48px] flex items-center justify-center"
+                  className="absolute bottom-4 right-4 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 min-w-[48px] min-h-[48px] flex items-center justify-center"
                   aria-label={
                     showBackFace ? "Show front face" : "Show back face"
                   }
                 >
                   <RefreshCw
-                    className={`w-5 h-5 text-slate-700 transition-transform duration-500 ${
+                    className={`w-5 h-5 transition-transform duration-500 ${
                       showBackFace ? "rotate-180" : ""
                     }`}
                   />
-                </button>
+                </Button>
               )}
             </div>
             {isDoubleFaced && (
               <div className="absolute bottom-2 left-0 right-0 text-center">
-                <span className="text-xs text-slate-500 bg-white/80 px-3 py-1 rounded-full">
+                <span className="text-xs bg-[--clr-surface-a10] px-3 py-1 rounded-full">
                   {showBackFace ? "Back Face" : "Front Face"} • Tap to flip
                 </span>
               </div>
@@ -111,31 +115,29 @@ export default function CardDisplay({ card }: { card: any }) {
           >
             <div id="header" className="space-y-2 md:space-y-3">
               <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3">
-                <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-slate-800">
+                <h2 className="text-xl md:text-2xl lg:text-3xl font-bold ">
                   {isDoubleFaced ? getCurrentFace()?.name : card.name}
                 </h2>
                 {getManaCost() && <ManaSymbol symbol={getManaCost()} />}
               </div>
               <div className="flex items-center gap-2 flex-wrap">
-                <p className="text-slate-600 font-medium">{getTypeLine()}</p>
+                <p className="font-medium">{getTypeLine()}</p>
                 {getPowerToughness() && (
-                  <Badge variant="outline" className="font-bold">
-                    {getPowerToughness()}
-                  </Badge>
+                  <Badge className="font-bold">{getPowerToughness()}</Badge>
                 )}
               </div>
             </div>
 
             {getOracleText() && (
               <div id="oracle-text" className="space-y-2">
-                <div className="flex items-center gap-2 text-slate-500">
+                <div className="flex items-center gap-2">
                   <BookOpen className="w-4 h-4" />
                   <span className="text-sm font-medium uppercase tracking-wide">
                     Oracle Text
                   </span>
                 </div>
-                <div className="bg-slate-50 rounded-xl p-3 md:p-4 border border-slate-100">
-                  <p className="text-slate-700 whitespace-pre-line leading-relaxed text-sm md:text-base">
+                <div className="bg-[--clr-surface-a10] rounded-xl p-3 md:p-4 border border-[--clr-surface-a20]">
+                  <p className="whitespace-pre-line leading-relaxed text-sm md:text-base">
                     {getOracleText()}
                   </p>
                 </div>
@@ -144,7 +146,7 @@ export default function CardDisplay({ card }: { card: any }) {
 
             {card.flavor_text && !isDoubleFaced && (
               <div id="flavor-text" className="space-y-2">
-                <div className="flex items-center gap-2 text-slate-500">
+                <div className="flex items-center gap-2 ">
                   <Sparkles className="w-4 h-4" />
                   <span className="text-sm font-medium uppercase tracking-wide">
                     Flavor Text
@@ -161,27 +163,27 @@ export default function CardDisplay({ card }: { card: any }) {
               className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4"
             >
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-slate-400">
+                <div className="flex items-center gap-2 ">
                   <Layers className="w-4 h-4" />
                   <span className="text-xs uppercase tracking-wide">Set</span>
                 </div>
-                <p className="text-slate-700 font-medium text-sm md:text-base">
+                <p className=" font-medium text-sm md:text-base">
                   {card.set_name}
                 </p>
               </div>
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-slate-400">
+                <div className="flex items-center gap-2 ">
                   <Hash className="w-4 h-4" />
                   <span className="text-xs uppercase tracking-wide">
                     Number
                   </span>
                 </div>
-                <p className="text-slate-700 font-medium text-sm md:text-base">
+                <p className=" font-medium text-sm md:text-base">
                   #{card.collector_number}
                 </p>
               </div>
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-slate-400">
+                <div className="flex items-center gap-2 ">
                   <Sparkles className="w-4 h-4" />
                   <span className="text-xs uppercase tracking-wide">
                     Rarity
@@ -190,13 +192,13 @@ export default function CardDisplay({ card }: { card: any }) {
                 <RarityBadge rarity={card.rarity} />
               </div>
               <div className="space-y-1 col-span-2 md:col-span-3">
-                <div className="flex items-center gap-2 text-slate-400">
+                <div className="flex items-center gap-2 ">
                   <Palette className="w-4 h-4" />
                   <span className="text-xs uppercase tracking-wide">
                     Artist
                   </span>
                 </div>
-                <p className="text-slate-700 font-medium text-sm md:text-base">
+                <p className="font-medium text-sm md:text-base">
                   {card.artist}
                 </p>
               </div>
