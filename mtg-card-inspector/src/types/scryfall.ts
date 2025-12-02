@@ -92,3 +92,27 @@ export interface ScryfallCard {
     cardhoarder?: string;
   };
 }
+
+export interface ScryfallLegalities {
+  alchemy: "not_legal" | "legal" | "banned" | "restricted";
+  brawl: "not_legal" | "legal" | "banned" | "restricted";
+  commander: "not_legal" | "legal" | "banned" | "restricted";
+  duel: "not_legal" | "legal" | "banned" | "restricted";
+  future: "not_legal" | "legal" | "banned" | "restricted";
+  gladiator: "not_legal" | "legal" | "banned" | "restricted";
+  historic: "not_legal" | "legal" | "banned" | "restricted";
+  legacy: "not_legal" | "legal" | "banned" | "restricted";
+  modern: "not_legal" | "legal" | "banned" | "restricted";
+  oathbreaker: "not_legal" | "legal" | "banned" | "restricted";
+  oldschool: "not_legal" | "legal" | "banned" | "restricted";
+  pauper: "not_legal" | "legal" | "banned" | "restricted";
+  paupercommander: "not_legal" | "legal" | "banned" | "restricted";
+  penny: "not_legal" | "legal" | "banned" | "restricted";
+  pioneer: "not_legal" | "legal" | "banned" | "restricted";
+  predh: "not_legal" | "legal" | "banned" | "restricted";
+  premodern: "not_legal" | "legal" | "banned" | "restricted";
+  standard: "not_legal" | "legal" | "banned" | "restricted";
+  standardbrawl: "not_legal" | "legal" | "banned" | "restricted";
+  timeless: "not_legal" | "legal" | "banned" | "restricted";
+  vintage: "not_legal" | "legal" | "banned" | "restricted";
+}
