@@ -132,7 +132,6 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
             aria-describedby="search-hint"
             aria-autocomplete="list"
             aria-controls="suggestions-list"
-            aria-expanded={shouldShowSuggestions}
           />
           {query && (
             <button
