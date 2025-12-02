@@ -13,11 +13,22 @@ import { Badge } from "../../ui/badge";
 import { ManaSymbol } from "./ManaSymbol";
 import { RarityBadge } from "./RarityBadge";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Legalities } from "./Legalities";
 
 // TODO: enhance types
 export default function CardDisplay({ card }: { card: any }) {
   const [showBackFace, setShowBackFace] = useState(false);
   const isDoubleFaced = card.card_faces && card.card_faces.length > 1;
+
+  console.log("Rendering CardDisplay for card:", card);
 
   const getCurrentFace = () => {
     if (!isDoubleFaced) return null;
@@ -201,6 +212,7 @@ export default function CardDisplay({ card }: { card: any }) {
                 </div>
                 <RarityBadge rarity={card.rarity} />
               </div>
+              <Legalities legalities={card.legalities} />
             </div>
           </div>
         </div>
