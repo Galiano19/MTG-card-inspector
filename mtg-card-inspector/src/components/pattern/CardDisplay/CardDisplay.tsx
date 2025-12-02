@@ -6,6 +6,7 @@ import {
   Sparkles,
   Hash,
   Layers,
+  Brush,
 } from "lucide-react";
 import { Card, CardContent } from "../../ui/card";
 import { Badge } from "../../ui/badge";
@@ -72,13 +73,16 @@ export default function CardDisplay({ card }: { card: any }) {
         <div className="flex flex-col lg:flex-row">
           <div
             id="image-section"
-            className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center"
+            className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center bg-cover bg-center"
+            style={{
+              backgroundImage: `linear-gradient(to right, var(--clr-surface-a30), rgba(0,0,0,0)), url('${card.image_uris?.art_crop}')`,
+            }}
           >
-            <div className="relative group">
+            <div className="relative group flex flex-col h-full w-full gap-2">
               <img
                 src={getImageUrl()}
                 alt={card.name}
-                className="w-full max-w-[280px] rounded-xl shadow-2xl transition-transform duration-500"
+                className="w-full max-w-[280px] rounded-xl shadow-2xl transition-transform duration-500 self-center"
                 onClick={
                   isDoubleFaced && (() => setShowBackFace(!showBackFace))
                 }
@@ -99,6 +103,14 @@ export default function CardDisplay({ card }: { card: any }) {
                   />
                 </Button>
               )}
+              <div className="margin-top-auto">
+                <div className="flex items-center gap-2 ">
+                  <Brush className="w-4 h-4" />
+                  <span className="tracking-wide">
+                    <i>{card.artist}</i>
+                  </span>
+                </div>
+              </div>
             </div>
             {isDoubleFaced && (
               <div className="absolute bottom-2 left-0 right-0 text-center">
@@ -113,15 +125,15 @@ export default function CardDisplay({ card }: { card: any }) {
             id="details-section"
             className="flex-1 p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6"
           >
-            <div id="header" className="space-y-2 md:space-y-3">
+            <div id="header">
               <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3">
-                <h2 className="text-xl md:text-2xl lg:text-3xl font-bold ">
+                <h2 className="text-xl md:text-2xl lg:text-3xl font-bold  ">
                   {isDoubleFaced ? getCurrentFace()?.name : card.name}
                 </h2>
                 {getManaCost() && <ManaSymbol symbol={getManaCost()} />}
               </div>
               <div className="flex items-center gap-2 flex-wrap">
-                <p className="font-medium">{getTypeLine()}</p>
+                <i>{getTypeLine()}</i>
                 {getPowerToughness() && (
                   <Badge className="font-bold">{getPowerToughness()}</Badge>
                 )}
@@ -131,8 +143,8 @@ export default function CardDisplay({ card }: { card: any }) {
             {getOracleText() && (
               <div id="oracle-text" className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <BookOpen className="w-4 h-4" />
-                  <span className="text-sm font-medium uppercase tracking-wide">
+                  <BookOpen className="w-4 h-4  " />
+                  <span className="text-sm font-medium uppercase tracking-wide font-bold  ">
                     Oracle Text
                   </span>
                 </div>
@@ -147,12 +159,12 @@ export default function CardDisplay({ card }: { card: any }) {
             {card.flavor_text && !isDoubleFaced && (
               <div id="flavor-text" className="space-y-2">
                 <div className="flex items-center gap-2 ">
-                  <Sparkles className="w-4 h-4" />
-                  <span className="text-sm font-medium uppercase tracking-wide">
+                  <Sparkles className="w-4 h-4  " />
+                  <span className="text-sm font-medium uppercase tracking-wide font-bold  ">
                     Flavor Text
                   </span>
                 </div>
-                <p className="text-slate-500 italic border-l-4 border-slate-200 pl-4 text-sm md:text-base">
+                <p className="italic border-l-4 border-[--clr-primary-a0] pl-4 text-sm md:text-base">
                   &ldquo;{card.flavor_text}&rdquo;
                 </p>
               </div>
@@ -162,45 +174,32 @@ export default function CardDisplay({ card }: { card: any }) {
               id="info-grid"
               className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4"
             >
-              <div className="space-y-1">
+              <div>
                 <div className="flex items-center gap-2 ">
                   <Layers className="w-4 h-4" />
-                  <span className="text-xs uppercase tracking-wide">Set</span>
+                  <span className="font-medium uppercase tracking-wide font-bold  ">
+                    Set
+                  </span>
                 </div>
-                <p className=" font-medium text-sm md:text-base">
-                  {card.set_name}
-                </p>
+                <p>{card.set_name}</p>
               </div>
-              <div className="space-y-1">
+              <div>
                 <div className="flex items-center gap-2 ">
-                  <Hash className="w-4 h-4" />
-                  <span className="text-xs uppercase tracking-wide">
+                  <Hash className="w-4 h-4  " />
+                  <span className="font-medium uppercase tracking-wide font-bold  ">
                     Number
                   </span>
                 </div>
-                <p className=" font-medium text-sm md:text-base">
-                  #{card.collector_number}
-                </p>
+                <p>#{card.collector_number}</p>
               </div>
-              <div className="space-y-1">
+              <div>
                 <div className="flex items-center gap-2 ">
-                  <Sparkles className="w-4 h-4" />
-                  <span className="text-xs uppercase tracking-wide">
+                  <Sparkles className="w-4 h-4  " />
+                  <span className="font-medium uppercase tracking-wide font-bold  ">
                     Rarity
                   </span>
                 </div>
                 <RarityBadge rarity={card.rarity} />
-              </div>
-              <div className="space-y-1 col-span-2 md:col-span-3">
-                <div className="flex items-center gap-2 ">
-                  <Palette className="w-4 h-4" />
-                  <span className="text-xs uppercase tracking-wide">
-                    Artist
-                  </span>
-                </div>
-                <p className="font-medium text-sm md:text-base">
-                  {card.artist}
-                </p>
               </div>
             </div>
           </div>

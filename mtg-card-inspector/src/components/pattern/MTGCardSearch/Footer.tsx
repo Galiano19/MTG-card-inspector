@@ -11,7 +11,7 @@ export function Footer() {
             href="https://scryfall.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[--clr-primary-a0] hover:text-teal-700 font-medium"
+            className="hover:underline font-medium"
           >
             Scryfall API
           </a>
