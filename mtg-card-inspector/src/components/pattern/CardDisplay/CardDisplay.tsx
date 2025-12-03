@@ -14,6 +14,8 @@ import { RarityBadge } from "./RarityBadge";
 import { Button } from "@/components/ui/button";
 import { Legalities } from "./Legalities";
 import { ScryfallCard } from "@/types/scryfall";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
+import { GameChangerBadge } from "./GameChangerBadge";
 
 // TODO: enhance types
 export default function CardDisplay({ card }: { card: ScryfallCard }) {
@@ -139,9 +141,12 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
           >
             <div id="header" className="flex gap-2 flex-col">
               <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3">
-                <h2 className="text-xl md:text-2xl lg:text-3xl font-bold  ">
-                  {isDoubleFaced ? getCurrentFace()?.name : card.name}
-                </h2>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-xl md:text-2xl lg:text-3xl font-bold  ">
+                    {isDoubleFaced ? getCurrentFace()?.name : card.name}
+                  </h2>
+                  {card.game_changer && <GameChangerBadge />}
+                </div>
                 {getManaCost() && <ManaSymbol symbol={getManaCost()} />}
               </div>
               <div className="flex items-center gap-2 flex-wrap">
