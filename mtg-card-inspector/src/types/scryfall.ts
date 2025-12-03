@@ -1,20 +1,29 @@
 // Scryfall API types
 export interface ScryfallCard {
-  object: string;
-  id: string;
-  oracle_id: string;
-  multiverse_ids: number[];
-  mtgo_id?: number;
-  mtgo_foil_id?: number;
-  tcgplayer_id?: number;
+  all_parts?: RelatedCard[];
+  artist?: string;
+  artist_ids?: string[];
+  booster: boolean;
+  border_color: string;
+  card_back_id?: string;
+  card_faces?: CardFace[];
   cardmarket_id?: number;
-  name: string;
-  lang: string;
-  released_at: string;
-  uri: string;
-  scryfall_uri: string;
-  layout: string;
+  cmc: number;
+  collector_number: string;
+  color_identity: string[];
+  colors?: string[];
+  digital: boolean;
+  edhrec_rank?: number;
+  finishes: string[];
+  flavor_text?: string;
+  foil: boolean;
+  frame: string;
+  frame_effects?: string[];
+  full_art: boolean;
+  game_changer: boolean;
+  games: string[];
   highres_image: boolean;
+  id: string;
   image_status: string;
   image_uris?: {
     small: string;
@@ -24,73 +33,95 @@ export interface ScryfallCard {
     art_crop: string;
     border_crop: string;
   };
-  mana_cost?: string;
-  cmc: number;
-  type_line: string;
-  oracle_text?: string;
-  power?: string;
-  toughness?: string;
-  colors?: string[];
-  color_identity: string[];
   keywords: string[];
-  legalities: Record<string, string>;
-  games: string[];
-  reserved: boolean;
-  foil: boolean;
+  lang: string;
+  legalities: ScryfallLegalities;
+  mana_cost?: string;
+  mtgo_id?: number;
+  multiverse_ids: number[];
+  name: string;
   nonfoil: boolean;
-  finishes: string[];
+  object: string;
+  oracle_id: string;
+  oracle_text?: string;
   oversized: boolean;
+  power?: string;
+  preview?: Preview;
+  prices: Prices;
+  prints_search_uri: string;
+  produced_mana?: string[];
   promo: boolean;
+  promo_types?: string[];
+  purchase_uris: Record<string, string>;
+  related_uris: Record<string, string>;
+  released_at: string;
+  rarity: string;
   reprint: boolean;
-  variation: boolean;
-  set_id: string;
+  reserved: boolean;
+  rulings_uri: string;
+  scryfall_set_uri: string;
+  scryfall_uri: string;
+  security_stamp?: string;
   set: string;
+  set_id: string;
   set_name: string;
+  set_search_uri: string;
   set_type: string;
   set_uri: string;
-  set_search_uri: string;
-  scryfall_set_uri: string;
-  rulings_uri: string;
-  prints_search_uri: string;
-  collector_number: string;
-  digital: boolean;
-  rarity: string;
-  card_back_id: string;
-  artist?: string;
-  artist_ids?: string[];
-  illustration_id?: string;
-  border_color: string;
-  frame: string;
-  frame_effects?: string[];
-  full_art: boolean;
-  textless: boolean;
-  booster: boolean;
   story_spotlight: boolean;
-  edhrec_rank?: number;
-  preview?: {
-    source: string;
-    source_uri: string;
-    previewed_at: string;
+  tcgplayer_id?: number;
+  textless: boolean;
+  toughness?: string;
+  type_line: string;
+  uri: string;
+  variation: boolean;
+}
+
+interface CardFace {
+  object: "card_face";
+  name: string;
+  mana_cost: string;
+  type_line: string;
+  flavor_text?: string;
+  oracle_text: string;
+  power?: string;
+  toughness?: string;
+  colors: string[];
+  artist: string;
+  artist_id: string;
+  illustration_id: string;
+  image_uris: {
+    small: string;
+    normal: string;
+    large: string;
+    png: string;
+    art_crop: string;
+    border_crop: string;
   };
-  prices: {
-    usd?: string;
-    usd_foil?: string;
-    usd_etched?: string;
-    eur?: string;
-    eur_foil?: string;
-    tix?: string;
-  };
-  related_uris: {
-    gatherer?: string;
-    tcgplayer_infinite_articles?: string;
-    tcgplayer_infinite_decks?: string;
-    edhrec?: string;
-  };
-  purchase_uris?: {
-    tcgplayer?: string;
-    cardmarket?: string;
-    cardhoarder?: string;
-  };
+}
+
+interface RelatedCard {
+  object: "related_card";
+  id: string;
+  component: string;
+  name: string;
+  type_line: string;
+  uri: string;
+}
+
+interface Prices {
+  usd?: string | null;
+  usd_foil?: string | null;
+  usd_etched?: string | null;
+  eur?: string | null;
+  eur_foil?: string | null;
+  tix?: string | null;
+}
+
+interface Preview {
+  source: string;
+  source_uri: string;
+  previewed_at: string;
 }
 
 export interface ScryfallLegalities {

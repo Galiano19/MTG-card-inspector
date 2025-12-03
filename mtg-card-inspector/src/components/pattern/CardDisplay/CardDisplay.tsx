@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   RefreshCw,
-  Palette,
   BookOpen,
   Sparkles,
   Hash,
@@ -13,25 +12,18 @@ import { Badge } from "../../ui/badge";
 import { ManaSymbol } from "./ManaSymbol";
 import { RarityBadge } from "./RarityBadge";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { Legalities } from "./Legalities";
+import { ScryfallCard } from "@/types/scryfall";
 
 // TODO: enhance types
-export default function CardDisplay({ card }: { card: any }) {
+export default function CardDisplay({ card }: { card: ScryfallCard }) {
   const [showBackFace, setShowBackFace] = useState(false);
   const isDoubleFaced = card.card_faces && card.card_faces.length > 1;
 
   console.log("Rendering CardDisplay for card:", card);
 
   const getCurrentFace = () => {
-    if (!isDoubleFaced) return null;
+    if (!isDoubleFaced || !card.card_faces) return null;
     return showBackFace ? card.card_faces[1] : card.card_faces[0];
   };
 
@@ -48,6 +40,13 @@ export default function CardDisplay({ card }: { card: any }) {
       return getCurrentFace()?.oracle_text || "";
     }
     return card.oracle_text || "";
+  };
+
+  const getFlavorText = () => {
+    if (isDoubleFaced) {
+      return getCurrentFace()?.flavor_text || "";
+    }
+    return card.flavor_text || "";
   };
 
   const getTypeLine = () => {
@@ -95,7 +94,9 @@ export default function CardDisplay({ card }: { card: any }) {
                 alt={card.name}
                 className="w-full max-w-[280px] rounded-xl shadow-2xl transition-transform duration-500 self-center"
                 onClick={
-                  isDoubleFaced && (() => setShowBackFace(!showBackFace))
+                  isDoubleFaced
+                    ? () => setShowBackFace(!showBackFace)
+                    : undefined
                 }
                 loading="lazy"
               />
@@ -136,7 +137,7 @@ export default function CardDisplay({ card }: { card: any }) {
             id="details-section"
             className="flex-1 p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6"
           >
-            <div id="header">
+            <div id="header" className="flex gap-2 flex-col">
               <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3">
                 <h2 className="text-xl md:text-2xl lg:text-3xl font-bold  ">
                   {isDoubleFaced ? getCurrentFace()?.name : card.name}
@@ -167,7 +168,7 @@ export default function CardDisplay({ card }: { card: any }) {
               </div>
             )}
 
-            {card.flavor_text && !isDoubleFaced && (
+            {Boolean(getFlavorText()) && (
               <div id="flavor-text" className="space-y-2">
                 <div className="flex items-center gap-2 ">
                   <Sparkles className="w-4 h-4  " />
@@ -176,7 +177,7 @@ export default function CardDisplay({ card }: { card: any }) {
                   </span>
                 </div>
                 <p className="italic border-l-4 border-[--clr-primary-a0] pl-4 text-sm md:text-base">
-                  &ldquo;{card.flavor_text}&rdquo;
+                  &ldquo;{getFlavorText()}&rdquo;
                 </p>
               </div>
             )}
