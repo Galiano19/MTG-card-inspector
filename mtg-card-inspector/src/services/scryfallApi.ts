@@ -1,3 +1,5 @@
+import mapScryfallCardToInternal from "./mappers/ScryfallApi.mapper";
+
 const SCRYFALL_BASE_URL = "https://api.scryfall.com";
 
 /**
@@ -15,7 +17,8 @@ export const fetchCardByName = async (cardName: string) => {
     throw new Error(errorData.details || `Card not found: ${cardName}`);
   }
 
-  return response.json();
+  const data = await response.json();
+  return mapScryfallCardToInternal(data);
 };
 
 /**
