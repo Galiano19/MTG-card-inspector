@@ -58,10 +58,9 @@ export default function MTGCardSearch() {
             {showCard && (
               <>
                 <CardDisplay card={card} />
-                <PriceComparison
-                  prices={card.prices}
-                  purchaseUris={card.purchase_uris}
-                />
+                {card.market_prices && (
+                  <PriceComparison marketPrices={card.market_prices} />
+                )}
               </>
             )}
 

@@ -1,38 +1,15 @@
 import React from "react";
-import { TrendingUp, DollarSign } from "lucide-react";
+import { DollarSign } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { priceMarkets } from "../../../services/scryfallApi";
 import PriceCard from "./PriceCard";
-
-interface PriceComparisonProps {
-  prices: {
-    usd: string | null;
-    usd_foil: string | null;
-    eur: string | null;
-    tix: string | null;
-    eur_foil: string | null;
-  } | null;
-  purchaseUris: {
-    tcgplayer?: string;
-  } | null;
-}
+import { MarketPrice } from "@/types/scryfall";
 
 export default function PriceComparison({
-  prices,
-  purchaseUris,
-}: PriceComparisonProps) {
-  const getLowestPrice = () => {
-    const usdPrices = [
-      prices?.usd ? parseFloat(prices.usd) : null,
-      prices?.usd_foil ? parseFloat(prices.usd_foil) : null,
-    ].filter((p): p is number => p !== null && !isNaN(p));
-
-    if (usdPrices.length === 0) return null;
-    return Math.min(...usdPrices).toFixed(2);
-  };
-
-  const lowestPrice = getLowestPrice();
-
+  marketPrices,
+}: {
+  marketPrices: MarketPrice[];
+}) {
+  console.log("Rendering PriceComparison with marketPrices:", marketPrices);
   return (
     <Card className="bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30">
       <CardHeader className="pb-3 md:pb-4">
@@ -45,26 +22,18 @@ export default function PriceComparison({
               Market Prices
             </CardTitle>
           </div>
-          {lowestPrice && (
-            <div className="flex items-center gap-2 bg-[--clr-success-a0] px-2 md:px-3 py-1 md:py-1.5 rounded-full">
-              <TrendingUp className="w-3 h-3 md:w-4 md:h-4 text-[--clr-success-700]" />
-              <span className="text-xs md:text-sm font-medium text-[--clr-success-700]">
-                From ${lowestPrice}
-              </span>
-            </div>
-          )}
         </div>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4">
-          {priceMarkets.map((market) => (
+          {marketPrices.map((market) => (
             <PriceCard
               key={market.key}
               market={market.name}
-              price={prices?.[market.key as keyof typeof prices]}
+              price={market.amount}
               currency={market.currency}
               color={market.color}
-              purchaseUrl={purchaseUris?.tcgplayer}
+              purchaseUrl={market.url}
             />
           ))}
         </div>
