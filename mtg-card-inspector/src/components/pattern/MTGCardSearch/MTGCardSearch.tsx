@@ -11,6 +11,7 @@ import {
 import { BackgroundDecoration } from "./BackgroundDecoration";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
+import RelatedCardArtworks from "../RelatedCardArtworks/RelatedCardArtworks";
 
 export default function MTGCardSearch() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -58,6 +59,7 @@ export default function MTGCardSearch() {
             {showCard && (
               <>
                 <CardDisplay card={card} />
+                <RelatedCardArtworks card={card} />
                 {card.market_prices && (
                   <PriceComparison marketPrices={card.market_prices} />
                 )}

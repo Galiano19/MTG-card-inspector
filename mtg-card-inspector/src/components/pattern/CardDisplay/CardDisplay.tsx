@@ -14,7 +14,6 @@ import { RarityBadge } from "./RarityBadge";
 import { Button } from "@/components/ui/button";
 import { Legalities } from "./Legalities";
 import { ScryfallCard } from "@/types/scryfall";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 import { GameChangerBadge } from "./GameChangerBadge";
 
 // TODO: enhance types
