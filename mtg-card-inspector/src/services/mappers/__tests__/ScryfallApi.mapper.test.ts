@@ -1,4 +1,7 @@
-import mapScryfallCardToInternal from "../ScryfallApi.mapper";
+import { Prices, purchaseUris } from "@/types/scryfall";
+import mapScryfallCardToInternal, {
+  mapMarketPrices,
+} from "../ScryfallApi.mapper";
 
 describe("mapScryfallCardToInternal", () => {
   const mockResponse = {
@@ -144,5 +147,119 @@ describe("mapScryfallCardToInternal", () => {
     expect(() => mapScryfallCardToInternal(undefined)).toThrow(
       "Invalid Scryfall API response"
     );
+  });
+});
+
+describe("mapMarketPrices", () => {
+  const purchaseUrisMock: purchaseUris = {
+    tcgplayer: "https://tcgplayer.com",
+    cardmarket: "https://cardmarket.com",
+    cardhoarder: "https://cardhoarder.com",
+  };
+
+  it("should map USD prices with variants correctly", () => {
+    const prices: Prices = {
+      usd: "1.42",
+      usd_foil: "2.08",
+      usd_etched: null,
+    };
+
+    const result = mapMarketPrices(prices, purchaseUrisMock);
+
+    expect(result).toEqual([
+      {
+        name: "TCGPlayer",
+        key: "usd",
+        currency: "$",
+        color: "#5c6bc0",
+        url: purchaseUrisMock.tcgplayer,
+        amount: "1.42",
+      },
+      {
+        name: "TCGPlayer (Foil)",
+        key: "usd_foil",
+        currency: "$",
+        color: "#5c6bc0",
+        url: purchaseUrisMock.tcgplayer,
+        amount: "2.08",
+      },
+      // usd_etched is skipped because it is null
+    ]);
+  });
+
+  it("should map EUR prices including foil variant", () => {
+    const prices: Prices = {
+      eur: "2.03",
+      eur_foil: "3.66",
+    };
+
+    const result = mapMarketPrices(prices, purchaseUrisMock);
+
+    expect(result).toEqual([
+      {
+        name: "CardMarket",
+        key: "eur",
+        currency: "€",
+        color: "#7e57c2",
+        url: purchaseUrisMock.cardmarket,
+        amount: "2.03",
+      },
+      {
+        name: "CardMarket (Foil)",
+        key: "eur_foil",
+        currency: "€",
+        color: "#7e57c2",
+        url: purchaseUrisMock.cardmarket,
+        amount: "3.66",
+      },
+    ]);
+  });
+
+  it("should map TIX prices", () => {
+    const prices: Prices = { tix: "0.98" };
+
+    const result = mapMarketPrices(prices, purchaseUrisMock);
+
+    expect(result).toEqual([
+      {
+        name: "Cardhoarder (MTGO)",
+        key: "tix",
+        currency: "tix",
+        color: "#00897b",
+        url: purchaseUrisMock.cardhoarder,
+        amount: "0.98",
+      },
+    ]);
+  });
+
+  it("should return an empty array if prices or purchaseUris are missing", () => {
+    expect(mapMarketPrices(null as any, purchaseUrisMock)).toEqual([]);
+    expect(mapMarketPrices({ usd: "1.0" }, null as any)).toEqual([]);
+  });
+
+  it("should skip null or undefined prices", () => {
+    const prices: Prices = {
+      usd: null,
+      usd_foil: undefined as any,
+      eur: "2.03",
+    };
+
+    const result = mapMarketPrices(prices, purchaseUrisMock);
+
+    expect(result).toEqual([
+      {
+        name: "CardMarket",
+        key: "eur",
+        currency: "€",
+        color: "#7e57c2",
+        url: purchaseUrisMock.cardmarket,
+        amount: "2.03",
+      },
+    ]);
+  });
+
+  it("should handle empty prices object", () => {
+    const result = mapMarketPrices({}, purchaseUrisMock);
+    expect(result).toEqual([]);
   });
 });
