@@ -1,4 +1,9 @@
-import { ScryfallCard } from "@/types/scryfall";
+import {
+  MarketPrice,
+  Prices,
+  purchaseUris,
+  ScryfallCard,
+} from "@/types/scryfall";
 
 export default function mapScryfallCardToInternal(response: any): ScryfallCard {
   if (!response || typeof response !== "object") {
@@ -36,6 +41,7 @@ export default function mapScryfallCardToInternal(response: any): ScryfallCard {
     lang: response.lang,
     legalities: response.legalities,
     mana_cost: response.mana_cost,
+    market_prices: mapMarketPrices(response.prices, response.purchase_uris),
     mtgo_id: response.mtgo_id,
     multiverse_ids: response.multiverse_ids,
     name: response.name,
@@ -72,4 +78,61 @@ export default function mapScryfallCardToInternal(response: any): ScryfallCard {
     uri: response.uri,
     variation: response.variation,
   };
+}
+
+function mapMarketPrices(
+  prices: Prices,
+  purchaseUris: purchaseUris
+): MarketPrice[] | undefined {
+  if (!prices || !purchaseUris) return [];
+
+  const mappingRules = [
+    {
+      keys: ["usd", "usd_foil", "usd_etched"],
+      currency: "$",
+      color: "#5c6bc0",
+      url: purchaseUris.tcgplayer,
+      name: "TCGPlayer",
+    },
+    {
+      keys: ["eur", "eur_foil"],
+      currency: "€",
+      color: "#7e57c2",
+      url: purchaseUris.cardmarket,
+      name: "CardMarket",
+    },
+    {
+      keys: ["tix"],
+      currency: "tix",
+      color: "#00897b",
+      url: purchaseUris.cardhoarder,
+      name: "Cardhoarder (MTGO)",
+    },
+  ];
+
+  const result: MarketPrice[] = [];
+
+  for (const rule of mappingRules) {
+    for (const key of rule.keys) {
+      if (key in prices) {
+        if (!prices[key as keyof Prices]) continue;
+
+        // Determine variant suffix
+        let variantName = rule.name;
+        if (key.endsWith("_foil")) variantName += " (Foil)";
+        else if (key.endsWith("_etched")) variantName += " (Etched)";
+
+        result.push({
+          name: variantName,
+          key,
+          currency: rule.currency,
+          color: rule.color,
+          url: rule.url,
+          amount: prices[key as keyof Prices] || null,
+        });
+      }
+    }
+  }
+
+  return result;
 }

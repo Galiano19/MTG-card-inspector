@@ -42,21 +42,3 @@ export const fetchAutocompleteSuggestions = async (query: string) => {
   const data = await response.json();
   return data.data || [];
 };
-
-export const priceMarkets = [
-  { name: "TCGPlayer", key: "usd", currency: "$", color: "#5c6bc0" },
-  {
-    name: "TCGPlayer (Foil)",
-    key: "usd_foil",
-    currency: "$",
-    color: "#7e57c2",
-  },
-  { name: "CardMarket", key: "eur", currency: "€", color: "#26a69a" },
-  {
-    name: "CardMarket (Foil)",
-    key: "eur_foil",
-    currency: "€",
-    color: "#00897b",
-  },
-  { name: "Cardhoarder (MTGO)", key: "tix", currency: "tix", color: "#ef5350" },
-];

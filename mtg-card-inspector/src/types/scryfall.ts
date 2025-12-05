@@ -37,6 +37,7 @@ export interface ScryfallCard {
   lang: string;
   legalities: ScryfallLegalities;
   mana_cost?: string;
+  market_prices?: MarketPrice[];
   mtgo_id?: number;
   multiverse_ids: number[];
   name: string;
@@ -52,7 +53,7 @@ export interface ScryfallCard {
   produced_mana?: string[];
   promo: boolean;
   promo_types?: string[];
-  purchase_uris: Record<string, string>;
+  purchase_uris: purchaseUris;
   related_uris: Record<string, string>;
   released_at: string;
   rarity: string;
@@ -75,6 +76,21 @@ export interface ScryfallCard {
   type_line: string;
   uri: string;
   variation: boolean;
+}
+
+export interface purchaseUris {
+  cardhoarder?: string;
+  cardmarket?: string;
+  tcgplayer?: string;
+}
+
+export interface MarketPrice {
+  name: string;
+  key: string;
+  currency: string;
+  color: string;
+  url?: string;
+  amount: string | null;
 }
 
 interface CardFace {
@@ -109,7 +125,7 @@ interface RelatedCard {
   uri: string;
 }
 
-interface Prices {
+export interface Prices {
   usd?: string | null;
   usd_foil?: string | null;
   usd_etched?: string | null;
