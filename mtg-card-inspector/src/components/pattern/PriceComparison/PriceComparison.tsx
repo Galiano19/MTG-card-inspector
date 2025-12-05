@@ -9,7 +9,6 @@ export default function PriceComparison({
 }: {
   marketPrices: MarketPrice[];
 }) {
-  console.log("Rendering PriceComparison with marketPrices:", marketPrices);
   return (
     <Card className="bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30">
       <CardHeader className="pb-3 md:pb-4">

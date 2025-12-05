@@ -80,7 +80,7 @@ export default function mapScryfallCardToInternal(response: any): ScryfallCard {
   };
 }
 
-function mapMarketPrices(
+export function mapMarketPrices(
   prices: Prices,
   purchaseUris: purchaseUris
 ): MarketPrice[] | undefined {
