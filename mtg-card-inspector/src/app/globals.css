@@ -178,3 +178,25 @@ code {
     border-bottom-color: inherit;
   }
 }
+
+/* foil effect */
+.foil-shine {
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(251, 255, 1, 0.4) 70%,
+    transparent 100%
+  );
+  background-size: 200% 200%;
+  animation: foilMove 3s linear infinite;
+  mix-blend-mode: overlay;
+}
+
+@keyframes foilMove {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
