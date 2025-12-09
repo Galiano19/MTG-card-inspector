@@ -54,6 +54,7 @@ export interface ScryfallCard {
   promo: boolean;
   promo_types?: string[];
   purchase_uris: purchaseUris;
+  related_arts?: RelatedArt[];
   related_uris: Record<string, string>;
   released_at: string;
   rarity: string;
@@ -76,6 +77,12 @@ export interface ScryfallCard {
   type_line: string;
   uri: string;
   variation: boolean;
+}
+
+export interface RelatedArt {
+  id: string;
+  image_normal: string;
+  image_large: string;
 }
 
 export interface purchaseUris {

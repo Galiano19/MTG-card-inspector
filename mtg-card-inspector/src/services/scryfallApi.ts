@@ -1,3 +1,4 @@
+import { RelatedArt, ScryfallCard } from "@/types/scryfall";
 import mapScryfallCardToInternal from "./mappers/ScryfallApi.mapper";
 
 const SCRYFALL_BASE_URL = "https://api.scryfall.com";
@@ -5,7 +6,7 @@ const SCRYFALL_BASE_URL = "https://api.scryfall.com";
 /**
  * Fetch a single card by name using fuzzy search
  * @param {string} cardName - The card name to search for
- * @returns {Promise<Object>} - Card data object
+ * @returns {Promise<ScryfallCard>} - Card data object
  */
 export const fetchCardByName = async (cardName: string) => {
   const response = await fetch(
@@ -37,6 +38,21 @@ export const fetchAutocompleteSuggestions = async (query: string) => {
 
   if (!response.ok) {
     throw new Error("Failed to fetch suggestions");
+  }
+
+  const data = await response.json();
+  return data.data || [];
+};
+
+/**
+ * Fetch related cards by provided URI
+ * @param {string} query - The URI to fetch related cards from
+ * @returns {Promise<RelatedArt[]>} - Array of related cards
+ */
+export const fetchRelatedCards = async (query: string) => {
+  const response = await fetch(query);
+  if (!response.ok) {
+    throw new Error("Failed to fetch related cards");
   }
 
   const data = await response.json();

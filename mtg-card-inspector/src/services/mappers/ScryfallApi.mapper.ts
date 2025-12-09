@@ -2,8 +2,10 @@ import {
   MarketPrice,
   Prices,
   purchaseUris,
+  RelatedArt,
   ScryfallCard,
 } from "@/types/scryfall";
+import { fetchRelatedCards } from "../scryfallApi";
 
 export default function mapScryfallCardToInternal(response: any): ScryfallCard {
   if (!response || typeof response !== "object") {
