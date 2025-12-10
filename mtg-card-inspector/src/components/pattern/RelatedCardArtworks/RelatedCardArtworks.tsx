@@ -6,7 +6,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useRelatedCards } from "@/hooks/useCardSearch";
+import {
+  QueryCardSearchInput,
+  useCardSearch,
+  useRelatedCards,
+} from "@/hooks/useCardSearch";
 import { ScryfallCard } from "@/types/scryfall";
 import Image from "next/image";
 import FoilEffect from "../CardDisplay/FoilEffect";
@@ -14,27 +18,45 @@ import { GalleryHorizontalEnd } from "lucide-react";
 import LoadingSkeleton from "./LoadingSkeleton";
 import NoRelatedArtworks from "./NoRelatedArtworks";
 
-function RelatedCardArtworksContent({ data, isLoading, isFetching }: any) {
+interface RelatedCardArtworksContentProps {
+  data: ScryfallCard[] | undefined;
+  isLoading: boolean;
+  isFetching: boolean;
+  onSearch: (query: QueryCardSearchInput) => void;
+}
+
+function RelatedCardArtworksContent({
+  data,
+  isLoading,
+  isFetching,
+  onSearch,
+}: RelatedCardArtworksContentProps) {
   if (isLoading || isFetching) {
     return <LoadingSkeleton />;
   }
   if (!data || data.length === 0) {
     return <NoRelatedArtworks />;
   }
+
   return (
     <Carousel>
-      <CarouselContent>
+      <CarouselContent className="pl-2 pr-4">
         {data.map((card: any) => (
-          <CarouselItem key={card.id}>
-            <div className=" w-full bg-transparent relative">
-              {card.foil && <FoilEffect />}
-              <Image
-                src={card.image_uris.normal}
-                alt="Related Artwork"
-                width={223}
-                height={310}
-              />
-            </div>
+          <CarouselItem key={card.id} className="px-2 py-4 ">
+            <button
+              onClick={() => onSearch({ id: card.id })}
+              className="rounded-lg overflow-hidden hover:scale-105 transition-transform duration-200"
+            >
+              <div className=" w-full bg-transparent relative">
+                {card.foil && <FoilEffect />}
+                <Image
+                  src={card.image_uris.normal}
+                  alt="Related Artwork"
+                  width={223}
+                  height={310}
+                />
+              </div>
+            </button>
           </CarouselItem>
         ))}
       </CarouselContent>
@@ -46,7 +68,13 @@ function RelatedCardArtworksContent({ data, isLoading, isFetching }: any) {
   );
 }
 
-export default function RelatedCardArtworks({ card }: { card: ScryfallCard }) {
+export default function RelatedCardArtworks({
+  card,
+  onSearch,
+}: {
+  card: ScryfallCard;
+  onSearch: (query: QueryCardSearchInput) => void;
+}) {
   const { data, isLoading, isFetching } = useRelatedCards(
     card.prints_search_uri
   );
@@ -74,6 +102,7 @@ export default function RelatedCardArtworks({ card }: { card: ScryfallCard }) {
           data={data}
           isLoading={isLoading}
           isFetching={isFetching}
+          onSearch={onSearch}
         />
       </CardContent>
     </Card>

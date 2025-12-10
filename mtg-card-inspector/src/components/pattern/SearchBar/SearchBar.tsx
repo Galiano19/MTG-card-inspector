@@ -2,11 +2,14 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Search, X, Loader2 } from "lucide-react";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
-import { useAutocomplete } from "../../../hooks/useCardSearch";
+import {
+  QueryCardSearchInput,
+  useAutocomplete,
+} from "../../../hooks/useCardSearch";
 import { Suggestions } from "./Suggestions";
 
 interface SearchBarProps {
-  onSearch: (query: string) => void;
+  onSearch: (query: QueryCardSearchInput) => void;
   isSearching: boolean;
 }
 
