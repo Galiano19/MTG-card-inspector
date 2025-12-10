@@ -1,5 +1,8 @@
 import React, { useState, useCallback } from "react";
-import { useCardSearch } from "../../../hooks/useCardSearch";
+import {
+  QueryCardSearchInput,
+  useCardSearch,
+} from "../../../hooks/useCardSearch";
 import {
   SearchBar,
   CardDisplay,
@@ -14,7 +17,7 @@ import { Footer } from "./Footer";
 import RelatedCardArtworks from "../RelatedCardArtworks/RelatedCardArtworks";
 
 export default function MTGCardSearch() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState<QueryCardSearchInput>("");
 
   const {
     data: card,
@@ -24,7 +27,7 @@ export default function MTGCardSearch() {
     refetch,
   } = useCardSearch(searchQuery);
 
-  const handleSearch = useCallback((query: string) => {
+  const handleSearch = useCallback((query: QueryCardSearchInput) => {
     setSearchQuery(query);
   }, []);
 
@@ -59,7 +62,7 @@ export default function MTGCardSearch() {
             {showCard && (
               <>
                 <CardDisplay card={card} />
-                <RelatedCardArtworks card={card} />
+                <RelatedCardArtworks card={card} onSearch={handleSearch} />
                 {card.market_prices && (
                   <PriceComparison marketPrices={card.market_prices} />
                 )}

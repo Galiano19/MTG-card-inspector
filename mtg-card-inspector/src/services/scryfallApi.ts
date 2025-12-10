@@ -23,6 +23,23 @@ export const fetchCardByName = async (cardName: string) => {
 };
 
 /**
+ * Fetch a card by its Scryfall ID
+ * @param {string} id - The Scryfall card ID
+ * @returns {Promise<ScryfallCard>}
+ */
+export const fetchCardById = async (id: string) => {
+  const response = await fetch(`${SCRYFALL_BASE_URL}/cards/${id}`);
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.details || `Card not found by ID: ${id}`);
+  }
+
+  const data = await response.json();
+  return mapScryfallCardToInternal(data);
+};
+
+/**
  * Fetch autocomplete suggestions for card names
  * @param {string} query - The partial card name to search for
  * @returns {Promise<string[]>} - Array of card name suggestions

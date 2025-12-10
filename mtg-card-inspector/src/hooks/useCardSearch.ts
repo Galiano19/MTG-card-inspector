@@ -3,11 +3,17 @@ import {
   fetchCardByName,
   fetchAutocompleteSuggestions,
   fetchRelatedCards,
+  fetchCardById,
 } from "../services/scryfallApi";
 
 export const cardQueryKeys = {
   all: ["cards"],
-  card: (name: string) => [...cardQueryKeys.all, "card", name],
+  card: ({ name, id }: { name?: string; id?: string }) => {
+    if (id) {
+      return [...cardQueryKeys.all, "card", id];
+    }
+    return [...cardQueryKeys.all, "card", name];
+  },
   autocomplete: (query: string) => [
     ...cardQueryKeys.all,
     "autocomplete",
@@ -15,18 +21,34 @@ export const cardQueryKeys = {
   ],
 };
 
+export type QueryCardSearchInput =
+  | string
+  | {
+      name?: string;
+      id?: string;
+    };
+
 /**
- * Hook to fetch a single card by name
+ * Hook to fetch a single card by name or ID
  *
- * @param {string} cardName - The card name to search for
+ * @param {QueryCardSearchInput} input - The card name to search for
  * @param {Object} options - Additional query options
  * @returns {Object} Query result with data, isLoading, error, etc.
  */
-export const useCardSearch = (cardName: string, options = {}) => {
+export const useCardSearch = (input: QueryCardSearchInput, options = {}) => {
+  const queryParams = getQueryParams(input);
+
   return useQuery({
-    queryKey: cardQueryKeys.card(cardName),
-    queryFn: () => fetchCardByName(cardName),
-    enabled: Boolean(cardName) && cardName.trim().length > 0,
+    queryKey: queryParams.cardId
+      ? cardQueryKeys.card({ id: queryParams.cardId })
+      : cardQueryKeys.card({ name: queryParams.cardName }),
+    queryFn: () =>
+      queryParams.cardId
+        ? fetchCardById(queryParams.cardId)
+        : fetchCardByName(queryParams.cardName),
+    enabled:
+      Boolean(queryParams.cardId) ||
+      (Boolean(queryParams.cardName) && queryParams.cardName.trim().length > 0),
     staleTime: 10 * 60 * 1000, // 10 minutes
     gcTime: 30 * 60 * 1000,
     retry: (failureCount, error) => {
@@ -65,7 +87,7 @@ export const useAutocomplete = (query: string, options = {}) => {
  */
 export const useRelatedCards = (uri: string, options = {}) => {
   return useQuery({
-    queryKey: cardQueryKeys.card(uri),
+    queryKey: cardQueryKeys.card({ name: uri }),
     queryFn: () => fetchRelatedCards(uri),
     enabled: Boolean(uri) && uri.trim().length > 0,
     staleTime: 10 * 60 * 1000, // 10 minutes
@@ -77,3 +99,16 @@ export const useRelatedCards = (uri: string, options = {}) => {
     ...options,
   });
 };
+
+function getQueryParams(input: QueryCardSearchInput): {
+  cardName: string;
+  cardId: string | undefined;
+} {
+  if (typeof input === "string") {
+    return { cardName: input, cardId: undefined };
+  }
+  return {
+    cardName: input.name || "",
+    cardId: input.id,
+  };
+}
