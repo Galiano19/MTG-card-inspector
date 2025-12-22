@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   RefreshCw,
   BookOpen,
@@ -13,24 +13,37 @@ import { ManaSymbol } from "./ManaSymbol";
 import { RarityBadge } from "./RarityBadge";
 import { Button } from "@/components/ui/button";
 import { Legalities } from "./Legalities";
-import { ScryfallCard } from "@/types/scryfall";
+import { CardFace, ScryfallCard } from "@/types/scryfall";
 import { GameChangerBadge } from "./GameChangerBadge";
+import CardImage from "./CardImage";
 
 // TODO: enhance types
 export default function CardDisplay({ card }: { card: ScryfallCard }) {
   const [showBackFace, setShowBackFace] = useState(false);
+  const [face, setFace] = useState<CardFace | undefined>(undefined);
   const isDoubleFaced = card.card_faces && card.card_faces.length > 1;
 
-  console.log("Rendering CardDisplay for card:", card);
+  useEffect(() => {
+    if (isDoubleFaced) {
+      //@ts-ignore -- isDoubleFaced already checks if cardFaces array contains items
+      setFace(card.card_faces[0]);
+    }
 
-  const getCurrentFace = () => {
-    if (!isDoubleFaced || !card.card_faces) return null;
-    return showBackFace ? card.card_faces[1] : card.card_faces[0];
+    return () => {
+      setFace(undefined);
+    };
+  }, [card, isDoubleFaced]);
+
+  const handleShowBackFace = () => {
+    if (isDoubleFaced) {
+      setShowBackFace(!showBackFace);
+      //@ts-ignore -- isDoubleFaced already checks if cardFaces array contains items
+      setFace(card.card_faces[showBackFace ? 0 : 1]);
+    }
   };
 
   const getImageUrl = () => {
     if (isDoubleFaced) {
-      const face = getCurrentFace();
       return face?.image_uris?.normal || face?.image_uris?.large;
     }
     return card.image_uris?.normal || card.image_uris?.large;
@@ -38,35 +51,34 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
 
   const getOracleText = () => {
     if (isDoubleFaced) {
-      return getCurrentFace()?.oracle_text || "";
+      return face?.oracle_text || "";
     }
     return card.oracle_text || "";
   };
 
   const getFlavorText = () => {
     if (isDoubleFaced) {
-      return getCurrentFace()?.flavor_text || "";
+      return face?.flavor_text || "";
     }
     return card.flavor_text || "";
   };
 
   const getTypeLine = () => {
     if (isDoubleFaced) {
-      return getCurrentFace()?.type_line || card.type_line;
+      return face?.type_line || card.type_line;
     }
     return card.type_line;
   };
 
   const getManaCost = () => {
     if (isDoubleFaced) {
-      return getCurrentFace()?.mana_cost || card.mana_cost || "";
+      return face?.mana_cost || card.mana_cost || "";
     }
     return card.mana_cost || "";
   };
 
   const getPowerToughness = () => {
     if (isDoubleFaced) {
-      const face = getCurrentFace();
       if (face?.power && face?.toughness) {
         return `${face.power}/${face.toughness}`;
       }
@@ -90,20 +102,22 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
             }}
           >
             <div className="relative group flex flex-col h-full w-full gap-2">
-              <img
+              <CardImage
+                cardName={card.name}
+                isDoubleFaced={isDoubleFaced}
+                face={face}
+                urlLarge={card.image_uris?.large}
+                urlNormal={card.image_uris?.normal}
+              />
+              {/* <img
                 src={getImageUrl()}
                 alt={card.name}
                 className="w-full max-w-[280px] rounded-xl shadow-2xl transition-transform duration-500 self-center"
-                onClick={
-                  isDoubleFaced
-                    ? () => setShowBackFace(!showBackFace)
-                    : undefined
-                }
                 loading="lazy"
-              />
+              /> */}
               {isDoubleFaced && (
                 <Button
-                  onClick={() => setShowBackFace(!showBackFace)}
+                  onClick={handleShowBackFace}
                   className="absolute bottom-4 right-4 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 min-w-[48px] min-h-[48px] flex items-center justify-center"
                   aria-label={
                     showBackFace ? "Show front face" : "Show back face"
@@ -142,7 +156,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
               <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3">
                 <div className="flex items-center gap-2">
                   <h2 className="text-xl md:text-2xl lg:text-3xl font-bold  ">
-                    {isDoubleFaced ? getCurrentFace()?.name : card.name}
+                    {isDoubleFaced ? face?.name : card.name}
                   </h2>
                   {card.game_changer && <GameChangerBadge />}
                 </div>

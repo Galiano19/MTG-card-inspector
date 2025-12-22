@@ -24,6 +24,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "embla-carousel-react": "^8.6.0",
+    "hover-tilt": "^1.0.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.553.0",
     "next": "13.4.10",

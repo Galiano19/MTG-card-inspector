@@ -100,7 +100,7 @@ export interface MarketPrice {
   amount: string | null;
 }
 
-interface CardFace {
+export interface CardFace {
   object: "card_face";
   name: string;
   mana_cost: string;
