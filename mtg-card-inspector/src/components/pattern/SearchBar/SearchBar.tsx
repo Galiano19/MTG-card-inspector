@@ -57,12 +57,13 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (query.trim()) {
-        onSearch(query.trim());
+      if (shouldShowSuggestions) {
+        onSearch(suggestions[0]);
+        setQuery(suggestions[0]);
         setShowSuggestions(false);
       }
     },
-    [query, onSearch]
+    [shouldShowSuggestions, suggestions, onSearch]
   );
 
   const handleSuggestionClick = useCallback(
