@@ -63,7 +63,7 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
         setShowSuggestions(false);
       }
     },
-    [query, onSearch]
+    [shouldShowSuggestions, suggestions, onSearch]
   );
 
   const handleSuggestionClick = useCallback(
