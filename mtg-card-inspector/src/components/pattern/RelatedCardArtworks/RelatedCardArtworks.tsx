@@ -47,12 +47,18 @@ function RelatedCardArtworksContent({
       >
         <div className="w-full bg-transparent relative">
           {card.foil && <FoilEffect />}
-          <Image
-            src={card.image_uris.normal}
-            alt="Related Artwork"
-            width={223}
-            height={310}
-          />
+          {card.image_uris ? (
+            <Image
+              src={card.image_uris.normal}
+              alt="Related Artwork"
+              width={223}
+              height={310}
+            />
+          ) : (
+            <div className="flex w-[223px] h-[310px] bg-[--clr-surface-a0] justify-center items-center">
+              Artwork not found
+            </div>
+          )}
         </div>
       </button>
     </CarouselItem>
