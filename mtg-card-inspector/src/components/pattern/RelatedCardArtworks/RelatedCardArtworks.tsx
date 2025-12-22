@@ -17,6 +17,7 @@ import FoilEffect from "../CardDisplay/FoilEffect";
 import { GalleryHorizontalEnd } from "lucide-react";
 import LoadingSkeleton from "./LoadingSkeleton";
 import NoRelatedArtworks from "./NoRelatedArtworks";
+import { memo } from "react";
 
 interface RelatedCardArtworksContentProps {
   data: ScryfallCard[] | undefined;
@@ -38,26 +39,30 @@ function RelatedCardArtworksContent({
     return <NoRelatedArtworks />;
   }
 
+  const RelatedCardArtwork = memo(({ card }: { card: any }) => (
+    <CarouselItem key={card.id} className="px-2 py-4">
+      <button
+        onClick={() => onSearch({ id: card.id })}
+        className="rounded-lg overflow-hidden hover:scale-105 transition-transform duration-200"
+      >
+        <div className="w-full bg-transparent relative">
+          {card.foil && <FoilEffect />}
+          <Image
+            src={card.image_uris.normal}
+            alt="Related Artwork"
+            width={223}
+            height={310}
+          />
+        </div>
+      </button>
+    </CarouselItem>
+  ));
+
   return (
     <Carousel>
       <CarouselContent className="pl-2 pr-4">
         {data.map((card: any) => (
-          <CarouselItem key={card.id} className="px-2 py-4 ">
-            <button
-              onClick={() => onSearch({ id: card.id })}
-              className="rounded-lg overflow-hidden hover:scale-105 transition-transform duration-200"
-            >
-              <div className=" w-full bg-transparent relative">
-                {card.foil && <FoilEffect />}
-                <Image
-                  src={card.image_uris.normal}
-                  alt="Related Artwork"
-                  width={223}
-                  height={310}
-                />
-              </div>
-            </button>
-          </CarouselItem>
+          <RelatedCardArtwork key={card.id} card={card} />
         ))}
       </CarouselContent>
       <div className="flex items-center gap-2 rounded-full border w-auto justify-self-end mt-2">
