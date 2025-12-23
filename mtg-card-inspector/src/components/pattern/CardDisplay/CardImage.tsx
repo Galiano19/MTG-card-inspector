@@ -1,6 +1,5 @@
 // @ts-ignore
 import { CardFace } from "@/types/scryfall";
-import "hover-tilt/web-component";
 import FoilEffect from "./FoilEffect";
 import { useEffect, useState } from "react";
 
@@ -24,6 +23,7 @@ export default function CardImage({
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    import("hover-tilt/web-component");
     setIsClient(true);
   }, []);
 
