@@ -2,6 +2,7 @@
 import { CardFace } from "@/types/scryfall";
 import "hover-tilt/web-component";
 import FoilEffect from "./FoilEffect";
+import { useEffect, useState } from "react";
 
 interface CardImageProps {
   cardName: string;
@@ -20,12 +21,45 @@ export default function CardImage({
   urlNormal,
   isFoil,
 }: CardImageProps) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const getImageUrl = () => {
     if (isDoubleFaced) {
       return face?.image_uris?.normal || face?.image_uris?.large;
     }
     return urlNormal || urlLarge;
   };
+
+  const imageContent = (
+    <>
+      {isFoil && (
+        <div className="rounded-xl overflow-hidden">
+          <div
+            className="absolute inset-0 rounded-xl mix-blend-multiply"
+            style={{
+              background:
+                "linear-gradient(135deg, #fcf4c9 10%, #fee3e2, #fbcdf2, #e8befa, #abbfff, #bbf3c0 90%)",
+            }}
+          />
+          <FoilEffect />
+        </div>
+      )}
+      <img
+        src={getImageUrl()}
+        alt={cardName}
+        className="w-full max-w-[280px] rounded-xl shadow-2xl transition-transform duration-500 self-center"
+        loading="lazy"
+      />
+    </>
+  );
+
+  if (!isClient) {
+    return <div className="flex self-center">{imageContent}</div>;
+  }
 
   return (
     <div className="flex self-center">
@@ -41,24 +75,7 @@ export default function CardImage({
         glare-mask-mode={isFoil ? "alpha" : "luminosity"}
         exit-delay="500"
       >
-        {isFoil && (
-          <div className="rounded-xl overflow-hidden">
-            <div
-              className="absolute inset-0 rounded-xl mix-blend-multiply"
-              style={{
-                background:
-                  "linear-gradient(135deg, #fcf4c9 10%, #fee3e2, #fbcdf2, #e8befa, #abbfff, #bbf3c0 90%)",
-              }}
-            />
-            <FoilEffect />
-          </div>
-        )}
-        <img
-          src={getImageUrl()}
-          alt={cardName}
-          className="w-full max-w-[280px] rounded-xl shadow-2xl transition-transform duration-500 self-center"
-          loading="lazy"
-        />
+        {imageContent}
         {/* @ts-ignore */}
       </hover-tilt>
     </div>
