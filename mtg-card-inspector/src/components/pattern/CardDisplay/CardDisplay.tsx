@@ -91,7 +91,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
   };
 
   return (
-    <Card className="bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30 overflow-hidden">
+    <Card className="bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30">
       <CardContent className="p-0">
         <div className="flex flex-col lg:flex-row">
           <div
@@ -108,13 +108,8 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                 face={face}
                 urlLarge={card.image_uris?.large}
                 urlNormal={card.image_uris?.normal}
+                isFoil={card.foil}
               />
-              {/* <img
-                src={getImageUrl()}
-                alt={card.name}
-                className="w-full max-w-[280px] rounded-xl shadow-2xl transition-transform duration-500 self-center"
-                loading="lazy"
-              /> */}
               {isDoubleFaced && (
                 <Button
                   onClick={handleShowBackFace}

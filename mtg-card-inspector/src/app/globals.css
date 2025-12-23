@@ -103,6 +103,19 @@
   }
 }
 
+/* Luminance Beam */
+:global(.luminance-beam) {
+  --hover-tilt-custom-gradient: linear-gradient(
+    120deg,
+    rgb(0 0 0 / 0)
+      calc((var(--gradient-x, 50%) / 2 + var(--gradient-y, 50%) / 2) - 60%),
+    rgb(249 218 173 / var(--hover-tilt-glare-intensity, 1))
+      calc((var(--gradient-x, 50%) / 2 + var(--gradient-y, 50%) / 2)),
+    rgb(0 0 0 / 0)
+      calc((var(--gradient-x, 50%) / 2 + var(--gradient-y, 50%) / 2) + 60%)
+  );
+}
+
 /* Basic layout resets */
 html,
 body,
@@ -184,19 +197,20 @@ code {
   background: linear-gradient(
     120deg,
     transparent 0%,
-    rgba(251, 255, 1, 0.4) 70%,
+    rgba(54, 207, 228, 0.4),
     transparent 100%
   );
   background-size: 200% 200%;
-  animation: foilMove 3s linear infinite;
+  animation: foilMove 9s linear infinite;
   mix-blend-mode: overlay;
+  filter: blur(25px);
 }
 
 @keyframes foilMove {
   0% {
-    background-position: 200% 0;
+    background-position: 200% 200%;
   }
   100% {
-    background-position: -200% 0;
+    background-position: -200% -200%;
   }
 }
