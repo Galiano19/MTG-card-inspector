@@ -16,15 +16,20 @@ import { Legalities } from "./Legalities";
 import { CardFace, ScryfallCard } from "@/types/scryfall";
 import { GameChangerBadge } from "./GameChangerBadge";
 import CardImage from "./CardImage";
+import {
+  getFlavorText,
+  getManaCost,
+  getOracleText,
+  getPowerToughness,
+  getTypeLine,
+  getIsDoubleFaced,
+} from "@/lib/card/utils";
 
 // TODO: enhance types
 export default function CardDisplay({ card }: { card: ScryfallCard }) {
   const [showBackFace, setShowBackFace] = useState(false);
   const [face, setFace] = useState<CardFace | undefined>(undefined);
-  const isDoubleFaced = card.card_faces && card.card_faces.length > 1;
-
-  console.log(card.finishes);
-  console.log(card.foil);
+  const isDoubleFaced = getIsDoubleFaced(card);
 
   useEffect(() => {
     if (isDoubleFaced) {
@@ -43,47 +48,6 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
       //@ts-ignore -- isDoubleFaced already checks if cardFaces array contains items
       setFace(card.card_faces[showBackFace ? 0 : 1]);
     }
-  };
-
-  const getOracleText = () => {
-    if (isDoubleFaced) {
-      return face?.oracle_text || "";
-    }
-    return card.oracle_text || "";
-  };
-
-  const getFlavorText = () => {
-    if (isDoubleFaced) {
-      return face?.flavor_text || "";
-    }
-    return card.flavor_text || "";
-  };
-
-  const getTypeLine = () => {
-    if (isDoubleFaced) {
-      return face?.type_line || card.type_line;
-    }
-    return card.type_line;
-  };
-
-  const getManaCost = () => {
-    if (isDoubleFaced) {
-      return face?.mana_cost || card.mana_cost || "";
-    }
-    return card.mana_cost || "";
-  };
-
-  const getPowerToughness = () => {
-    if (isDoubleFaced) {
-      if (face?.power && face?.toughness) {
-        return `${face.power}/${face.toughness}`;
-      }
-      return null;
-    }
-    if (card.power && card.toughness) {
-      return `${card.power}/${card.toughness}`;
-    }
-    return null;
   };
 
   return (
@@ -151,17 +115,21 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                   </h2>
                   {card.game_changer && <GameChangerBadge />}
                 </div>
-                {getManaCost() && <ManaSymbol symbol={getManaCost()} />}
+                {getManaCost({ face, card }) && (
+                  <ManaSymbol symbol={getManaCost({ face, card })} />
+                )}
               </div>
               <div className="flex items-center gap-2 flex-wrap">
-                <i>{getTypeLine()}</i>
-                {getPowerToughness() && (
-                  <Badge className="font-bold">{getPowerToughness()}</Badge>
+                <i>{getTypeLine({ face, card })}</i>
+                {getPowerToughness({ face, card }) && (
+                  <Badge className="font-bold">
+                    {getPowerToughness({ face, card })}
+                  </Badge>
                 )}
               </div>
             </div>
 
-            {getOracleText() && (
+            {getOracleText({ face, card }) && (
               <div id="oracle-text" className="space-y-2">
                 <div className="flex items-center gap-2">
                   <BookOpen className="w-4 h-4  " />
@@ -171,13 +139,13 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                 </div>
                 <div className="bg-[--clr-surface-a10] rounded-xl p-3 md:p-4 border border-[--clr-surface-a20]">
                   <p className="whitespace-pre-line leading-relaxed text-sm md:text-base">
-                    {getOracleText()}
+                    {getOracleText({ face, card })}
                   </p>
                 </div>
               </div>
             )}
 
-            {Boolean(getFlavorText()) && (
+            {Boolean(getFlavorText({ face, card })) && (
               <div id="flavor-text" className="space-y-2">
                 <div className="flex items-center gap-2 ">
                   <Sparkles className="w-4 h-4  " />
@@ -186,7 +154,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                   </span>
                 </div>
                 <p className="italic border-l-4 border-[--clr-primary-a0] pl-4 text-sm md:text-base">
-                  &ldquo;{getFlavorText()}&rdquo;
+                  &ldquo;{getFlavorText({ face, card })}&rdquo;
                 </p>
               </div>
             )}
