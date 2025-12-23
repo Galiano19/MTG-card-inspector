@@ -23,6 +23,9 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
   const [face, setFace] = useState<CardFace | undefined>(undefined);
   const isDoubleFaced = card.card_faces && card.card_faces.length > 1;
 
+  console.log(card.finishes);
+  console.log(card.foil);
+
   useEffect(() => {
     if (isDoubleFaced) {
       //@ts-ignore -- isDoubleFaced already checks if cardFaces array contains items
@@ -40,13 +43,6 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
       //@ts-ignore -- isDoubleFaced already checks if cardFaces array contains items
       setFace(card.card_faces[showBackFace ? 0 : 1]);
     }
-  };
-
-  const getImageUrl = () => {
-    if (isDoubleFaced) {
-      return face?.image_uris?.normal || face?.image_uris?.large;
-    }
-    return card.image_uris?.normal || card.image_uris?.large;
   };
 
   const getOracleText = () => {
