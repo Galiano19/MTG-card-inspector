@@ -96,7 +96,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
         <div className="flex flex-col lg:flex-row">
           <div
             id="image-section"
-            className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center bg-cover bg-center"
+            className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center bg-cover bg-center rounded-t-xl lg:rounded-t-none lg:rounded-tl-xl lg:rounded-bl-xl"
             style={{
               backgroundImage: `linear-gradient(to right, var(--clr-surface-a30), rgba(0,0,0,0)), url('${card.image_uris?.art_crop}')`,
             }}

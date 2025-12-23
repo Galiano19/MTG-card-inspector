@@ -206,11 +206,33 @@ code {
   filter: blur(25px);
 }
 
+.foil-shine-pink {
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(228, 54, 207, 0.4),
+    transparent 100%
+  );
+  background-size: 200% 200%;
+  animation: foilMoveReverse 9s linear infinite;
+  mix-blend-mode: overlay;
+  filter: blur(25px);
+}
+
 @keyframes foilMove {
   0% {
     background-position: 200% 200%;
   }
   100% {
     background-position: -200% -200%;
+  }
+}
+
+@keyframes foilMoveReverse {
+  0% {
+    background-position: -200% -200%;
+  }
+  100% {
+    background-position: 200% 200%;
   }
 }
