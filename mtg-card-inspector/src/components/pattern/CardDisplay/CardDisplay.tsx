@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   RefreshCw,
   BookOpen,
@@ -13,97 +13,66 @@ import { ManaSymbol } from "./ManaSymbol";
 import { RarityBadge } from "./RarityBadge";
 import { Button } from "@/components/ui/button";
 import { Legalities } from "./Legalities";
-import { ScryfallCard } from "@/types/scryfall";
+import { CardFace, ScryfallCard } from "@/types/scryfall";
 import { GameChangerBadge } from "./GameChangerBadge";
+import CardImage from "./CardImage";
+import {
+  getFlavorText,
+  getManaCost,
+  getOracleText,
+  getPowerToughness,
+  getTypeLine,
+  getIsDoubleFaced,
+} from "@/lib/card/utils";
 
 // TODO: enhance types
 export default function CardDisplay({ card }: { card: ScryfallCard }) {
   const [showBackFace, setShowBackFace] = useState(false);
-  const isDoubleFaced = card.card_faces && card.card_faces.length > 1;
+  const [face, setFace] = useState<CardFace | undefined>(undefined);
+  const isDoubleFaced = getIsDoubleFaced(card);
 
-  console.log("Rendering CardDisplay for card:", card);
-
-  const getCurrentFace = () => {
-    if (!isDoubleFaced || !card.card_faces) return null;
-    return showBackFace ? card.card_faces[1] : card.card_faces[0];
-  };
-
-  const getImageUrl = () => {
+  useEffect(() => {
     if (isDoubleFaced) {
-      const face = getCurrentFace();
-      return face?.image_uris?.normal || face?.image_uris?.large;
+      //@ts-ignore -- isDoubleFaced already checks if cardFaces array contains items
+      setFace(card.card_faces[0]);
     }
-    return card.image_uris?.normal || card.image_uris?.large;
-  };
 
-  const getOracleText = () => {
-    if (isDoubleFaced) {
-      return getCurrentFace()?.oracle_text || "";
-    }
-    return card.oracle_text || "";
-  };
+    return () => {
+      setFace(undefined);
+    };
+  }, [card, isDoubleFaced]);
 
-  const getFlavorText = () => {
+  const handleShowBackFace = () => {
     if (isDoubleFaced) {
-      return getCurrentFace()?.flavor_text || "";
+      setShowBackFace(!showBackFace);
+      //@ts-ignore -- isDoubleFaced already checks if cardFaces array contains items
+      setFace(card.card_faces[showBackFace ? 0 : 1]);
     }
-    return card.flavor_text || "";
-  };
-
-  const getTypeLine = () => {
-    if (isDoubleFaced) {
-      return getCurrentFace()?.type_line || card.type_line;
-    }
-    return card.type_line;
-  };
-
-  const getManaCost = () => {
-    if (isDoubleFaced) {
-      return getCurrentFace()?.mana_cost || card.mana_cost || "";
-    }
-    return card.mana_cost || "";
-  };
-
-  const getPowerToughness = () => {
-    if (isDoubleFaced) {
-      const face = getCurrentFace();
-      if (face?.power && face?.toughness) {
-        return `${face.power}/${face.toughness}`;
-      }
-      return null;
-    }
-    if (card.power && card.toughness) {
-      return `${card.power}/${card.toughness}`;
-    }
-    return null;
   };
 
   return (
-    <Card className="bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30 overflow-hidden">
+    <Card className="bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30">
       <CardContent className="p-0">
         <div className="flex flex-col lg:flex-row">
           <div
             id="image-section"
-            className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center bg-cover bg-center"
+            className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center bg-cover bg-center rounded-t-xl lg:rounded-t-none lg:rounded-tl-xl lg:rounded-bl-xl"
             style={{
               backgroundImage: `linear-gradient(to right, var(--clr-surface-a30), rgba(0,0,0,0)), url('${card.image_uris?.art_crop}')`,
             }}
           >
             <div className="relative group flex flex-col h-full w-full gap-2">
-              <img
-                src={getImageUrl()}
-                alt={card.name}
-                className="w-full max-w-[280px] rounded-xl shadow-2xl transition-transform duration-500 self-center"
-                onClick={
-                  isDoubleFaced
-                    ? () => setShowBackFace(!showBackFace)
-                    : undefined
-                }
-                loading="lazy"
+              <CardImage
+                cardName={card.name}
+                isDoubleFaced={isDoubleFaced}
+                face={face}
+                urlLarge={card.image_uris?.large}
+                urlNormal={card.image_uris?.normal}
+                isFoil={card.foil}
               />
               {isDoubleFaced && (
                 <Button
-                  onClick={() => setShowBackFace(!showBackFace)}
+                  onClick={handleShowBackFace}
                   className="absolute bottom-4 right-4 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 min-w-[48px] min-h-[48px] flex items-center justify-center"
                   aria-label={
                     showBackFace ? "Show front face" : "Show back face"
@@ -142,21 +111,25 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
               <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3">
                 <div className="flex items-center gap-2">
                   <h2 className="text-xl md:text-2xl lg:text-3xl font-bold  ">
-                    {isDoubleFaced ? getCurrentFace()?.name : card.name}
+                    {isDoubleFaced ? face?.name : card.name}
                   </h2>
                   {card.game_changer && <GameChangerBadge />}
                 </div>
-                {getManaCost() && <ManaSymbol symbol={getManaCost()} />}
+                {getManaCost({ face, card }) && (
+                  <ManaSymbol symbol={getManaCost({ face, card })} />
+                )}
               </div>
               <div className="flex items-center gap-2 flex-wrap">
-                <i>{getTypeLine()}</i>
-                {getPowerToughness() && (
-                  <Badge className="font-bold">{getPowerToughness()}</Badge>
+                <i>{getTypeLine({ face, card })}</i>
+                {getPowerToughness({ face, card }) && (
+                  <Badge className="font-bold">
+                    {getPowerToughness({ face, card })}
+                  </Badge>
                 )}
               </div>
             </div>
 
-            {getOracleText() && (
+            {getOracleText({ face, card }) && (
               <div id="oracle-text" className="space-y-2">
                 <div className="flex items-center gap-2">
                   <BookOpen className="w-4 h-4  " />
@@ -166,13 +139,13 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                 </div>
                 <div className="bg-[--clr-surface-a10] rounded-xl p-3 md:p-4 border border-[--clr-surface-a20]">
                   <p className="whitespace-pre-line leading-relaxed text-sm md:text-base">
-                    {getOracleText()}
+                    {getOracleText({ face, card })}
                   </p>
                 </div>
               </div>
             )}
 
-            {Boolean(getFlavorText()) && (
+            {Boolean(getFlavorText({ face, card })) && (
               <div id="flavor-text" className="space-y-2">
                 <div className="flex items-center gap-2 ">
                   <Sparkles className="w-4 h-4  " />
@@ -181,7 +154,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                   </span>
                 </div>
                 <p className="italic border-l-4 border-[--clr-primary-a0] pl-4 text-sm md:text-base">
-                  &ldquo;{getFlavorText()}&rdquo;
+                  &ldquo;{getFlavorText({ face, card })}&rdquo;
                 </p>
               </div>
             )}
