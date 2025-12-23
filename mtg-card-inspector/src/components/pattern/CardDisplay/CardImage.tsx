@@ -27,7 +27,11 @@ export default function CardImage({
   return (
     <>
       {/* @ts-ignore */}
-      <hover-tilt tilt-factor="1.5" scale-factor="1.1">
+      <hover-tilt
+        tilt-factor="1.5"
+        scale-factor="1.1"
+        class="[&::part(container)]:rounded-xl"
+      >
         <img
           src={getImageUrl()}
           alt={cardName}
