@@ -26,7 +26,7 @@ const CardHeader = React.forwardRef(
   ) => (
     <div
       ref={ref}
-      className={cn("flex flex-col space-y-1.5 p-6", className)}
+      className={cn("flex flex-col space-y-1.5 p-4 md:p-6", className)}
       {...props}
     />
   )
@@ -63,9 +63,19 @@ CardDescription.displayName = "CardDescription";
 
 const CardContent = React.forwardRef(
   (
-    { className, ...props }: React.HTMLAttributes<HTMLDivElement>,
+    {
+      className,
+      isFullWidth = false,
+      ...props
+    }: React.HTMLAttributes<HTMLDivElement> & { isFullWidth?: boolean },
     ref: React.Ref<HTMLDivElement>
-  ) => <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+  ) => (
+    <div
+      ref={ref}
+      className={cn(`${!isFullWidth ? "p-6" : " "} pb-6 pt-0`, className)}
+      {...props}
+    />
+  )
 );
 CardContent.displayName = "CardContent";
 

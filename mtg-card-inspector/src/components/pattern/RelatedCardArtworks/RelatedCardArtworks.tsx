@@ -18,6 +18,7 @@ import { GalleryHorizontalEnd } from "lucide-react";
 import LoadingSkeleton from "./LoadingSkeleton";
 import NoRelatedArtworks from "./NoRelatedArtworks";
 import { memo } from "react";
+import { scrollToTop } from "@/lib/utils";
 
 interface RelatedCardArtworksContentProps {
   data: ScryfallCard[] | undefined;
@@ -39,39 +40,70 @@ function RelatedCardArtworksContent({
     return <NoRelatedArtworks />;
   }
 
-  const RelatedCardArtwork = memo(({ card }: { card: any }) => (
-    <CarouselItem key={card.id} className="px-2 py-4">
-      <button
-        onClick={() => onSearch({ id: card.id })}
-        className="rounded-lg overflow-hidden hover:scale-105 transition-transform duration-200"
-      >
-        <div className="w-full bg-transparent relative">
-          {card.foil && <FoilEffect />}
-          {card.image_uris ? (
-            <Image
-              src={card.image_uris.normal}
-              alt="Related Artwork"
-              width={223}
-              height={310}
-            />
-          ) : (
-            <div className="flex w-[223px] h-[310px] bg-[--clr-surface-a0] justify-center items-center">
-              Artwork not found
+  const RelatedCardArtwork = memo(({ card }: { card: ScryfallCard }) => {
+    const isFoil = card.foil;
+    const cardEurPrice = isFoil ? card.prices?.eur_foil : card.prices?.eur;
+    const cardUsdPrice = isFoil ? card.prices?.usd_foil : card.prices?.usd;
+
+    const handleOnClick = () => {
+      onSearch({ id: card.id });
+      scrollToTop();
+    };
+
+    return (
+      <CarouselItem key={card.id} className="px-2 py-2">
+        <button
+          onClick={handleOnClick}
+          className="relative rounded-lg overflow-hidden hover:scale-105 transition-transform duration-200"
+        >
+          {isFoil && (
+            <div className="absolute z-[1] top-0 bg-[--clr-primary-a10] left-1/2 transform -translate-x-1/2  pl-3 pr-3 rounded-b-md text-[--clr-dark-a0] flex">
+              <span className="text-xs">FOIL</span>
             </div>
           )}
-        </div>
-      </button>
-    </CarouselItem>
-  ));
+          {(cardEurPrice || cardUsdPrice) && (
+            <div className="absolute z-[1] bottom-0 bg-[--clr-primary-a10] left-1/2 transform -translate-x-1/2 flex gap-2 items-center pl-3 pr-3 rounded-t-md text-[--clr-dark-a0]">
+              {cardEurPrice && <span className="text-xs">€{cardEurPrice}</span>}
+              {cardUsdPrice && (
+                <span className="text-xs"> ${cardUsdPrice}</span>
+              )}
+            </div>
+          )}
+          <div className="w-full bg-transparent relative">
+            {card.foil && <FoilEffect />}
+            {card.image_uris ? (
+              <Image
+                src={card.image_uris.normal}
+                alt="Related Artwork"
+                width={223}
+                height={310}
+              />
+            ) : (
+              <div className="flex w-[223px] h-[310px] bg-[--clr-surface-a0] justify-center items-center">
+                Artwork not found
+              </div>
+            )}
+          </div>
+        </button>
+      </CarouselItem>
+    );
+  });
 
   return (
     <Carousel>
-      <CarouselContent className="pl-2 pr-4">
-        {data.map((card: any) => (
-          <RelatedCardArtwork key={card.id} card={card} />
-        ))}
-      </CarouselContent>
-      <div className="flex items-center gap-2 rounded-full border w-auto justify-self-end mt-2">
+      <div className="relative">
+        <CarouselContent className="pl-6 md:pl-8 md:pr-10">
+          {data.map((card: any) => (
+            <RelatedCardArtwork key={card.id} card={card} />
+          ))}
+        </CarouselContent>
+        <div className="pointer-events-none absolute left-0 top-0 h-full w-6 md:w-8 bg-gradient-to-r from-[--clr-surface-a20] to-transparent"></div>
+        <div
+          className="pointer-events-none absolute right-0 top-0 h-full w-6 md:w-8
+              bg-gradient-to-l from-[--clr-surface-a20] to-transparent"
+        ></div>
+      </div>
+      <div className="flex items-center gap-2 rounded-full border w-auto justify-self-end mt-2 md:mr-6 mr-4">
         <CarouselPrevious />
         <CarouselNext />
       </div>
@@ -103,12 +135,12 @@ export default function RelatedCardArtworks({
               <GalleryHorizontalEnd className="w-4 h-4 md:w-5 md:h-5" />
             </div>
             <CardTitle className="text-lg md:text-xl font-bold ">
-              Related Artworks
+              Other versions
             </CardTitle>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent isFullWidth>
         <RelatedCardArtworksContent
           data={data}
           isLoading={isLoading}
