@@ -39,30 +39,49 @@ function RelatedCardArtworksContent({
     return <NoRelatedArtworks />;
   }
 
-  const RelatedCardArtwork = memo(({ card }: { card: any }) => (
-    <CarouselItem key={card.id} className="px-2 py-2">
-      <button
-        onClick={() => onSearch({ id: card.id })}
-        className="rounded-lg overflow-hidden hover:scale-105 transition-transform duration-200"
-      >
-        <div className="w-full bg-transparent relative">
-          {card.foil && <FoilEffect />}
-          {card.image_uris ? (
-            <Image
-              src={card.image_uris.normal}
-              alt="Related Artwork"
-              width={223}
-              height={310}
-            />
-          ) : (
-            <div className="flex w-[223px] h-[310px] bg-[--clr-surface-a0] justify-center items-center">
-              Artwork not found
+  const RelatedCardArtwork = memo(({ card }: { card: ScryfallCard }) => {
+    const isFoil = card.foil;
+    const cardEurPrice = isFoil ? card.prices?.eur_foil : card.prices?.eur;
+    const cardUsdPrice = isFoil ? card.prices?.usd_foil : card.prices?.usd;
+
+    return (
+      <CarouselItem key={card.id} className="px-2 py-2">
+        <button
+          onClick={() => onSearch({ id: card.id })}
+          className="relative rounded-lg overflow-hidden hover:scale-105 transition-transform duration-200"
+        >
+          {isFoil && (
+            <div className="absolute z-[1] top-0 bg-[--clr-primary-a10] left-1/2 transform -translate-x-1/2  pl-3 pr-3 rounded-b-md text-[--clr-dark-a0] flex">
+              <span className="text-xs">FOIL</span>
             </div>
           )}
-        </div>
-      </button>
-    </CarouselItem>
-  ));
+          {(cardEurPrice || cardUsdPrice) && (
+            <div className="absolute z-[1] bottom-0 bg-[--clr-primary-a10] left-1/2 transform -translate-x-1/2 flex gap-2 items-center pl-3 pr-3 rounded-t-md text-[--clr-dark-a0]">
+              {cardEurPrice && <span className="text-xs">€{cardEurPrice}</span>}
+              {cardUsdPrice && (
+                <span className="text-xs"> ${cardUsdPrice}</span>
+              )}
+            </div>
+          )}
+          <div className="w-full bg-transparent relative">
+            {card.foil && <FoilEffect />}
+            {card.image_uris ? (
+              <Image
+                src={card.image_uris.normal}
+                alt="Related Artwork"
+                width={223}
+                height={310}
+              />
+            ) : (
+              <div className="flex w-[223px] h-[310px] bg-[--clr-surface-a0] justify-center items-center">
+                Artwork not found
+              </div>
+            )}
+          </div>
+        </button>
+      </CarouselItem>
+    );
+  });
 
   return (
     <Carousel>
