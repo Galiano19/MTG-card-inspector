@@ -18,6 +18,7 @@ import { GalleryHorizontalEnd } from "lucide-react";
 import LoadingSkeleton from "./LoadingSkeleton";
 import NoRelatedArtworks from "./NoRelatedArtworks";
 import { memo } from "react";
+import { scrollToTop } from "@/lib/utils";
 
 interface RelatedCardArtworksContentProps {
   data: ScryfallCard[] | undefined;
@@ -44,10 +45,15 @@ function RelatedCardArtworksContent({
     const cardEurPrice = isFoil ? card.prices?.eur_foil : card.prices?.eur;
     const cardUsdPrice = isFoil ? card.prices?.usd_foil : card.prices?.usd;
 
+    const handleOnClick = () => {
+      onSearch({ id: card.id });
+      scrollToTop();
+    };
+
     return (
       <CarouselItem key={card.id} className="px-2 py-2">
         <button
-          onClick={() => onSearch({ id: card.id })}
+          onClick={handleOnClick}
           className="relative rounded-lg overflow-hidden hover:scale-105 transition-transform duration-200"
         >
           {isFoil && (
