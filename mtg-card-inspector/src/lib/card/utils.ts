@@ -1,7 +1,7 @@
 import { CardFace, ScryfallCard } from "@/types/scryfall";
 
-export function getIsFlippeable(card: ScryfallCard): boolean {
-  const doubleFacedLayouts = [
+export function getIsTransformable(card: ScryfallCard): boolean {
+  const transformanbleLayouts = [
     "transform",
     "modal_dfc",
     "meld",
@@ -9,7 +9,7 @@ export function getIsFlippeable(card: ScryfallCard): boolean {
     "art_series",
     "reversible_card",
   ];
-  if (card.layout && doubleFacedLayouts.includes(card.layout)) {
+  if (card.layout && transformanbleLayouts.includes(card.layout)) {
     return true;
   }
 
@@ -23,7 +23,7 @@ export function getOracleText({
   face?: CardFace;
   card: ScryfallCard;
 }) {
-  if (getIsFlippeable(card)) {
+  if (getIsTransformable(card)) {
     return face?.oracle_text || "";
   }
   return card.oracle_text || "";
@@ -36,7 +36,7 @@ export function getFlavorText({
   face?: CardFace;
   card: ScryfallCard;
 }) {
-  if (getIsFlippeable(card)) {
+  if (getIsTransformable(card)) {
     return face?.flavor_text || "";
   }
   return card.flavor_text || "";
@@ -49,7 +49,7 @@ export function getTypeLine({
   face?: CardFace;
   card: ScryfallCard;
 }) {
-  if (getIsFlippeable(card)) {
+  if (getIsTransformable(card)) {
     return face?.type_line || card.type_line;
   }
   return card.type_line;
@@ -62,7 +62,7 @@ export function getManaCost({
   face?: CardFace;
   card: ScryfallCard;
 }) {
-  if (getIsFlippeable(card)) {
+  if (getIsTransformable(card)) {
     return (
       sanitizeSymbol(face?.mana_cost) || sanitizeSymbol(card.mana_cost) || []
     );
@@ -77,7 +77,7 @@ export function getPowerToughness({
   face?: CardFace;
   card: ScryfallCard;
 }) {
-  if (getIsFlippeable(card)) {
+  if (getIsTransformable(card)) {
     if (face?.power && face?.toughness) {
       return `${face.power}/${face.toughness}`;
     }

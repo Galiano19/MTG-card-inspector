@@ -1,5 +1,5 @@
 import {
-  getIsFlippeable,
+  getIsTransformable,
   getOracleText,
   getFlavorText,
   getTypeLine,
@@ -42,17 +42,17 @@ const mockDoubleFaceCard: ScryfallCard = {
   layout: "transform",
 } as ScryfallCard;
 
-describe("getIsFlippeable", () => {
+describe("getIsTransformable", () => {
   it("returns false for single-faced card", () => {
-    expect(getIsFlippeable(mockSingleFaceCard)).toBe(false);
+    expect(getIsTransformable(mockSingleFaceCard)).toBe(false);
   });
 
   it("returns true for double-faced card", () => {
-    expect(getIsFlippeable(mockDoubleFaceCard)).toBe(true);
+    expect(getIsTransformable(mockDoubleFaceCard)).toBe(true);
   });
 
   it("returns false when card_faces is undefined", () => {
-    expect(getIsFlippeable({} as ScryfallCard)).toBe(false);
+    expect(getIsTransformable({} as ScryfallCard)).toBe(false);
   });
 });
 
