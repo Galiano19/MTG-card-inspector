@@ -31,6 +31,8 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
   const [face, setFace] = useState<CardFace | undefined>(undefined);
   const isDoubleFaced = getIsDoubleFaced(card);
 
+  console.log(card);
+
   useEffect(() => {
     if (isDoubleFaced) {
       //@ts-ignore -- isDoubleFaced already checks if cardFaces array contains items
@@ -115,9 +117,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                   </h2>
                   {card.game_changer && <GameChangerBadge />}
                 </div>
-                {getManaCost({ face, card }) && (
-                  <ManaSymbol symbol={getManaCost({ face, card })} />
-                )}
+                <ManaSymbol card={card} face={face} />
               </div>
               <div className="flex items-center gap-2 flex-wrap">
                 <i>{getTypeLine({ face, card })}</i>

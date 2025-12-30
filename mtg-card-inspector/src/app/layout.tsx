@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
+import "mana-font/css/mana.css";
 import { QueryProvider } from "../providers/query-provider";
 
 export const metadata: Metadata = {

@@ -54,9 +54,13 @@ export function getManaCost({
   card: ScryfallCard;
 }) {
   if (getIsDoubleFaced(card)) {
-    return face?.mana_cost || card.mana_cost || "";
+    return (
+      sanitizeManaCost(face?.mana_cost) ||
+      sanitizeManaCost(card.mana_cost) ||
+      []
+    );
   }
-  return card.mana_cost || "";
+  return sanitizeManaCost(card.mana_cost) || [];
 }
 
 export function getPowerToughness({
@@ -76,4 +80,18 @@ export function getPowerToughness({
     return `${card.power}/${card.toughness}`;
   }
   return null;
+}
+
+export function sanitizeManaCost(manaCost?: string): string[] {
+  if (!manaCost) return [];
+
+  const regex = /\{([^}]+)\}/g;
+  const matches = [];
+  let match;
+
+  while ((match = regex.exec(manaCost)) !== null) {
+    matches.push(match[1]);
+  }
+
+  return matches;
 }
