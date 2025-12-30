@@ -22,32 +22,32 @@ import {
   getOracleText,
   getPowerToughness,
   getTypeLine,
-  getIsDoubleFaced,
+  getIsFlippeable,
 } from "@/lib/card/utils";
 
 // TODO: enhance types
 export default function CardDisplay({ card }: { card: ScryfallCard }) {
   const [showBackFace, setShowBackFace] = useState(false);
   const [face, setFace] = useState<CardFace | undefined>(undefined);
-  const isDoubleFaced = getIsDoubleFaced(card);
+  const isFlippeable = getIsFlippeable(card);
 
   console.log(card);
 
   useEffect(() => {
-    if (isDoubleFaced) {
-      //@ts-ignore -- isDoubleFaced already checks if cardFaces array contains items
+    if (isFlippeable) {
+      //@ts-ignore -- isFlippeable already checks if cardFaces array contains items
       setFace(card.card_faces[0]);
     }
 
     return () => {
       setFace(undefined);
     };
-  }, [card, isDoubleFaced]);
+  }, [card, isFlippeable]);
 
   const handleShowBackFace = () => {
-    if (isDoubleFaced) {
+    if (isFlippeable) {
       setShowBackFace(!showBackFace);
-      //@ts-ignore -- isDoubleFaced already checks if cardFaces array contains items
+      //@ts-ignore -- isFlippeable already checks if cardFaces array contains items
       setFace(card.card_faces[showBackFace ? 0 : 1]);
     }
   };
@@ -66,13 +66,13 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
             <div className="relative group flex flex-col h-full w-full gap-2">
               <CardImage
                 cardName={card.name}
-                isDoubleFaced={isDoubleFaced}
+                isFlippeable={isFlippeable}
                 face={face}
                 urlLarge={card.image_uris?.large}
                 urlNormal={card.image_uris?.normal}
                 isFoil={card.foil}
               />
-              {isDoubleFaced && (
+              {isFlippeable && (
                 <Button
                   onClick={handleShowBackFace}
                   className="absolute bottom-4 right-4 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 min-w-[48px] min-h-[48px] flex items-center justify-center"
@@ -96,7 +96,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                 </div>
               </div>
             </div>
-            {isDoubleFaced && (
+            {isFlippeable && (
               <div className="absolute bottom-2 left-0 right-0 text-center">
                 <span className="text-xs bg-[--clr-surface-a10] px-3 py-1 rounded-full">
                   {showBackFace ? "Back Face" : "Front Face"} • Tap to flip
@@ -113,7 +113,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
               <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3 align-center">
                 <div className="flex items-center gap-2">
                   <h2 className="text-xl md:text-2xl lg:text-3xl font-bold  ">
-                    {isDoubleFaced ? face?.name : card.name}
+                    {isFlippeable ? face?.name : card.name}
                   </h2>
                   {card.game_changer && <GameChangerBadge />}
                 </div>

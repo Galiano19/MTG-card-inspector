@@ -1,10 +1,19 @@
 import { CardFace, ScryfallCard } from "@/types/scryfall";
 
-export function getIsDoubleFaced(card: ScryfallCard): boolean {
-  if (!card.card_faces) {
-    return false;
+export function getIsFlippeable(card: ScryfallCard): boolean {
+  const doubleFacedLayouts = [
+    "transform",
+    "modal_dfc",
+    "meld",
+    "double_faced_token",
+    "art_series",
+    "reversible_card",
+  ];
+  if (card.layout && doubleFacedLayouts.includes(card.layout)) {
+    return true;
   }
-  return card.card_faces && card.card_faces.length > 1;
+
+  return false;
 }
 
 export function getOracleText({
@@ -14,7 +23,7 @@ export function getOracleText({
   face?: CardFace;
   card: ScryfallCard;
 }) {
-  if (getIsDoubleFaced(card)) {
+  if (getIsFlippeable(card)) {
     return face?.oracle_text || "";
   }
   return card.oracle_text || "";
@@ -27,7 +36,7 @@ export function getFlavorText({
   face?: CardFace;
   card: ScryfallCard;
 }) {
-  if (getIsDoubleFaced(card)) {
+  if (getIsFlippeable(card)) {
     return face?.flavor_text || "";
   }
   return card.flavor_text || "";
@@ -40,7 +49,7 @@ export function getTypeLine({
   face?: CardFace;
   card: ScryfallCard;
 }) {
-  if (getIsDoubleFaced(card)) {
+  if (getIsFlippeable(card)) {
     return face?.type_line || card.type_line;
   }
   return card.type_line;
@@ -53,7 +62,7 @@ export function getManaCost({
   face?: CardFace;
   card: ScryfallCard;
 }) {
-  if (getIsDoubleFaced(card)) {
+  if (getIsFlippeable(card)) {
     return (
       sanitizeSymbol(face?.mana_cost) || sanitizeSymbol(card.mana_cost) || []
     );
@@ -68,7 +77,7 @@ export function getPowerToughness({
   face?: CardFace;
   card: ScryfallCard;
 }) {
-  if (getIsDoubleFaced(card)) {
+  if (getIsFlippeable(card)) {
     if (face?.power && face?.toughness) {
       return `${face.power}/${face.toughness}`;
     }

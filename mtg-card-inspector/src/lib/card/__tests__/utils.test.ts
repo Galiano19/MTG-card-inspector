@@ -1,5 +1,5 @@
 import {
-  getIsDoubleFaced,
+  getIsFlippeable,
   getOracleText,
   getFlavorText,
   getTypeLine,
@@ -15,6 +15,7 @@ const mockSingleFaceCard: ScryfallCard = {
   mana_cost: "{aManaCost}",
   power: "aPower",
   toughness: "aToughness",
+  layout: "normal",
 } as ScryfallCard;
 
 const mockDoubleFaceCard: ScryfallCard = {
@@ -38,19 +39,20 @@ const mockDoubleFaceCard: ScryfallCard = {
   ],
   type_line: "aDoubleFaceTypeLine",
   mana_cost: "{aDoubleFaceManaCost}",
+  layout: "transform",
 } as ScryfallCard;
 
-describe("getIsDoubleFaced", () => {
+describe("getIsFlippeable", () => {
   it("returns false for single-faced card", () => {
-    expect(getIsDoubleFaced(mockSingleFaceCard)).toBe(false);
+    expect(getIsFlippeable(mockSingleFaceCard)).toBe(false);
   });
 
   it("returns true for double-faced card", () => {
-    expect(getIsDoubleFaced(mockDoubleFaceCard)).toBe(true);
+    expect(getIsFlippeable(mockDoubleFaceCard)).toBe(true);
   });
 
   it("returns false when card_faces is undefined", () => {
-    expect(getIsDoubleFaced({} as ScryfallCard)).toBe(false);
+    expect(getIsFlippeable({} as ScryfallCard)).toBe(false);
   });
 });
 
