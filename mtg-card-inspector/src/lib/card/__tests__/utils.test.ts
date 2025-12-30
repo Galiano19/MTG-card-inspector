@@ -18,7 +18,7 @@ const mockSingleFaceCard: ScryfallCard = {
   layout: "normal",
 } as ScryfallCard;
 
-const mockDoubleFaceCard: ScryfallCard = {
+const mockTransformableCard: ScryfallCard = {
   card_faces: [
     {
       oracle_text: "aFrontOracleText",
@@ -48,7 +48,7 @@ describe("getIsTransformable", () => {
   });
 
   it("returns true for double-faced card", () => {
-    expect(getIsTransformable(mockDoubleFaceCard)).toBe(true);
+    expect(getIsTransformable(mockTransformableCard)).toBe(true);
   });
 
   it("returns false when card_faces is undefined", () => {
@@ -66,8 +66,8 @@ describe("getOracleText", () => {
   it("returns face oracle text for double-faced card", () => {
     expect(
       getOracleText({
-        face: mockDoubleFaceCard.card_faces![0],
-        card: mockDoubleFaceCard,
+        face: mockTransformableCard.card_faces![0],
+        card: mockTransformableCard,
       })
     ).toStrictEqual(["aFrontOracleText"]);
   });
@@ -85,8 +85,8 @@ describe("getFlavorText", () => {
   it("returns face flavor text for double-faced card", () => {
     expect(
       getFlavorText({
-        face: mockDoubleFaceCard.card_faces![0],
-        card: mockDoubleFaceCard,
+        face: mockTransformableCard.card_faces![0],
+        card: mockTransformableCard,
       })
     ).toBe("aFrontFlavorText");
   });
@@ -104,15 +104,15 @@ describe("getTypeLine", () => {
   it("returns face type line for double-faced card", () => {
     expect(
       getTypeLine({
-        face: mockDoubleFaceCard.card_faces![0],
-        card: mockDoubleFaceCard,
+        face: mockTransformableCard.card_faces![0],
+        card: mockTransformableCard,
       })
     ).toBe("aFrontTypeLine");
   });
 
   it("falls back to card type line when face has no type line", () => {
     expect(
-      getTypeLine({ face: {} as CardFace, card: mockDoubleFaceCard })
+      getTypeLine({ face: {} as CardFace, card: mockTransformableCard })
     ).toBe("aDoubleFaceTypeLine");
   });
 });
@@ -127,8 +127,8 @@ describe("getManaCost", () => {
   it("returns face mana cost for double-faced card", () => {
     expect(
       getManaCost({
-        face: mockDoubleFaceCard.card_faces![0],
-        card: mockDoubleFaceCard,
+        face: mockTransformableCard.card_faces![0],
+        card: mockTransformableCard,
       })
     ).toStrictEqual(["afrontmanacost"]);
   });
@@ -148,8 +148,8 @@ describe("getPowerToughness", () => {
   it("returns face power/toughness for double-faced card", () => {
     expect(
       getPowerToughness({
-        face: mockDoubleFaceCard.card_faces![0],
-        card: mockDoubleFaceCard,
+        face: mockTransformableCard.card_faces![0],
+        card: mockTransformableCard,
       })
     ).toBe("aFrontPower/aFrontToughness");
   });
