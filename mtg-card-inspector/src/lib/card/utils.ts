@@ -67,21 +67,8 @@ export function getFlavorText(data: CardFace | ScryfallCard) {
 }
 
 export function getTypeLine(data: CardFace | ScryfallCard) {
-  return data.type_line;
+  return data.type_line || null;
 }
-
-// export function getTypeLine({
-//   face,
-//   card,
-// }: {
-//   face?: CardFace;
-//   card: ScryfallCard;
-// }) {
-//   if (getIsTransformable(card)) {
-//     return face?.type_line || card.type_line;
-//   }
-//   return card.type_line;
-// }
 
 export function getManaCost(data: CardFace | ScryfallCard) {
   if (getDataIsFace(data)) {

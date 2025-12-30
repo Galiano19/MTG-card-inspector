@@ -90,22 +90,17 @@ describe("getFlavorText", () => {
 
 describe("getTypeLine", () => {
   it("returns card type line for single-faced card", () => {
-    expect(getTypeLine({ card: mockSingleFaceCard })).toBe("aTypeLine");
+    expect(getTypeLine(mockSingleFaceCard)).toBe("aTypeLine");
   });
 
   it("returns face type line for double-faced card", () => {
-    expect(
-      getTypeLine({
-        face: mockTransformableCard.card_faces![0],
-        card: mockTransformableCard,
-      })
-    ).toBe("aFrontTypeLine");
+    expect(getTypeLine(mockTransformableCard.card_faces![0])).toBe(
+      "aFrontTypeLine"
+    );
   });
 
-  it("falls back to card type line when face has no type line", () => {
-    expect(
-      getTypeLine({ face: {} as CardFace, card: mockTransformableCard })
-    ).toBe("aDoubleFaceTypeLine");
+  it("return null when face has no type line", () => {
+    expect(getTypeLine({} as CardFace)).toBe(null);
   });
 });
 
