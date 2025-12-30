@@ -12,7 +12,7 @@ const mockSingleFaceCard: ScryfallCard = {
   oracle_text: "anOracleText",
   flavor_text: "aFlavorText",
   type_line: "aTypeLine",
-  mana_cost: "aManaCost",
+  mana_cost: "{aManaCost}",
   power: "aPower",
   toughness: "aToughness",
 } as ScryfallCard;
@@ -23,7 +23,7 @@ const mockDoubleFaceCard: ScryfallCard = {
       oracle_text: "aFrontOracleText",
       flavor_text: "aFrontFlavorText",
       type_line: "aFrontTypeLine",
-      mana_cost: "aFrontManaCost",
+      mana_cost: "{aFrontManaCost}",
       power: "aFrontPower",
       toughness: "aFrontToughness",
     } as CardFace,
@@ -31,13 +31,13 @@ const mockDoubleFaceCard: ScryfallCard = {
       oracle_text: "anBackOracleText",
       flavor_text: "aBackFlavorText",
       type_line: "aBackTypeLine",
-      mana_cost: "aBackManaCost",
+      mana_cost: "{aBackManaCost}",
       power: "aBackPower",
       toughness: "aBackToughness",
     } as CardFace,
   ],
   type_line: "aDoubleFaceTypeLine",
-  mana_cost: "aDoubleFaceManaCost",
+  mana_cost: "{aDoubleFaceManaCost}",
 } as ScryfallCard;
 
 describe("getIsDoubleFaced", () => {
@@ -115,7 +115,9 @@ describe("getTypeLine", () => {
 
 describe("getManaCost", () => {
   it("returns card mana cost for single-faced card", () => {
-    expect(getManaCost({ card: mockSingleFaceCard })).toBe("aManaCost");
+    expect(getManaCost({ card: mockSingleFaceCard })).toStrictEqual([
+      "amanacost",
+    ]);
   });
 
   it("returns face mana cost for double-faced card", () => {
@@ -124,11 +126,11 @@ describe("getManaCost", () => {
         face: mockDoubleFaceCard.card_faces![0],
         card: mockDoubleFaceCard,
       })
-    ).toBe("aFrontManaCost");
+    ).toStrictEqual(["afrontmanacost"]);
   });
 
   it("returns empty string when no mana cost", () => {
-    expect(getManaCost({ card: {} as ScryfallCard })).toBe("");
+    expect(getManaCost({ card: {} as ScryfallCard })).toStrictEqual([]);
   });
 });
 
@@ -156,5 +158,18 @@ describe("getPowerToughness", () => {
     expect(
       getPowerToughness({ card: { power: "aPower" } as ScryfallCard })
     ).toBe(null);
+  });
+});
+
+describe("sanitizeSymbol", () => {
+  it("returns empty array if no mana cost is provided", () => {
+    expect(getManaCost({ card: {} as ScryfallCard })).toEqual([]);
+  });
+
+  it("correctly sanitizes a mana cost string", () => {
+    const manaCost = "{2}{U}{U}{B/R}{G/P}";
+    expect(
+      getManaCost({ card: { mana_cost: manaCost } as ScryfallCard })
+    ).toEqual(["2", "u", "u", "br", "gp"]);
   });
 });
