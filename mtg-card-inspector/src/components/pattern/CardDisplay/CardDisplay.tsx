@@ -14,8 +14,11 @@ import {
   getPowerToughness,
   getTypeLine,
   getIsTransformable,
+  getHasMultipleFaces,
 } from "@/lib/card/utils";
 import OracleText from "./OracleText";
+import FlavorText from "./FlavorText";
+import FaceInfo from "./FaceInfo";
 
 // TODO: enhance types
 export default function CardDisplay({ card }: { card: ScryfallCard }) {
@@ -79,7 +82,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                   />
                 </Button>
               )}
-              <div className="margin-top-auto">
+              <div className="mt-auto">
                 <div className="flex items-center gap-2 ">
                   <Brush className="w-4 h-4" />
                   <span className="tracking-wide">
@@ -101,41 +104,27 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
             id="details-section"
             className="flex-1 p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6"
           >
-            <div id="header" className="flex gap-2 flex-col">
-              <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3 align-center">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-xl md:text-2xl lg:text-3xl font-bold  ">
-                    {isTransformable ? face?.name : card.name}
-                  </h2>
-                  {card.game_changer && <GameChangerBadge />}
+            {!getHasMultipleFaces(card) && (
+              <div id="header" className="flex flex-col">
+                <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3 align-center">
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-xl md:text-2xl lg:text-3xl font-bold  ">
+                      {isTransformable ? face?.name : card.name}
+                    </h2>
+                  </div>
+                  <ManaSymbol card={card} face={face} />
                 </div>
-                <ManaSymbol card={card} face={face} />
-              </div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <i>{getTypeLine({ face, card })}</i>
-                {getPowerToughness({ face, card }) && (
-                  <Badge className="font-bold">
-                    {getPowerToughness({ face, card })}
-                  </Badge>
-                )}
-              </div>
-            </div>
-
-            <OracleText face={face} card={card} />
-
-            {Boolean(getFlavorText({ face, card })) && (
-              <div id="flavor-text" className="space-y-2">
-                <div className="flex items-center gap-2 ">
-                  <Sparkles className="w-4 h-4  " />
-                  <span className="text-sm font-medium uppercase tracking-wide font-bold  ">
-                    Flavor Text
-                  </span>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <i>{getTypeLine(face || card)}</i>
+                  {getPowerToughness({ face, card }) && (
+                    <Badge className="font-bold">
+                      {getPowerToughness({ face, card })}
+                    </Badge>
+                  )}
                 </div>
-                <p className="italic border-l-4 border-[--clr-primary-a0] pl-4 text-sm md:text-base">
-                  &ldquo;{getFlavorText({ face, card })}&rdquo;
-                </p>
               </div>
             )}
+            <FaceInfo face={face} card={card} />
 
             <div
               id="info-grid"
@@ -169,6 +158,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                 <RarityBadge rarity={card.rarity} />
               </div>
               <Legalities legalities={card.legalities} />
+              {card.game_changer && <GameChangerBadge />}
             </div>
           </div>
         </div>

@@ -58,41 +58,33 @@ describe("getIsTransformable", () => {
 
 describe("getOracleText", () => {
   it("returns card oracle text for single-faced card", () => {
-    expect(getOracleText({ card: mockSingleFaceCard })).toStrictEqual([
-      "anOracleText",
-    ]);
+    expect(getOracleText(mockSingleFaceCard)).toStrictEqual("anOracleText");
   });
 
   it("returns face oracle text for double-faced card", () => {
-    expect(
-      getOracleText({
-        face: mockTransformableCard.card_faces![0],
-        card: mockTransformableCard,
-      })
-    ).toStrictEqual(["aFrontOracleText"]);
+    expect(getOracleText(mockTransformableCard.card_faces![0])).toStrictEqual(
+      "aFrontOracleText"
+    );
   });
 
   it("returns null when no oracle text", () => {
-    expect(getOracleText({ card: {} as ScryfallCard })).toStrictEqual(null);
+    expect(getOracleText({} as ScryfallCard)).toStrictEqual(null);
   });
 });
 
 describe("getFlavorText", () => {
   it("returns card flavor text for single-faced card", () => {
-    expect(getFlavorText({ card: mockSingleFaceCard })).toBe("aFlavorText");
+    expect(getFlavorText(mockSingleFaceCard)).toBe("aFlavorText");
   });
 
   it("returns face flavor text for double-faced card", () => {
-    expect(
-      getFlavorText({
-        face: mockTransformableCard.card_faces![0],
-        card: mockTransformableCard,
-      })
-    ).toBe("aFrontFlavorText");
+    expect(getFlavorText(mockTransformableCard.card_faces![0])).toBe(
+      "aFrontFlavorText"
+    );
   });
 
   it("returns empty string when no flavor text", () => {
-    expect(getFlavorText({ card: {} as ScryfallCard })).toBe("");
+    expect(getFlavorText({} as ScryfallCard)).toBe(null);
   });
 });
 
@@ -119,22 +111,17 @@ describe("getTypeLine", () => {
 
 describe("getManaCost", () => {
   it("returns card mana cost for single-faced card", () => {
-    expect(getManaCost({ card: mockSingleFaceCard })).toStrictEqual([
-      "amanacost",
-    ]);
+    expect(getManaCost(mockSingleFaceCard)).toStrictEqual(["amanacost"]);
   });
 
   it("returns face mana cost for double-faced card", () => {
-    expect(
-      getManaCost({
-        face: mockTransformableCard.card_faces![0],
-        card: mockTransformableCard,
-      })
-    ).toStrictEqual(["afrontmanacost"]);
+    expect(getManaCost(mockTransformableCard.card_faces![0])).toStrictEqual([
+      "afrontmanacost",
+    ]);
   });
 
-  it("returns empty string when no mana cost", () => {
-    expect(getManaCost({ card: {} as ScryfallCard })).toStrictEqual([]);
+  it("returns null when no mana cost", () => {
+    expect(getManaCost({} as ScryfallCard)).toStrictEqual(null);
   });
 });
 
@@ -166,14 +153,18 @@ describe("getPowerToughness", () => {
 });
 
 describe("sanitizeSymbol", () => {
-  it("returns empty array if no mana cost is provided", () => {
-    expect(getManaCost({ card: {} as ScryfallCard })).toEqual([]);
+  it("returns null if no mana cost is provided", () => {
+    expect(getManaCost({} as ScryfallCard)).toEqual(null);
   });
 
   it("correctly sanitizes a mana cost string", () => {
     const manaCost = "{2}{U}{U}{B/R}{G/P}";
-    expect(
-      getManaCost({ card: { mana_cost: manaCost } as ScryfallCard })
-    ).toEqual(["2", "u", "u", "br", "gp"]);
+    expect(getManaCost({ mana_cost: manaCost } as ScryfallCard)).toEqual([
+      "2",
+      "u",
+      "u",
+      "br",
+      "gp",
+    ]);
   });
 });
