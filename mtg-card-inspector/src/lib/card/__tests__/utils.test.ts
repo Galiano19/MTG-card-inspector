@@ -58,7 +58,9 @@ describe("getIsTransformable", () => {
 
 describe("getOracleText", () => {
   it("returns card oracle text for single-faced card", () => {
-    expect(getOracleText({ card: mockSingleFaceCard })).toBe("anOracleText");
+    expect(getOracleText({ card: mockSingleFaceCard })).toStrictEqual([
+      "anOracleText",
+    ]);
   });
 
   it("returns face oracle text for double-faced card", () => {
@@ -67,11 +69,11 @@ describe("getOracleText", () => {
         face: mockDoubleFaceCard.card_faces![0],
         card: mockDoubleFaceCard,
       })
-    ).toBe("aFrontOracleText");
+    ).toStrictEqual(["aFrontOracleText"]);
   });
 
-  it("returns empty string when no oracle text", () => {
-    expect(getOracleText({ card: {} as ScryfallCard })).toBe("");
+  it("returns null when no oracle text", () => {
+    expect(getOracleText({ card: {} as ScryfallCard })).toStrictEqual(null);
   });
 });
 

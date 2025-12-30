@@ -24,9 +24,16 @@ export function getOracleText({
   card: ScryfallCard;
 }) {
   if (getIsTransformable(card)) {
-    return face?.oracle_text || "";
+    if (!face?.oracle_text) {
+      return null;
+    }
+    return [face?.oracle_text];
   }
-  return card.oracle_text || "";
+
+  if (!card.oracle_text) {
+    return null;
+  }
+  return [card.oracle_text];
 }
 
 export function getFlavorText({

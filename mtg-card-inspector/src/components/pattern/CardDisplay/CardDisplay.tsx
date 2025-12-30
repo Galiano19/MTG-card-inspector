@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  RefreshCw,
-  BookOpen,
-  Sparkles,
-  Hash,
-  Layers,
-  Brush,
-} from "lucide-react";
+import { RefreshCw, Sparkles, Hash, Layers, Brush } from "lucide-react";
 import { Card, CardContent } from "../../ui/card";
 import { Badge } from "../../ui/badge";
 import { ManaSymbol } from "./ManaSymbol";
@@ -18,12 +11,11 @@ import { GameChangerBadge } from "./GameChangerBadge";
 import CardImage from "./CardImage";
 import {
   getFlavorText,
-  getManaCost,
-  getOracleText,
   getPowerToughness,
   getTypeLine,
   getIsTransformable,
 } from "@/lib/card/utils";
+import OracleText from "./OracleText";
 
 // TODO: enhance types
 export default function CardDisplay({ card }: { card: ScryfallCard }) {
@@ -129,21 +121,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
               </div>
             </div>
 
-            {getOracleText({ face, card }) && (
-              <div id="oracle-text" className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <BookOpen className="w-4 h-4  " />
-                  <span className="text-sm font-medium uppercase tracking-wide font-bold  ">
-                    Oracle Text
-                  </span>
-                </div>
-                <div className="bg-[--clr-surface-a10] rounded-xl p-3 md:p-4 border border-[--clr-surface-a20]">
-                  <p className="whitespace-pre-line leading-relaxed text-sm md:text-base">
-                    {getOracleText({ face, card })}
-                  </p>
-                </div>
-              </div>
-            )}
+            <OracleText face={face} card={card} />
 
             {Boolean(getFlavorText({ face, card })) && (
               <div id="flavor-text" className="space-y-2">
