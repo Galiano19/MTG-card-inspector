@@ -55,7 +55,9 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
             id="image-section"
             className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center bg-cover bg-center rounded-t-xl lg:rounded-t-none lg:rounded-tl-xl lg:rounded-bl-xl"
             style={{
-              backgroundImage: `linear-gradient(to right, var(--clr-surface-a30), rgba(0,0,0,0)), url('${card.image_uris?.art_crop}')`,
+              backgroundImage: `linear-gradient(to right, var(--clr-surface-a30), rgba(0,0,0,0)), url('${
+                face ? face.image_uris?.art_crop : card.image_uris?.art_crop
+              }')`,
             }}
           >
             <div className="relative group flex flex-col h-full w-full gap-2">
@@ -94,7 +96,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
             {isTransformable && (
               <div className="absolute bottom-2 left-0 right-0 text-center">
                 <span className="text-xs bg-[--clr-surface-a10] px-3 py-1 rounded-full">
-                  {showBackFace ? "Back Face" : "Front Face"} • Tap to flip
+                  {showBackFace ? "Back Face" : "Front Face"}
                 </span>
               </div>
             )}
