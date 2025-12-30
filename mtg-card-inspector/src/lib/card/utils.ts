@@ -55,12 +55,10 @@ export function getManaCost({
 }) {
   if (getIsDoubleFaced(card)) {
     return (
-      sanitizeManaCost(face?.mana_cost) ||
-      sanitizeManaCost(card.mana_cost) ||
-      []
+      sanitizeSymbol(face?.mana_cost) || sanitizeSymbol(card.mana_cost) || []
     );
   }
-  return sanitizeManaCost(card.mana_cost) || [];
+  return sanitizeSymbol(card.mana_cost) || [];
 }
 
 export function getPowerToughness({
@@ -82,7 +80,7 @@ export function getPowerToughness({
   return null;
 }
 
-export function sanitizeManaCost(manaCost?: string): string[] {
+export function sanitizeSymbol(manaCost?: string): string[] {
   if (!manaCost) return [];
 
   const regex = /\{([^}]+)\}/g;
@@ -90,7 +88,10 @@ export function sanitizeManaCost(manaCost?: string): string[] {
   let match;
 
   while ((match = regex.exec(manaCost)) !== null) {
-    matches.push(match[1]);
+    let symbol = match[1].toLowerCase().replace(/\//g, "");
+    if (symbol) {
+      matches.push(symbol);
+    }
   }
 
   return matches;

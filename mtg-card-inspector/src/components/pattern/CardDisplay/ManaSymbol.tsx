@@ -26,7 +26,7 @@ export function ManaSymbol({
   return (
     <div className="inline-flex items-center gap-1 flex-wrap">
       {manaCost.map((symbol, index) => (
-        <div key={index}>{symbol}</div>
+        <i key={index} className={`ms ms-${symbol} ms-cost`}></i>
       ))}
     </div>
   );

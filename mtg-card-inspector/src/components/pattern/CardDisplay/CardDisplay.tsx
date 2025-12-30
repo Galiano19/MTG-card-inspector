@@ -110,7 +110,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
             className="flex-1 p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6"
           >
             <div id="header" className="flex gap-2 flex-col">
-              <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3">
+              <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3 align-center">
                 <div className="flex items-center gap-2">
                   <h2 className="text-xl md:text-2xl lg:text-3xl font-bold  ">
                     {isDoubleFaced ? face?.name : card.name}
