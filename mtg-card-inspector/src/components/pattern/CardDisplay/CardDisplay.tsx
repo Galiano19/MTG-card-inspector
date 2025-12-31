@@ -85,11 +85,18 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                 </Button>
               )}
               <div className="mt-auto">
-                <div className="flex items-center gap-2 ">
-                  <Brush className="w-4 h-4" />
-                  <span className="tracking-wide">
-                    <i>{card.artist}</i>
-                  </span>
+                <div className="flex items-center gap-2 justify-between">
+                  <div className="flex items-center gap-2 ">
+                    <Brush className="w-4 h-4" />
+                    <span className="tracking-wide">
+                      <i>{card.artist}</i>
+                    </span>
+                  </div>
+                  <div>
+                    <span className="tracking-wide">
+                      <i>#{card.collector_number}</i>
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -140,15 +147,6 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                   </span>
                 </div>
                 <p>{card.set_name}</p>
-              </div>
-              <div>
-                <div className="flex items-center gap-2 ">
-                  <Hash className="w-4 h-4  " />
-                  <span className="font-medium uppercase tracking-wide font-bold  ">
-                    Number
-                  </span>
-                </div>
-                <p>#{card.collector_number}</p>
               </div>
               <div>
                 <div className="flex items-center gap-2 ">
