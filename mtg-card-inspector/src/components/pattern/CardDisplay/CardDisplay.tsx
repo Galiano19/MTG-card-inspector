@@ -124,8 +124,10 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
               <FaceInfo face={face} card={card} />
               <SetInfo {...card} />
             </div>
-            <Legalities legalities={card.legalities} />
-            {card.game_changer && <GameChangerBadge />}
+            <div className="flex gap-2">
+              <GameChangerBadge {...card} />
+              <Legalities legalities={card.legalities} />
+            </div>
           </div>
         </div>
       </CardContent>
