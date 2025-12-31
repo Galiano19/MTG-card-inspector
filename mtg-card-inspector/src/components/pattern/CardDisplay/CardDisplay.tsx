@@ -21,8 +21,6 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
   const [face, setFace] = useState<CardFace | undefined>(undefined);
   const isTransformable = getIsTransformable(card);
 
-  console.log(card);
-
   useEffect(() => {
     if (isTransformable) {
       //@ts-ignore -- isTransformable already checks if cardFaces array contains items
