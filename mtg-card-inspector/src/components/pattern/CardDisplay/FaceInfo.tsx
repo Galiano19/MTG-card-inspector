@@ -9,6 +9,7 @@ import {
 } from "@/lib/card/utils";
 import { ManaSymbol } from "./ManaSymbol";
 import { Badge } from "@/components/ui/badge";
+import { Swords } from "lucide-react";
 
 export default function FaceInfo({
   face,
@@ -19,7 +20,7 @@ export default function FaceInfo({
 }) {
   if (getHasMultipleFaces(card)) {
     return (
-      <>
+      <div className="space-y-4">
         {card.card_faces?.map((face, index) => (
           <div key={index} className=" flex flex-col gap-2">
             <div>
@@ -33,10 +34,15 @@ export default function FaceInfo({
               </div>
               <div className="flex items-center gap-2 flex-wrap">
                 <i>{getTypeLine(face || card)}</i>
-                {getPowerToughness({ face, card }) && (
-                  <Badge className="font-bold">
-                    {getPowerToughness({ face, card })}
-                  </Badge>
+              </div>
+              <div>
+                {getPowerToughness(face ? face : card) && (
+                  <>
+                    <Swords className="w-4 h-4 inline-block mr-1" />
+                    <Badge className="font-bold">
+                      {getPowerToughness(face ? face : card)}
+                    </Badge>
+                  </>
                 )}
               </div>
             </div>
@@ -45,14 +51,14 @@ export default function FaceInfo({
             <FlavorText face={face} card={card} />
           </div>
         ))}
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="space-y-4">
       <OracleText face={face} card={card} />
       <FlavorText face={face} card={card} />
-    </>
+    </div>
   );
 }

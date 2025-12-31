@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RefreshCw, Sparkles, Layers, Brush } from "lucide-react";
+import { RefreshCw, Sparkles, Layers, Brush, Swords } from "lucide-react";
 import { Card, CardContent } from "../../ui/card";
 import { Badge } from "../../ui/badge";
 import { ManaSymbol } from "./ManaSymbol";
@@ -25,6 +25,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
   const isTransformable = getIsTransformable(card);
 
   console.log(card);
+  console.log(getPowerToughness(face ? face : card));
 
   useEffect(() => {
     if (isTransformable) {
@@ -96,7 +97,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                     </span>
                     <span className="leading-[0.9]">
                       <i>
-                        {card.set.toUpperCase()} -{card.rarity}
+                        {card.set.toUpperCase()} - {card.rarity}
                       </i>
                     </span>
                   </div>
@@ -114,7 +115,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
 
           <div
             id="details-section"
-            className="flex-1 p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6"
+            className="flex-1 p-4 md:p-6 lg:p-8 space-y-4"
           >
             {!getHasMultipleFaces(card) && (
               <div id="header" className="flex flex-col">
@@ -128,15 +129,20 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                 </div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <i>{getTypeLine(face || card)}</i>
-                  {getPowerToughness({ face, card }) && (
-                    <Badge className="font-bold">
-                      {getPowerToughness({ face, card })}
-                    </Badge>
+                </div>
+                <div>
+                  {getPowerToughness(face ? face : card) && (
+                    <>
+                      <Swords className="w-4 h-4 inline-block mr-1" />
+                      <Badge className="font-bold">
+                        {getPowerToughness(face ? face : card)}
+                      </Badge>
+                    </>
                   )}
                 </div>
               </div>
             )}
-            <div>
+            <div className="space-y-2">
               <FaceInfo face={face} card={card} />
               <SetInfo {...card} />
             </div>

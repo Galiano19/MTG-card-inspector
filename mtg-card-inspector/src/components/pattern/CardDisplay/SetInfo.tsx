@@ -30,19 +30,21 @@ export default function SetInfo(card: ScryfallCard) {
           <Tooltip>
             <TooltipTrigger>
               <i
-                className={`ss ss-${card.set} text-2xl ${getRarityColor(
+                className={`ss ss-${
+                  card.set
+                } [-webkit-text-stroke:1px_rgba(0,0,0,0.3)] text-2xl ${getRarityColor(
                   card.rarity
                 )}`}
               ></i>
             </TooltipTrigger>
             <TooltipContent>
-              <span className="text-sm font-medium uppercase tracking-wide font-bold">
+              <span className="text-sm uppercase font-bold">
                 {card.set} - {card.rarity}
               </span>
             </TooltipContent>
           </Tooltip>
 
-          <span className="text-sm font-medium uppercase tracking-wide font-bold">
+          <span className="text-sm font-medium  tracking-wide font-bold">
             {card.set_name}
           </span>
         </div>

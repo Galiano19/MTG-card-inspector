@@ -51,6 +51,7 @@ export default function mapScryfallCardToInternal(response: any): ScryfallCard {
     oracle_id: response.oracle_id,
     oracle_text: response.oracle_text,
     oversized: response.oversized,
+    power: response.power,
     preview: response.preview,
     prices: response.prices,
     prints_search_uri: response.prints_search_uri,
@@ -76,6 +77,7 @@ export default function mapScryfallCardToInternal(response: any): ScryfallCard {
     scryfall_set_uri: response.scryfall_set_uri,
     set_id: response.set_id,
     textless: response.textless,
+    toughness: response.toughness,
     uri: response.uri,
     variation: response.variation,
   };
