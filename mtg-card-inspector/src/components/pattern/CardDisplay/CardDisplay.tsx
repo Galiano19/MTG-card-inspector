@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RefreshCw, Sparkles, Hash, Layers, Brush } from "lucide-react";
+import { RefreshCw, Sparkles, Layers, Brush } from "lucide-react";
 import { Card, CardContent } from "../../ui/card";
 import { Badge } from "../../ui/badge";
 import { ManaSymbol } from "./ManaSymbol";
@@ -10,15 +10,13 @@ import { CardFace, ScryfallCard } from "@/types/scryfall";
 import { GameChangerBadge } from "./GameChangerBadge";
 import CardImage from "./CardImage";
 import {
-  getFlavorText,
   getPowerToughness,
   getTypeLine,
   getIsTransformable,
   getHasMultipleFaces,
 } from "@/lib/card/utils";
-import OracleText from "./OracleText";
-import FlavorText from "./FlavorText";
 import FaceInfo from "./FaceInfo";
+import SetInfo from "./SetInfo";
 
 // TODO: enhance types
 export default function CardDisplay({ card }: { card: ScryfallCard }) {
@@ -85,16 +83,21 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                 </Button>
               )}
               <div className="mt-auto">
-                <div className="flex items-center gap-2 justify-between">
+                <div className="flex items-end gap-2 justify-between">
                   <div className="flex items-center gap-2 ">
                     <Brush className="w-4 h-4" />
                     <span className="tracking-wide">
                       <i>{card.artist}</i>
                     </span>
                   </div>
-                  <div>
-                    <span className="tracking-wide">
+                  <div className="flex flex-col items-end text-xs">
+                    <span className="leading-[0.9]">
                       <i>#{card.collector_number}</i>
+                    </span>
+                    <span className="leading-[0.9]">
+                      <i>
+                        {card.set.toUpperCase()} -{card.rarity}
+                      </i>
                     </span>
                   </div>
                 </div>
@@ -133,33 +136,12 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                 </div>
               </div>
             )}
-            <FaceInfo face={face} card={card} />
-
-            <div
-              id="info-grid"
-              className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4"
-            >
-              <div>
-                <div className="flex items-center gap-2 ">
-                  <Layers className="w-4 h-4" />
-                  <span className="font-medium uppercase tracking-wide font-bold  ">
-                    Set
-                  </span>
-                </div>
-                <p>{card.set_name}</p>
-              </div>
-              <div>
-                <div className="flex items-center gap-2 ">
-                  <Sparkles className="w-4 h-4  " />
-                  <span className="font-medium uppercase tracking-wide font-bold  ">
-                    Rarity
-                  </span>
-                </div>
-                <RarityBadge rarity={card.rarity} />
-              </div>
-              <Legalities legalities={card.legalities} />
-              {card.game_changer && <GameChangerBadge />}
+            <div>
+              <FaceInfo face={face} card={card} />
+              <SetInfo {...card} />
             </div>
+            <Legalities legalities={card.legalities} />
+            {card.game_changer && <GameChangerBadge />}
           </div>
         </div>
       </CardContent>

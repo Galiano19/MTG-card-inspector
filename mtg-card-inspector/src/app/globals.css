@@ -51,6 +51,14 @@
     --clr-info-a0: #1f407a;
     --clr-info-a10: #3f6fbe;
     --clr-info-a20: #95b5e8;
+
+    /* Rarity colors */
+    --clr-rarity-common: #212121;
+    --clr-rarity-uncommon: #bae2ef;
+    --clr-rarity-rare: #e9d292;
+    --clr-rarity-special: #d98ed3;
+    --clr-rarity-mythic: #f59326;
+    --clr-rarity-bonus: #800080;
   }
   .dark {
     /** Base colors */
