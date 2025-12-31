@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 interface CardImageProps {
   cardName: string;
-  isDoubleFaced?: boolean;
+  isTransformable?: boolean;
   face?: CardFace;
   urlLarge?: string;
   urlNormal?: string;
@@ -14,7 +14,7 @@ interface CardImageProps {
 
 export default function CardImage({
   cardName,
-  isDoubleFaced,
+  isTransformable,
   face,
   urlLarge,
   urlNormal,
@@ -28,7 +28,7 @@ export default function CardImage({
   }, []);
 
   const getImageUrl = () => {
-    if (isDoubleFaced) {
+    if (isTransformable) {
       return face?.image_uris?.normal || face?.image_uris?.large;
     }
     return urlNormal || urlLarge;

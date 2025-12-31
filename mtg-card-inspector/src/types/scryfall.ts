@@ -35,6 +35,7 @@ export interface ScryfallCard {
   };
   keywords: string[];
   lang: string;
+  layout: CardLayout;
   legalities: ScryfallLegalities;
   mana_cost?: string;
   market_prices?: MarketPrice[];
@@ -78,6 +79,32 @@ export interface ScryfallCard {
   uri: string;
   variation: boolean;
 }
+
+export type CardLayout =
+  | "normal"
+  | "split"
+  | "flip"
+  | "transform"
+  | "modal_dfc"
+  | "meld"
+  | "leveler"
+  | "class"
+  | "case"
+  | "saga"
+  | "adventure"
+  | "mutate"
+  | "prototype"
+  | "battle"
+  | "planar"
+  | "scheme"
+  | "vanguard"
+  | "token"
+  | "double_faced_token"
+  | "emblem"
+  | "augment"
+  | "host"
+  | "art_series"
+  | "reversible_card";
 
 export interface RelatedArt {
   id: string;

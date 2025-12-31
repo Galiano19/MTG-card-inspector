@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  RefreshCw,
-  BookOpen,
-  Sparkles,
-  Hash,
-  Layers,
-  Brush,
-} from "lucide-react";
+import { RefreshCw, Sparkles, Hash, Layers, Brush } from "lucide-react";
 import { Card, CardContent } from "../../ui/card";
 import { Badge } from "../../ui/badge";
 import { ManaSymbol } from "./ManaSymbol";
@@ -18,36 +11,38 @@ import { GameChangerBadge } from "./GameChangerBadge";
 import CardImage from "./CardImage";
 import {
   getFlavorText,
-  getManaCost,
-  getOracleText,
   getPowerToughness,
   getTypeLine,
-  getIsDoubleFaced,
+  getIsTransformable,
+  getHasMultipleFaces,
 } from "@/lib/card/utils";
+import OracleText from "./OracleText";
+import FlavorText from "./FlavorText";
+import FaceInfo from "./FaceInfo";
 
 // TODO: enhance types
 export default function CardDisplay({ card }: { card: ScryfallCard }) {
   const [showBackFace, setShowBackFace] = useState(false);
   const [face, setFace] = useState<CardFace | undefined>(undefined);
-  const isDoubleFaced = getIsDoubleFaced(card);
+  const isTransformable = getIsTransformable(card);
 
   console.log(card);
 
   useEffect(() => {
-    if (isDoubleFaced) {
-      //@ts-ignore -- isDoubleFaced already checks if cardFaces array contains items
+    if (isTransformable) {
+      //@ts-ignore -- isTransformable already checks if cardFaces array contains items
       setFace(card.card_faces[0]);
     }
 
     return () => {
       setFace(undefined);
     };
-  }, [card, isDoubleFaced]);
+  }, [card, isTransformable]);
 
   const handleShowBackFace = () => {
-    if (isDoubleFaced) {
+    if (isTransformable) {
       setShowBackFace(!showBackFace);
-      //@ts-ignore -- isDoubleFaced already checks if cardFaces array contains items
+      //@ts-ignore -- isTransformable already checks if cardFaces array contains items
       setFace(card.card_faces[showBackFace ? 0 : 1]);
     }
   };
@@ -60,19 +55,21 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
             id="image-section"
             className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center bg-cover bg-center rounded-t-xl lg:rounded-t-none lg:rounded-tl-xl lg:rounded-bl-xl"
             style={{
-              backgroundImage: `linear-gradient(to right, var(--clr-surface-a30), rgba(0,0,0,0)), url('${card.image_uris?.art_crop}')`,
+              backgroundImage: `linear-gradient(to right, var(--clr-surface-a30), rgba(0,0,0,0)), url('${
+                face ? face.image_uris?.art_crop : card.image_uris?.art_crop
+              }')`,
             }}
           >
             <div className="relative group flex flex-col h-full w-full gap-2">
               <CardImage
                 cardName={card.name}
-                isDoubleFaced={isDoubleFaced}
+                isTransformable={isTransformable}
                 face={face}
                 urlLarge={card.image_uris?.large}
                 urlNormal={card.image_uris?.normal}
                 isFoil={card.foil}
               />
-              {isDoubleFaced && (
+              {isTransformable && (
                 <Button
                   onClick={handleShowBackFace}
                   className="absolute bottom-4 right-4 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 min-w-[48px] min-h-[48px] flex items-center justify-center"
@@ -87,7 +84,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                   />
                 </Button>
               )}
-              <div className="margin-top-auto">
+              <div className="mt-auto">
                 <div className="flex items-center gap-2 ">
                   <Brush className="w-4 h-4" />
                   <span className="tracking-wide">
@@ -96,10 +93,10 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                 </div>
               </div>
             </div>
-            {isDoubleFaced && (
+            {isTransformable && (
               <div className="absolute bottom-2 left-0 right-0 text-center">
                 <span className="text-xs bg-[--clr-surface-a10] px-3 py-1 rounded-full">
-                  {showBackFace ? "Back Face" : "Front Face"} • Tap to flip
+                  {showBackFace ? "Back Face" : "Front Face"}
                 </span>
               </div>
             )}
@@ -109,55 +106,27 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
             id="details-section"
             className="flex-1 p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6"
           >
-            <div id="header" className="flex gap-2 flex-col">
-              <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3 align-center">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-xl md:text-2xl lg:text-3xl font-bold  ">
-                    {isDoubleFaced ? face?.name : card.name}
-                  </h2>
-                  {card.game_changer && <GameChangerBadge />}
+            {!getHasMultipleFaces(card) && (
+              <div id="header" className="flex flex-col">
+                <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3 align-center">
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-xl md:text-2xl lg:text-3xl font-bold  ">
+                      {isTransformable ? face?.name : card.name}
+                    </h2>
+                  </div>
+                  <ManaSymbol card={card} face={face} />
                 </div>
-                <ManaSymbol card={card} face={face} />
-              </div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <i>{getTypeLine({ face, card })}</i>
-                {getPowerToughness({ face, card }) && (
-                  <Badge className="font-bold">
-                    {getPowerToughness({ face, card })}
-                  </Badge>
-                )}
-              </div>
-            </div>
-
-            {getOracleText({ face, card }) && (
-              <div id="oracle-text" className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <BookOpen className="w-4 h-4  " />
-                  <span className="text-sm font-medium uppercase tracking-wide font-bold  ">
-                    Oracle Text
-                  </span>
-                </div>
-                <div className="bg-[--clr-surface-a10] rounded-xl p-3 md:p-4 border border-[--clr-surface-a20]">
-                  <p className="whitespace-pre-line leading-relaxed text-sm md:text-base">
-                    {getOracleText({ face, card })}
-                  </p>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <i>{getTypeLine(face || card)}</i>
+                  {getPowerToughness({ face, card }) && (
+                    <Badge className="font-bold">
+                      {getPowerToughness({ face, card })}
+                    </Badge>
+                  )}
                 </div>
               </div>
             )}
-
-            {Boolean(getFlavorText({ face, card })) && (
-              <div id="flavor-text" className="space-y-2">
-                <div className="flex items-center gap-2 ">
-                  <Sparkles className="w-4 h-4  " />
-                  <span className="text-sm font-medium uppercase tracking-wide font-bold  ">
-                    Flavor Text
-                  </span>
-                </div>
-                <p className="italic border-l-4 border-[--clr-primary-a0] pl-4 text-sm md:text-base">
-                  &ldquo;{getFlavorText({ face, card })}&rdquo;
-                </p>
-              </div>
-            )}
+            <FaceInfo face={face} card={card} />
 
             <div
               id="info-grid"
@@ -191,6 +160,7 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                 <RarityBadge rarity={card.rarity} />
               </div>
               <Legalities legalities={card.legalities} />
+              {card.game_changer && <GameChangerBadge />}
             </div>
           </div>
         </div>
