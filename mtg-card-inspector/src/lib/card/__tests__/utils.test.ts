@@ -122,28 +122,21 @@ describe("getManaCost", () => {
 
 describe("getPowerToughness", () => {
   it("returns power/toughness for single-faced card", () => {
-    expect(getPowerToughness({ card: mockSingleFaceCard })).toBe(
-      "aPower/aToughness"
-    );
+    expect(getPowerToughness(mockSingleFaceCard)).toBe("aPower/aToughness");
   });
 
   it("returns face power/toughness for double-faced card", () => {
-    expect(
-      getPowerToughness({
-        face: mockTransformableCard.card_faces![0],
-        card: mockTransformableCard,
-      })
-    ).toBe("aFrontPower/aFrontToughness");
+    expect(getPowerToughness(mockTransformableCard.card_faces![0])).toBe(
+      "aFrontPower/aFrontToughness"
+    );
   });
 
   it("returns null when no power/toughness", () => {
-    expect(getPowerToughness({ card: {} as ScryfallCard })).toBe(null);
+    expect(getPowerToughness({} as ScryfallCard)).toBe(null);
   });
 
   it("returns null when only power exists", () => {
-    expect(
-      getPowerToughness({ card: { power: "aPower" } as ScryfallCard })
-    ).toBe(null);
+    expect(getPowerToughness({ power: "aPower" } as ScryfallCard)).toBe(null);
   });
 });
 

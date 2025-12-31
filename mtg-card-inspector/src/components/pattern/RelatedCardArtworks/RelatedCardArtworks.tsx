@@ -25,6 +25,7 @@ interface RelatedCardArtworksContentProps {
   isLoading: boolean;
   isFetching: boolean;
   onSearch: (query: QueryCardSearchInput) => void;
+  currentCardId: string;
 }
 
 function RelatedCardArtworksContent({
@@ -32,6 +33,7 @@ function RelatedCardArtworksContent({
   isLoading,
   isFetching,
   onSearch,
+  currentCardId,
 }: RelatedCardArtworksContentProps) {
   if (isLoading || isFetching) {
     return <LoadingSkeleton />;
@@ -41,6 +43,8 @@ function RelatedCardArtworksContent({
   }
 
   const RelatedCardArtwork = memo(({ card }: { card: ScryfallCard }) => {
+    if (card.id === currentCardId) return null;
+
     const isFoil = card.foil;
     const cardEurPrice = isFoil ? card.prices?.eur_foil : card.prices?.eur;
     const cardUsdPrice = isFoil ? card.prices?.usd_foil : card.prices?.usd;
@@ -122,7 +126,7 @@ export default function RelatedCardArtworks({
     card.prints_search_uri
   );
 
-  if (!data || data.length === 0) {
+  if (!data || data.length <= 1) {
     return null;
   }
 
@@ -135,7 +139,7 @@ export default function RelatedCardArtworks({
               <GalleryHorizontalEnd className="w-4 h-4 md:w-5 md:h-5" />
             </div>
             <CardTitle className="text-lg md:text-xl font-bold ">
-              Other versions
+              Other printings
             </CardTitle>
           </div>
         </div>
@@ -146,6 +150,7 @@ export default function RelatedCardArtworks({
           isLoading={isLoading}
           isFetching={isFetching}
           onSearch={onSearch}
+          currentCardId={card.id}
         />
       </CardContent>
     </Card>

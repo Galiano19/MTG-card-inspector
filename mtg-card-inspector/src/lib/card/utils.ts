@@ -85,23 +85,19 @@ export function getManaCost(data: CardFace | ScryfallCard) {
   return sanitizeSymbol(data.mana_cost);
 }
 
-export function getPowerToughness({
-  face,
-  card,
-}: {
-  face?: CardFace;
-  card: ScryfallCard;
-}) {
-  if (getIsTransformable(card)) {
-    if (face?.power && face?.toughness) {
-      return `${face.power}/${face.toughness}`;
+export function getPowerToughness(data: CardFace | ScryfallCard) {
+  if (getDataIsFace(data)) {
+    if (!data.power || !data.toughness) {
+      return null;
     }
+    return `${data.power}/${data.toughness}`;
+  }
+
+  if (!data.power || !data.toughness) {
     return null;
   }
-  if (card.power && card.toughness) {
-    return `${card.power}/${card.toughness}`;
-  }
-  return null;
+
+  return `${data.power}/${data.toughness}`;
 }
 
 export function sanitizeSymbol(manaCost?: string): string[] {

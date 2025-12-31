@@ -1,32 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { RefreshCw, Sparkles, Hash, Layers, Brush } from "lucide-react";
+import { RefreshCw, Brush } from "lucide-react";
 import { Card, CardContent } from "../../ui/card";
-import { Badge } from "../../ui/badge";
-import { ManaSymbol } from "./ManaSymbol";
-import { RarityBadge } from "./RarityBadge";
 import { Button } from "@/components/ui/button";
 import { Legalities } from "./Legalities";
 import { CardFace, ScryfallCard } from "@/types/scryfall";
 import { GameChangerBadge } from "./GameChangerBadge";
 import CardImage from "./CardImage";
 import {
-  getFlavorText,
   getPowerToughness,
-  getTypeLine,
   getIsTransformable,
   getHasMultipleFaces,
 } from "@/lib/card/utils";
-import OracleText from "./OracleText";
-import FlavorText from "./FlavorText";
 import FaceInfo from "./FaceInfo";
+import SetInfo from "./SetInfo";
+import NameArea from "./NameArea";
 
 // TODO: enhance types
 export default function CardDisplay({ card }: { card: ScryfallCard }) {
   const [showBackFace, setShowBackFace] = useState(false);
   const [face, setFace] = useState<CardFace | undefined>(undefined);
   const isTransformable = getIsTransformable(card);
-
-  console.log(card);
 
   useEffect(() => {
     if (isTransformable) {
@@ -85,11 +78,23 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
                 </Button>
               )}
               <div className="mt-auto">
-                <div className="flex items-center gap-2 ">
-                  <Brush className="w-4 h-4" />
-                  <span className="tracking-wide">
-                    <i>{card.artist}</i>
-                  </span>
+                <div className="flex items-end gap-2 justify-between">
+                  <div className="flex items-center gap-2 ">
+                    <Brush className="w-4 h-4" />
+                    <span className="tracking-wide">
+                      <i>{card.artist}</i>
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-end text-xs">
+                    <span className="leading-[0.9]">
+                      <i>#{card.collector_number}</i>
+                    </span>
+                    <span className="leading-[0.9]">
+                      <i>
+                        {card.set.toUpperCase()} - {card.rarity}
+                      </i>
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -104,63 +109,22 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
 
           <div
             id="details-section"
-            className="flex-1 p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6"
+            className="flex-1 p-4 md:p-6 lg:p-8 space-y-4"
           >
             {!getHasMultipleFaces(card) && (
-              <div id="header" className="flex flex-col">
-                <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3 align-center">
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-xl md:text-2xl lg:text-3xl font-bold  ">
-                      {isTransformable ? face?.name : card.name}
-                    </h2>
-                  </div>
-                  <ManaSymbol card={card} face={face} />
-                </div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <i>{getTypeLine(face || card)}</i>
-                  {getPowerToughness({ face, card }) && (
-                    <Badge className="font-bold">
-                      {getPowerToughness({ face, card })}
-                    </Badge>
-                  )}
-                </div>
-              </div>
+              <NameArea
+                nameLabel={(isTransformable ? face?.name : card.name) || ""}
+                card={card}
+                face={face}
+              />
             )}
-            <FaceInfo face={face} card={card} />
-
-            <div
-              id="info-grid"
-              className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4"
-            >
-              <div>
-                <div className="flex items-center gap-2 ">
-                  <Layers className="w-4 h-4" />
-                  <span className="font-medium uppercase tracking-wide font-bold  ">
-                    Set
-                  </span>
-                </div>
-                <p>{card.set_name}</p>
-              </div>
-              <div>
-                <div className="flex items-center gap-2 ">
-                  <Hash className="w-4 h-4  " />
-                  <span className="font-medium uppercase tracking-wide font-bold  ">
-                    Number
-                  </span>
-                </div>
-                <p>#{card.collector_number}</p>
-              </div>
-              <div>
-                <div className="flex items-center gap-2 ">
-                  <Sparkles className="w-4 h-4  " />
-                  <span className="font-medium uppercase tracking-wide font-bold  ">
-                    Rarity
-                  </span>
-                </div>
-                <RarityBadge rarity={card.rarity} />
-              </div>
+            <div className="space-y-2">
+              <FaceInfo face={face} card={card} />
+              <SetInfo {...card} />
+            </div>
+            <div className="flex gap-2">
+              <GameChangerBadge {...card} />
               <Legalities legalities={card.legalities} />
-              {card.game_changer && <GameChangerBadge />}
             </div>
           </div>
         </div>

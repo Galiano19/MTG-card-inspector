@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
@@ -20,7 +21,7 @@ export function Legalities({ legalities }: { legalities: ScryfallLegalities }) {
         <SheetHeader>
           <SheetTitle>Format Legality</SheetTitle>
           <SheetDescription asChild>
-            <div>
+            <ScrollArea className="h-[93vh] ">
               {legalities &&
                 Object.entries(legalities).map(([format, status]) => (
                   <div key={format} className="flex justify-between py-1">
@@ -28,7 +29,14 @@ export function Legalities({ legalities }: { legalities: ScryfallLegalities }) {
                     <span>{getStatusBadge(status)}</span>
                   </div>
                 ))}
-            </div>
+              {legalities &&
+                Object.entries(legalities).map(([format, status]) => (
+                  <div key={format} className="flex justify-between py-1">
+                    <span className=" capitalize">{format}</span>
+                    <span>{getStatusBadge(status)}</span>
+                  </div>
+                ))}
+            </ScrollArea>
           </SheetDescription>
         </SheetHeader>
       </SheetContent>
