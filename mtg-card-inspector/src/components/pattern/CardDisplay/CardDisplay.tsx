@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { RefreshCw, Sparkles, Layers, Brush, Swords } from "lucide-react";
+import { RefreshCw, Brush } from "lucide-react";
 import { Card, CardContent } from "../../ui/card";
-import { Badge } from "../../ui/badge";
-import { ManaSymbol } from "./ManaSymbol";
-import { RarityBadge } from "./RarityBadge";
 import { Button } from "@/components/ui/button";
 import { Legalities } from "./Legalities";
 import { CardFace, ScryfallCard } from "@/types/scryfall";
@@ -11,12 +8,12 @@ import { GameChangerBadge } from "./GameChangerBadge";
 import CardImage from "./CardImage";
 import {
   getPowerToughness,
-  getTypeLine,
   getIsTransformable,
   getHasMultipleFaces,
 } from "@/lib/card/utils";
 import FaceInfo from "./FaceInfo";
 import SetInfo from "./SetInfo";
+import NameArea from "./NameArea";
 
 // TODO: enhance types
 export default function CardDisplay({ card }: { card: ScryfallCard }) {
@@ -25,7 +22,6 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
   const isTransformable = getIsTransformable(card);
 
   console.log(card);
-  console.log(getPowerToughness(face ? face : card));
 
   useEffect(() => {
     if (isTransformable) {
@@ -118,29 +114,11 @@ export default function CardDisplay({ card }: { card: ScryfallCard }) {
             className="flex-1 p-4 md:p-6 lg:p-8 space-y-4"
           >
             {!getHasMultipleFaces(card) && (
-              <div id="header" className="flex flex-col">
-                <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3 align-center">
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-xl md:text-2xl lg:text-3xl font-bold  ">
-                      {isTransformable ? face?.name : card.name}
-                    </h2>
-                  </div>
-                  <ManaSymbol card={card} face={face} />
-                </div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <i>{getTypeLine(face || card)}</i>
-                </div>
-                <div>
-                  {getPowerToughness(face ? face : card) && (
-                    <>
-                      <Swords className="w-4 h-4 inline-block mr-1" />
-                      <Badge className="font-bold">
-                        {getPowerToughness(face ? face : card)}
-                      </Badge>
-                    </>
-                  )}
-                </div>
-              </div>
+              <NameArea
+                nameLabel={(isTransformable ? face?.name : card.name) || ""}
+                card={card}
+                face={face}
+              />
             )}
             <div className="space-y-2">
               <FaceInfo face={face} card={card} />
