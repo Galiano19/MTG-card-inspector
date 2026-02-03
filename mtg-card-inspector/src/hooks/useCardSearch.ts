@@ -4,6 +4,7 @@ import {
   fetchAutocompleteSuggestions,
   fetchRelatedCards,
   fetchCardById,
+  fetchTrendingCards,
 } from "../services/scryfallApi";
 
 export const cardQueryKeys = {
@@ -90,6 +91,25 @@ export const useRelatedCards = (uri: string, options = {}) => {
     queryKey: cardQueryKeys.card({ name: uri }),
     queryFn: () => fetchRelatedCards(uri),
     enabled: Boolean(uri) && uri.trim().length > 0,
+    staleTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 30 * 60 * 1000,
+    retry: (failureCount, error) => {
+      if (error.message.includes("not found")) return false;
+      return failureCount < 2;
+    },
+    ...options,
+  });
+};
+
+/**
+ * Hook to fetch trending EDH cards (ordered by edhrec popularity)
+ * Returns up to `limit` results
+ */
+export const useTrendingCards = (limit = 20, options = {}) => {
+  return useQuery({
+    queryKey: [...cardQueryKeys.all, "trending", limit],
+    queryFn: () => fetchTrendingCards(limit),
+    enabled: Boolean(limit > 0),
     staleTime: 10 * 60 * 1000, // 10 minutes
     gcTime: 30 * 60 * 1000,
     retry: (failureCount, error) => {

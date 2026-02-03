@@ -10,7 +10,7 @@ const SCRYFALL_BASE_URL = "https://api.scryfall.com";
  */
 export const fetchCardByName = async (cardName: string) => {
   const response = await fetch(
-    `${SCRYFALL_BASE_URL}/cards/named?fuzzy=${encodeURIComponent(cardName)}`
+    `${SCRYFALL_BASE_URL}/cards/named?fuzzy=${encodeURIComponent(cardName)}`,
   );
 
   if (!response.ok) {
@@ -50,7 +50,7 @@ export const fetchAutocompleteSuggestions = async (query: string) => {
   }
 
   const response = await fetch(
-    `${SCRYFALL_BASE_URL}/cards/autocomplete?q=${encodeURIComponent(query)}`
+    `${SCRYFALL_BASE_URL}/cards/autocomplete?q=${encodeURIComponent(query)}`,
   );
 
   if (!response.ok) {
@@ -74,4 +74,25 @@ export const fetchRelatedCards = async (query: string) => {
 
   const data = await response.json();
   return data.data || [];
+};
+
+/**
+ * Fetch trending EDH cards ordered by EDHREC popularity
+ * Returns up to `limit` cards (default 20)
+ */
+export const fetchTrendingCards = async (limit = 100) => {
+  const response = await fetch(
+    `${SCRYFALL_BASE_URL}/cards/search?q=format:edh&order=edhrec&dir=asc`,
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch trending cards");
+  }
+
+  const data = await response.json();
+  // Map items to internal shape using existing mapper
+  const items = (data.data || [])
+    .slice(0, limit)
+    .map((item: any) => mapScryfallCardToInternal(item));
+  return items;
 };

@@ -1,0 +1,148 @@
+import React, { memo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { useTrendingCards } from "@/hooks/useCardSearch";
+import { ScryfallCard } from "@/types/scryfall";
+import Image from "next/image";
+import FoilEffect from "../CardDisplay/FoilEffect";
+import { TrendingUp } from "lucide-react";
+import LoadingSkeleton from "../RelatedCardArtworks/LoadingSkeleton";
+import ErrorState from "../ErrorState/ErrorState";
+import { scrollToTop } from "@/lib/utils";
+
+export default function TrendingCards({
+  onSearch,
+}: {
+  onSearch: (query: any) => void;
+}) {
+  const { data, isLoading, isFetching, error } = useTrendingCards(50);
+
+  if (isLoading || isFetching) {
+    return (
+      <Card className="bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30">
+        <CardHeader className="pb-3 md:pb-4">
+          <div className="flex items-center gap-2 md:gap-3">
+            <div className="p-1.5 md:p-2 bg-[--clr-primary-a0] rounded-lg md:rounded-xl">
+              <TrendingUp className="w-4 h-4 md:w-5 md:h-5" />
+            </div>
+            <CardTitle className="text-lg md:text-xl font-bold ">
+              Trending EDH
+            </CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent isFullWidth>
+          <LoadingSkeleton />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30">
+        <CardHeader className="pb-3 md:pb-4">
+          <div className="flex items-center gap-2 md:gap-3">
+            <div className="p-1.5 md:p-2 bg-[--clr-primary-a0] rounded-lg md:rounded-xl">
+              <TrendingUp className="w-4 h-4 md:w-5 md:h-5" />
+            </div>
+            <CardTitle className="text-lg md:text-xl font-bold ">
+              Trending EDH
+            </CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent isFullWidth>
+          <ErrorState error={error} />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!data || data.length === 0) return null;
+
+  const TrendingItem = memo(({ card }: { card: ScryfallCard }) => {
+    const isFoil = card.foil;
+    const cardEurPrice = isFoil ? card.prices?.eur_foil : card.prices?.eur;
+    const cardUsdPrice = isFoil ? card.prices?.usd_foil : card.prices?.usd;
+
+    const handleOnClick = () => {
+      onSearch({ id: card.id });
+      scrollToTop();
+    };
+
+    return (
+      <CarouselItem key={card.id} className="px-2 py-2">
+        <button
+          onClick={handleOnClick}
+          className="relative rounded-lg overflow-hidden hover:scale-105 transition-transform duration-200"
+        >
+          {isFoil && (
+            <div className="absolute z-[1] top-0 bg-[--clr-primary-a10] left-1/2 transform -translate-x-1/2  pl-3 pr-3 rounded-b-md text-[--clr-dark-a0] flex">
+              <span className="text-xs">FOIL</span>
+            </div>
+          )}
+          {(cardEurPrice || cardUsdPrice) && (
+            <div className="absolute z-[1] bottom-0 bg-[--clr-primary-a10] left-1/2 transform -translate-x-1/2 flex gap-2 items-center pl-3 pr-3 rounded-t-md text-[--clr-dark-a0]">
+              {cardEurPrice && <span className="text-xs">€{cardEurPrice}</span>}
+              {cardUsdPrice && (
+                <span className="text-xs"> ${cardUsdPrice}</span>
+              )}
+            </div>
+          )}
+          <div className="w-full bg-transparent relative">
+            {card.foil && <FoilEffect />}
+            {card.image_uris ? (
+              <Image
+                src={card.image_uris.normal}
+                alt={card.name}
+                width={223}
+                height={310}
+              />
+            ) : (
+              <div className="flex w-[223px] h-[310px] bg-[--clr-surface-a0] justify-center items-center">
+                Artwork not found
+              </div>
+            )}
+          </div>
+        </button>
+      </CarouselItem>
+    );
+  });
+
+  return (
+    <section>
+      <div className="pb-3 md:pb-4">
+        <div className="flex items-center justify-between flex-wrap gap-3 md:gap-4">
+          <div className="flex items-center gap-2 md:gap-3">
+            <div className="p-1.5 md:p-2 bg-[--clr-primary-a0] rounded-lg md:rounded-xl">
+              <TrendingUp className="w-4 h-4 md:w-5 md:h-5" />
+            </div>
+            <CardTitle className="text-lg md:text-xl font-bold ">
+              Trending EDH
+            </CardTitle>
+          </div>
+        </div>
+      </div>
+      <div>
+        <Carousel>
+          <div className="relative">
+            <CarouselContent className="pl-2 ">
+              {data.map((card: any) => (
+                <TrendingItem key={card.id} card={card} />
+              ))}
+            </CarouselContent>
+          </div>
+          <div className="flex items-center gap-2  w-auto justify-self-end mt-2 md:mr-6 mr-4">
+            <CarouselPrevious />
+            <CarouselNext />
+          </div>
+        </Carousel>
+      </div>
+    </section>
+  );
+}
