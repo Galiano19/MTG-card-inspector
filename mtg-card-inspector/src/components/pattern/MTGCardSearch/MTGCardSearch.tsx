@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   QueryCardSearchInput,
   useCardSearch,
 } from "../../../hooks/useCardSearch";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import {
   SearchBar,
   CardDisplay,
@@ -35,6 +36,38 @@ export default function MTGCardSearch() {
       refetch();
     }
   }, [searchQuery, refetch]);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const id = searchParams?.get("id");
+    if (id) {
+      if (
+        !searchQuery ||
+        typeof searchQuery === "string" ||
+        (typeof searchQuery === "object" && searchQuery.id !== id)
+      ) {
+        setSearchQuery({ id });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (card?.id) {
+      const currentId = searchParams?.get("id");
+      if (currentId !== card.id) {
+        const params = new URLSearchParams(
+          Array.from(searchParams?.entries() || []),
+        );
+        params.set("id", card.id);
+        router.replace(`${pathname}?${params.toString()}`);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [card?.id]);
 
   const showLoading = isLoading || isFetching;
   const showError = error && !showLoading;

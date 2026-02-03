@@ -57,13 +57,26 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+      const trimmed = query.trim();
+      const uuidRegex =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+      if (uuidRegex.test(trimmed)) {
+        onSearch({ id: trimmed });
+        setShowSuggestions(false);
+        return;
+      }
+
       if (shouldShowSuggestions) {
         onSearch(suggestions[0]);
         setQuery(suggestions[0]);
         setShowSuggestions(false);
+      } else if (trimmed.length > 0) {
+        onSearch(trimmed);
+        setShowSuggestions(false);
       }
     },
-    [shouldShowSuggestions, suggestions, onSearch]
+    [shouldShowSuggestions, suggestions, onSearch, query],
   );
 
   const handleSuggestionClick = useCallback(
@@ -72,7 +85,7 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
       onSearch(suggestion);
       setShowSuggestions(false);
     },
-    [onSearch]
+    [onSearch],
   );
 
   const handleKeyDown = useCallback(
@@ -83,7 +96,7 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
         case "ArrowDown":
           e.preventDefault();
           setSelectedIndex((prev) =>
-            Math.min(prev + 1, suggestions.length - 1)
+            Math.min(prev + 1, suggestions.length - 1),
           );
           break;
         case "ArrowUp":
@@ -103,7 +116,7 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
           break;
       }
     },
-    [showSuggestions, suggestions, selectedIndex, handleSuggestionClick]
+    [showSuggestions, suggestions, selectedIndex, handleSuggestionClick],
   );
 
   const clearInput = useCallback(() => {
