@@ -15,7 +15,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               id="results-section"
               className="px-4 pb-8 md:pb-12 flex-1 content-center"
             >
-              <Header />
               {children}
             </div>
           </div>
