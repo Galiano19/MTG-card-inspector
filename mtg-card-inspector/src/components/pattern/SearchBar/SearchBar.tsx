@@ -126,7 +126,7 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
   }, []);
 
   return (
-    <div className="w-full max-w-2xl mx-auto relative">
+    <div className="w-full max-w-2xl mx-auto relative animate-in fade-in slide-in-from-bottom-4 duration-700">
       <form onSubmit={handleSubmit} className="relative">
         <div className="relative flex items-center">
           <Search className="absolute left-4 w-5 h-5 text-[--clr-dark-a0] pointer-events-none" />
