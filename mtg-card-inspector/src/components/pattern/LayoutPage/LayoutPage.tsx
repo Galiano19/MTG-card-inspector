@@ -1,9 +1,12 @@
 import { BackgroundDecoration } from "../MTGCardSearch/BackgroundDecoration";
-import { Header } from "../MTGCardSearch/Header";
 import { Footer } from "../MTGCardSearch/Footer";
 import NavigationBar from "../NavigationBar/NavigationBar";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function LayoutPage({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <main className="min-h-full">
       <NavigationBar />

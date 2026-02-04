@@ -10,7 +10,7 @@ import {
 } from "@/components/pattern";
 import useCardRoute from "@/hooks/useCardRoute";
 import RelatedCardArtworks from "@/components/pattern/RelatedCardArtworks/RelatedCardArtworks";
-import Layout from "@/components/pattern/Layout/Layout";
+import LayoutPage from "@/components/pattern/LayoutPage/LayoutPage";
 
 export default function CardPage() {
   const { handleSearch, handleRetry, card, isLoading, error } = useCardRoute({
@@ -22,7 +22,7 @@ export default function CardPage() {
   const showCard = !!card && !showLoading && !error;
 
   return (
-    <Layout>
+    <LayoutPage>
       <section id="search-section" className="pb-6 md:pb-8 ">
         <SearchBar onSearch={handleSearch} isSearching={showLoading} />
       </section>
@@ -41,6 +41,6 @@ export default function CardPage() {
           </div>
         )}
       </div>
-    </Layout>
+    </LayoutPage>
   );
 }
