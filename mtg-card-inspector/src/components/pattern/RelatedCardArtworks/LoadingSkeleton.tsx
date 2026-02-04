@@ -4,7 +4,7 @@ export default function LoadingSkeleton() {
       {[...Array(5)].map((_, i) => (
         <div
           key={i}
-          className="rounded-lg bg-[--clr-surface-a10] h-[300px] w-[223px]"
+          className="rounded-lg bg-[--clr-surface-a10] min-h-[310px] min-w-[223px]"
         />
       ))}
     </div>

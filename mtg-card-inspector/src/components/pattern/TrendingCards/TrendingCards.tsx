@@ -43,17 +43,15 @@ export default function TrendingCards({
   if (isLoading || isFetching) {
     return (
       <Wrapper>
-        <LoadingSkeleton />
+        <div className="px-2 py-2 overflow-x-hidden">
+          <LoadingSkeleton />
+        </div>
       </Wrapper>
     );
   }
 
   if (error) {
-    return (
-      <Wrapper>
-        <ErrorState error={error} />
-      </Wrapper>
-    );
+    return null;
   }
 
   if (!data || data.length === 0) return null;
@@ -61,7 +59,6 @@ export default function TrendingCards({
   const TrendingItem = memo(({ card }: { card: ScryfallCard }) => {
     const isFoil = card.foil;
     const cardEurPrice = isFoil ? card.prices?.eur_foil : card.prices?.eur;
-    const cardUsdPrice = isFoil ? card.prices?.usd_foil : card.prices?.usd;
 
     const handleOnClick = () => {
       onSearch({ id: card.id });
@@ -91,20 +88,27 @@ export default function TrendingCards({
               )}
             </div>
           </div>
-          <div className="flex items-center gap-1">
-            {cardEurPrice && <span className="text-xs">€{cardEurPrice}</span>}
-            {card.set && (
-              <>
-                <span className="text-xs">•</span>
-                <span className="text-xs">{card.set.toUpperCase()}</span>
-              </>
-            )}
-            {isFoil && (
-              <>
-                <span className="text-xs">•</span>
-                <span className="text-xs">FOIL</span>
-              </>
-            )}
+          <div>
+            <div className="flex ">
+              <p className="font-medium text-slate-900 dark:text-slate-200 truncate text-left">
+                {card.name}
+              </p>
+            </div>
+            <div className="flex items-center gap-1">
+              {cardEurPrice && <span className="text-xs">€{cardEurPrice}</span>}
+              {card.set && (
+                <>
+                  <span className="text-xs">•</span>
+                  <span className="text-xs">{card.set.toUpperCase()}</span>
+                </>
+              )}
+              {isFoil && (
+                <>
+                  <span className="text-xs">•</span>
+                  <span className="text-xs">FOIL</span>
+                </>
+              )}
+            </div>
           </div>
         </button>
       </CarouselItem>
