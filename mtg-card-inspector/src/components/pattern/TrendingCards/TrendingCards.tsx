@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -16,6 +15,24 @@ import LoadingSkeleton from "../RelatedCardArtworks/LoadingSkeleton";
 import ErrorState from "../ErrorState/ErrorState";
 import { scrollToTop } from "@/lib/utils";
 
+function Wrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <section>
+      <div className="pb-3 md:pb-4">
+        <div className="flex items-center justify-between flex-wrap gap-3 md:gap-4">
+          <div className="flex items-center gap-2 md:gap-3">
+            <div className="p-1.5 md:p-2 bg-[--clr-primary-a0] rounded-lg md:rounded-xl">
+              <TrendingUp className="w-4 h-4 md:w-5 md:h-5" />
+            </div>
+            <div className="text-lg md:text-xl font-bold ">Trending Cards</div>
+          </div>
+          {children}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function TrendingCards({
   onSearch,
 }: {
@@ -25,41 +42,17 @@ export default function TrendingCards({
 
   if (isLoading || isFetching) {
     return (
-      <Card className="bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30">
-        <CardHeader className="pb-3 md:pb-4">
-          <div className="flex items-center gap-2 md:gap-3">
-            <div className="p-1.5 md:p-2 bg-[--clr-primary-a0] rounded-lg md:rounded-xl">
-              <TrendingUp className="w-4 h-4 md:w-5 md:h-5" />
-            </div>
-            <CardTitle className="text-lg md:text-xl font-bold ">
-              Trending EDH
-            </CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent isFullWidth>
-          <LoadingSkeleton />
-        </CardContent>
-      </Card>
+      <Wrapper>
+        <LoadingSkeleton />
+      </Wrapper>
     );
   }
 
   if (error) {
     return (
-      <Card className="bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30">
-        <CardHeader className="pb-3 md:pb-4">
-          <div className="flex items-center gap-2 md:gap-3">
-            <div className="p-1.5 md:p-2 bg-[--clr-primary-a0] rounded-lg md:rounded-xl">
-              <TrendingUp className="w-4 h-4 md:w-5 md:h-5" />
-            </div>
-            <CardTitle className="text-lg md:text-xl font-bold ">
-              Trending EDH
-            </CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent isFullWidth>
-          <ErrorState error={error} />
-        </CardContent>
-      </Card>
+      <Wrapper>
+        <ErrorState error={error} />
+      </Wrapper>
     );
   }
 
@@ -115,34 +108,20 @@ export default function TrendingCards({
   });
 
   return (
-    <section>
-      <div className="pb-3 md:pb-4">
-        <div className="flex items-center justify-between flex-wrap gap-3 md:gap-4">
-          <div className="flex items-center gap-2 md:gap-3">
-            <div className="p-1.5 md:p-2 bg-[--clr-primary-a0] rounded-lg md:rounded-xl">
-              <TrendingUp className="w-4 h-4 md:w-5 md:h-5" />
-            </div>
-            <CardTitle className="text-lg md:text-xl font-bold ">
-              Trending EDH
-            </CardTitle>
-          </div>
+    <Wrapper>
+      <Carousel>
+        <div className="relative">
+          <CarouselContent className="pl-2 ">
+            {data.map((card: any) => (
+              <TrendingItem key={card.id} card={card} />
+            ))}
+          </CarouselContent>
         </div>
-      </div>
-      <div>
-        <Carousel>
-          <div className="relative">
-            <CarouselContent className="pl-2 ">
-              {data.map((card: any) => (
-                <TrendingItem key={card.id} card={card} />
-              ))}
-            </CarouselContent>
-          </div>
-          <div className="flex items-center gap-2  w-auto justify-self-end mt-2 md:mr-6 mr-4">
-            <CarouselPrevious />
-            <CarouselNext />
-          </div>
-        </Carousel>
-      </div>
-    </section>
+        <div className="flex items-center gap-2  w-auto justify-self-end mt-2 md:mr-6 mr-4">
+          <CarouselPrevious />
+          <CarouselNext />
+        </div>
+      </Carousel>
+    </Wrapper>
   );
 }
