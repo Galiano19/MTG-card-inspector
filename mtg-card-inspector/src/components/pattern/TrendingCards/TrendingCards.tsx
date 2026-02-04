@@ -26,8 +26,8 @@ function Wrapper({ children }: { children: React.ReactNode }) {
             </div>
             <div className="text-lg md:text-xl font-bold ">Trending Cards</div>
           </div>
-          {children}
         </div>
+        <div>{children}</div>
       </div>
     </section>
   );
@@ -72,34 +72,38 @@ export default function TrendingCards({
       <CarouselItem key={card.id} className="px-2 py-2">
         <button
           onClick={handleOnClick}
-          className="relative rounded-lg overflow-hidden hover:scale-105 transition-transform duration-200"
+          className="relative flex flex-col gap-2"
         >
-          {isFoil && (
-            <div className="absolute z-[1] top-0 bg-[--clr-primary-a10] left-1/2 transform -translate-x-1/2  pl-3 pr-3 rounded-b-md text-[--clr-dark-a0] flex">
-              <span className="text-xs">FOIL</span>
-            </div>
-          )}
-          {(cardEurPrice || cardUsdPrice) && (
-            <div className="absolute z-[1] bottom-0 bg-[--clr-primary-a10] left-1/2 transform -translate-x-1/2 flex gap-2 items-center pl-3 pr-3 rounded-t-md text-[--clr-dark-a0]">
-              {cardEurPrice && <span className="text-xs">€{cardEurPrice}</span>}
-              {cardUsdPrice && (
-                <span className="text-xs"> ${cardUsdPrice}</span>
+          <div className="relative rounded-lg overflow-hidden hover:scale-105 transition-transform duration-200">
+            <div className="w-full bg-transparent relative">
+              {isFoil && <FoilEffect />}
+              {card.image_uris ? (
+                <Image
+                  src={card.image_uris.normal}
+                  alt={card.name}
+                  width={223}
+                  height={310}
+                />
+              ) : (
+                <div className="flex w-[223px] h-[310px] bg-[--clr-surface-a0] justify-center items-center">
+                  Artwork not found
+                </div>
               )}
             </div>
-          )}
-          <div className="w-full bg-transparent relative">
-            {card.foil && <FoilEffect />}
-            {card.image_uris ? (
-              <Image
-                src={card.image_uris.normal}
-                alt={card.name}
-                width={223}
-                height={310}
-              />
-            ) : (
-              <div className="flex w-[223px] h-[310px] bg-[--clr-surface-a0] justify-center items-center">
-                Artwork not found
-              </div>
+          </div>
+          <div className="flex items-center gap-1">
+            {cardEurPrice && <span className="text-xs">€{cardEurPrice}</span>}
+            {card.set && (
+              <>
+                <span className="text-xs">•</span>
+                <span className="text-xs">{card.set.toUpperCase()}</span>
+              </>
+            )}
+            {isFoil && (
+              <>
+                <span className="text-xs">•</span>
+                <span className="text-xs">FOIL</span>
+              </>
             )}
           </div>
         </button>
