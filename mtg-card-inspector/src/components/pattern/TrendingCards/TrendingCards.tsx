@@ -18,7 +18,7 @@ import { scrollToTop } from "@/lib/utils";
 function Wrapper({ children }: { children: React.ReactNode }) {
   return (
     <section>
-      <div className="pb-3 md:pb-4">
+      <div className="pb-3 md:pb-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="flex items-center justify-between flex-wrap gap-3 md:gap-4">
           <div className="flex items-center gap-2 md:gap-3">
             <div className="p-1.5 md:p-2 bg-[--clr-primary-a0] rounded-lg md:rounded-xl">
