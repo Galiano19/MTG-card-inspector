@@ -12,15 +12,14 @@ import Image from "next/image";
 import FoilEffect from "../CardDisplay/FoilEffect";
 import { TrendingUp } from "lucide-react";
 import LoadingSkeleton from "../RelatedCardArtworks/LoadingSkeleton";
-import ErrorState from "../ErrorState/ErrorState";
 import { scrollToTop } from "@/lib/utils";
 
 function Wrapper({ children }: { children: React.ReactNode }) {
   return (
     <section>
-      <div className="pb-3 md:pb-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <div className="flex items-center justify-between flex-wrap gap-3 md:gap-4">
-          <div className="flex items-center gap-2 md:gap-3">
+      <div className=" pb-3 md:pb-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="flex items-center justify-between flex-wrap gap-3 md:gap-4 pb-2">
+          <div className="flex items-center gap-2 md:gap-3 px-4">
             <div className="p-1.5 md:p-2 bg-[--clr-primary-a0] rounded-lg md:rounded-xl">
               <TrendingUp className="w-4 h-4 md:w-5 md:h-5" />
             </div>
@@ -119,7 +118,7 @@ export default function TrendingCards({
     <Wrapper>
       <Carousel>
         <div className="relative">
-          <CarouselContent className="pl-2 ">
+          <CarouselContent className="px-6 ">
             {data.map((card: any) => (
               <TrendingItem key={card.id} card={card} />
             ))}
