@@ -10,7 +10,7 @@ export default function MTGCardSearch() {
   const showLoading = isLoading || isFetching;
 
   return (
-    <section id="search-section" className="pb-6 md:pb-8 ">
+    <section id="search-section" className="pb-8 ">
       <SearchBar onSearch={handleSearch} isSearching={showLoading} />
     </section>
   );
