@@ -25,9 +25,6 @@ export default function CardPage() {
   return (
     <LayoutPage>
       <LayoutItem>
-        <section id="search-section" className="pb-6 md:pb-8 ">
-          <SearchBar onSearch={handleSearch} isSearching={showLoading} />
-        </section>
         <div className="max-w-5xl mx-auto space-y-4 md:space-y-6 ">
           {showLoading && <LoadingState />}
 

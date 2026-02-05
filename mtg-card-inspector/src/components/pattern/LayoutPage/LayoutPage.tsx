@@ -2,14 +2,23 @@ import { BackgroundDecoration } from "../MTGCardSearch/BackgroundDecoration";
 import { Footer } from "../MTGCardSearch/Footer";
 import NavigationBar from "../NavigationBar/NavigationBar";
 
+interface LayoutPageProps {
+  children: React.ReactNode;
+  showSearchBar?: boolean;
+  showNavigationBorder?: boolean;
+}
+
 export default function LayoutPage({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+  showSearchBar = true,
+  showNavigationBorder = true,
+}: LayoutPageProps) {
   return (
     <main className="min-h-full">
-      <NavigationBar />
+      <NavigationBar
+        showSearchBar={showSearchBar}
+        showBorder={showNavigationBorder}
+      />
       <div className="max-w-6xl mx-auto">
         <div className="relative">
           <BackgroundDecoration />

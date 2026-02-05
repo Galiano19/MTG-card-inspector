@@ -8,7 +8,9 @@ export default function LayoutItem({
   isFullWidth = false,
 }: LayoutItemProps) {
   return (
-    <div className={isFullWidth ? "w-full" : "px-4 pb-8 md:pb-12"}>
+    <div
+      className={`animate-in fade-in slide-in-from-bottom-4 duration-700 ${isFullWidth ? "w-full" : "px-4 pb-8 md:pb-12"}`}
+    >
       {children}
     </div>
   );

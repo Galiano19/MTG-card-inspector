@@ -5,7 +5,7 @@ export function Header() {
   return (
     <header className="pb-4 pt-8">
       <div className="max-w-4xl mx-auto text-center">
-        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="space-y-4 ">
           <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white">
             Find ANY <br />
             <span className="text-primary">Magic The Gathering Card</span>

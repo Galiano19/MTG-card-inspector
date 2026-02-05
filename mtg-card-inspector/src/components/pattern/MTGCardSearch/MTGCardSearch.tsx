@@ -11,7 +11,7 @@ export default function MTGCardSearch() {
 
   return (
     <section id="search-section" className="pb-8 ">
-      <SearchBar onSearch={handleSearch} isSearching={showLoading} />
+      <SearchBar />
     </section>
   );
 }

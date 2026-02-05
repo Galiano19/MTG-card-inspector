@@ -2,24 +2,22 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Search, X, Loader2 } from "lucide-react";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
-import {
-  QueryCardSearchInput,
-  useAutocomplete,
-} from "../../../hooks/useCardSearch";
+import { useAutocomplete } from "../../../hooks/useCardSearch";
 import { Suggestions } from "./Suggestions";
+import useCardRoute from "@/hooks/useCardRoute";
 
-interface SearchBarProps {
-  onSearch: (query: QueryCardSearchInput) => void;
-  isSearching: boolean;
-}
-
-export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
+export default function SearchBar() {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const suggestionsRef = useRef<HTMLDivElement | null>(null);
+  const { handleSearch, isLoading, isFetching } = useCardRoute({
+    navigateToCardOnId: true,
+  });
+
+  const showLoading = isLoading || isFetching;
 
   // Debounce the query for autocomplete
   useEffect(() => {
@@ -62,30 +60,30 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
         /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
       if (uuidRegex.test(trimmed)) {
-        onSearch({ id: trimmed });
+        handleSearch({ id: trimmed });
         setShowSuggestions(false);
         return;
       }
 
       if (shouldShowSuggestions) {
-        onSearch(suggestions[0]);
+        handleSearch({ name: suggestions[0] });
         setQuery(suggestions[0]);
         setShowSuggestions(false);
       } else if (trimmed.length > 0) {
-        onSearch(trimmed);
+        handleSearch({ name: trimmed });
         setShowSuggestions(false);
       }
     },
-    [shouldShowSuggestions, suggestions, onSearch, query],
+    [shouldShowSuggestions, suggestions, handleSearch, query],
   );
 
   const handleSuggestionClick = useCallback(
     (suggestion: string) => {
       setQuery(suggestion);
-      onSearch(suggestion);
+      handleSearch({ name: suggestion });
       setShowSuggestions(false);
     },
-    [onSearch],
+    [handleSearch],
   );
 
   const handleKeyDown = useCallback(
@@ -126,11 +124,12 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
   }, []);
 
   return (
-    <div className="w-full max-w-2xl mx-auto relative animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="w-full max-w-2xl mx-auto relative ">
       <form onSubmit={handleSubmit} className="relative">
         <div className="relative flex items-center">
           <Search className="absolute left-4 w-5 h-5 text-[--clr-dark-a0] pointer-events-none" />
           <Input
+            id="search-bar"
             ref={inputRef}
             type="text"
             value={query}
@@ -143,7 +142,7 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
             }}
             onKeyDown={handleKeyDown}
             onFocus={() => query.length >= 2 && setShowSuggestions(true)}
-            placeholder="Search for a Magic card..."
+            placeholder="Search for a MTG card..."
             className="pl-5 pr-28 h-14 text-base md:text-lg bg-[--clr-surface-a20] backdrop-blur rounded-2xl shadow-lg shadow-[--clr-surface-a0]/50 focus:shadow-xl focus:shadow-[--clr-primary-a0]/10 transition-all duration-300"
             aria-label="Search for Magic: The Gathering cards"
             aria-describedby="search-hint"
@@ -162,10 +161,10 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
           )}
           <Button
             type="submit"
-            disabled={isSearching || !query.trim()}
+            disabled={showLoading || !query.trim()}
             className="absolute right-2"
           >
-            {isSearching ? (
+            {showLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
               "Search"
@@ -184,7 +183,7 @@ export default function SearchBar({ onSearch, isSearching }: SearchBarProps) {
         isFetchingSuggestions={isFetchingSuggestions}
         selectedIndex={selectedIndex}
         setQuery={setQuery}
-        onSearch={onSearch}
+        onSearch={handleSearch}
         setShowSuggestions={setShowSuggestions}
       />
     </div>

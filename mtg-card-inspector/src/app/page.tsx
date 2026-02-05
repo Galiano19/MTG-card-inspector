@@ -13,7 +13,7 @@ export default function Home() {
   });
 
   return (
-    <LayoutPage>
+    <LayoutPage showSearchBar={false} showNavigationBorder={false}>
       <LayoutItem>
         <Header />
       </LayoutItem>
