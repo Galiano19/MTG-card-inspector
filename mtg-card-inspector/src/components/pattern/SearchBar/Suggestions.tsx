@@ -1,5 +1,4 @@
 import { Loader2, Search } from "lucide-react";
-import { useCallback } from "react";
 
 interface SuggestionsProps {
   shouldShowSuggestions: boolean;
@@ -7,9 +6,7 @@ interface SuggestionsProps {
   suggestions: string[];
   isFetchingSuggestions: boolean;
   selectedIndex: number;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
-  onSearch: (query: string) => void;
-  setShowSuggestions: React.Dispatch<React.SetStateAction<boolean>>;
+  onSuggestionClick: (suggestion: string) => void;
 }
 
 export function Suggestions({
@@ -18,19 +15,8 @@ export function Suggestions({
   suggestions,
   isFetchingSuggestions,
   selectedIndex,
-  setQuery,
-  onSearch,
-  setShowSuggestions,
+  onSuggestionClick,
 }: SuggestionsProps) {
-  const handleSuggestionClick = useCallback(
-    (suggestion: string) => {
-      setQuery(suggestion);
-      onSearch(suggestion);
-      setShowSuggestions(false);
-    },
-    [onSearch]
-  );
-
   if (!shouldShowSuggestions) {
     return null;
   }
@@ -51,7 +37,10 @@ export function Suggestions({
       {suggestions.slice(0, 8).map((suggestion: string, index: number) => (
         <button
           key={suggestion}
-          onClick={() => handleSuggestionClick(suggestion)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onSuggestionClick(suggestion);
+          }}
           className={`w-full px-4 py-3 text-left flex items-center gap-3 min-h-[48px] ${
             index === selectedIndex ? "bg-teal-50" : ""
           }`}
