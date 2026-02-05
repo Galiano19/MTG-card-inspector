@@ -13,6 +13,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Search as SearchIcon } from "lucide-react";
 
 interface SearchBarProps {
   sheetAsMobile?: boolean;
@@ -257,7 +258,9 @@ export default function SearchBar({ sheetAsMobile = false }: SearchBarProps) {
         <div className="relative lg:hidden">
           <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger asChild>
-              <Button>Search</Button>
+              <Button className="px-2 py-1 rounded border border-border rounded-full">
+                <SearchIcon />
+              </Button>
             </SheetTrigger>
             <SheetContent side="top">
               <SheetHeader>
