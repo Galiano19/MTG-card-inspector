@@ -129,6 +129,7 @@ export default function SearchBar({ sheetAsMobile = false }: SearchBarProps) {
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const suggestionsRef = useRef<HTMLDivElement | null>(null);
   const { handleSearch, isLoading, isFetching } = useCardRoute({
@@ -176,6 +177,7 @@ export default function SearchBar({ sheetAsMobile = false }: SearchBarProps) {
       if (uuidRegex.test(trimmed)) {
         handleSearch({ id: trimmed });
         setShowSuggestions(false);
+        setSheetOpen(false);
         return;
       }
 
@@ -186,6 +188,7 @@ export default function SearchBar({ sheetAsMobile = false }: SearchBarProps) {
         handleSearch({ name: trimmed });
       }
       setShowSuggestions(false);
+      setSheetOpen(false);
     },
     [suggestions, handleSearch, query],
   );
@@ -195,6 +198,7 @@ export default function SearchBar({ sheetAsMobile = false }: SearchBarProps) {
       handleSearch({ name: suggestion });
       setQuery(suggestion);
       setShowSuggestions(false);
+      setSheetOpen(false);
     },
     [handleSearch],
   );
@@ -251,7 +255,7 @@ export default function SearchBar({ sheetAsMobile = false }: SearchBarProps) {
     <>
       {sheetAsMobile && (
         <div className="relative lg:hidden">
-          <Sheet>
+          <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger asChild>
               <Button>Search</Button>
             </SheetTrigger>
