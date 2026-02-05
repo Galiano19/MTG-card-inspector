@@ -19,6 +19,7 @@ interface SearchBarProps {
 }
 
 interface SearchFormProps {
+  id?: string;
   query: string;
   setQuery: (value: string) => void;
   showSuggestions: boolean;
@@ -36,6 +37,7 @@ interface SearchFormProps {
 }
 
 function SearchForm({
+  id = "search-bar",
   query,
   setQuery,
   showSuggestions,
@@ -65,7 +67,7 @@ function SearchForm({
       <div className="relative flex items-center">
         <Search className="absolute left-4 w-5 h-5 text-[--clr-dark-a0] pointer-events-none" />
         <Input
-          id="search-bar"
+          id={id}
           ref={inputRef}
           type="text"
           value={query}
@@ -267,7 +269,7 @@ export default function SearchBar({ sheetAsMobile = false }: SearchBarProps) {
       <div
         className={`w-full max-w-2xl mx-auto relative ${sheetAsMobile ? "hidden lg:block" : ""}`}
       >
-        <SearchForm {...searchFormProps} />
+        <SearchForm id="search-bar-desktop" {...searchFormProps} />
       </div>
     </>
   );

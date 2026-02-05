@@ -37,7 +37,13 @@ export function Suggestions({
       {suggestions.slice(0, 8).map((suggestion: string, index: number) => (
         <button
           key={suggestion}
-          onClick={(e) => {
+          onMouseDown={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onSuggestionClick(suggestion);
+          }}
+          onTouchStart={(e) => {
+            e.preventDefault();
             e.stopPropagation();
             onSuggestionClick(suggestion);
           }}
