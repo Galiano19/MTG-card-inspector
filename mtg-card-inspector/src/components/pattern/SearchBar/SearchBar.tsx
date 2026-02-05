@@ -5,12 +5,132 @@ import { Button } from "../../ui/button";
 import { useAutocomplete } from "../../../hooks/useCardSearch";
 import { Suggestions } from "./Suggestions";
 import useCardRoute from "@/hooks/useCardRoute";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Search as SearchIcon } from "lucide-react";
 
-export default function SearchBar() {
+interface SearchBarProps {
+  sheetAsMobile?: boolean;
+}
+
+interface SearchFormProps {
+  id?: string;
+  query: string;
+  setQuery: (value: string) => void;
+  showSuggestions: boolean;
+  setShowSuggestions: (value: boolean) => void;
+  suggestions: string[];
+  isFetchingSuggestions: boolean;
+  selectedIndex: number;
+  setSelectedIndex: (value: number) => void;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  suggestionsRef: React.RefObject<HTMLDivElement | null>;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onSuggestionClick: (suggestion: string) => void;
+  showLoading: boolean;
+}
+
+function SearchForm({
+  id = "search-bar",
+  query,
+  setQuery,
+  showSuggestions,
+  setShowSuggestions,
+  suggestions,
+  isFetchingSuggestions,
+  selectedIndex,
+  setSelectedIndex,
+  inputRef,
+  suggestionsRef,
+  onSubmit,
+  onKeyDown,
+  onSuggestionClick,
+  showLoading,
+}: SearchFormProps) {
+  const clearInput = useCallback(() => {
+    setQuery("");
+    setShowSuggestions(false);
+    inputRef.current?.focus();
+  }, [setQuery, setShowSuggestions, inputRef]);
+
+  const shouldShowSuggestions =
+    showSuggestions && suggestions.length > 0 && query.length >= 2;
+
+  return (
+    <form onSubmit={onSubmit} className="relative">
+      <div className="relative flex items-center">
+        <Search className="absolute left-4 w-5 h-5 text-[--clr-dark-a0] pointer-events-none" />
+        <Input
+          id={id}
+          ref={inputRef}
+          type="text"
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setSelectedIndex(-1);
+            if (e.target.value.length >= 2) {
+              setShowSuggestions(true);
+            }
+          }}
+          onKeyDown={onKeyDown}
+          onFocus={() => query.length >= 2 && setShowSuggestions(true)}
+          placeholder="Search for a MTG card..."
+          className="pl-5 pr-28 h-14 text-base md:text-lg bg-[--clr-surface-a20] backdrop-blur rounded-2xl shadow-lg shadow-[--clr-surface-a0]/50 focus:shadow-xl focus:shadow-[--clr-primary-a0]/10 transition-all duration-300"
+          aria-label="Search for Magic: The Gathering cards"
+          aria-describedby="search-hint"
+          aria-autocomplete="list"
+          aria-controls="suggestions-list"
+        />
+        {query && (
+          <button
+            type="button"
+            onClick={clearInput}
+            className="absolute right-20 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+            aria-label="Clear search"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
+        <Button
+          type="submit"
+          disabled={showLoading || !query.trim()}
+          className="absolute right-2"
+        >
+          {showLoading ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            "Search"
+          )}
+        </Button>
+      </div>
+      <p id="search-hint" className="sr-only">
+        Type at least 2 characters for autocomplete suggestions
+      </p>
+      <Suggestions
+        shouldShowSuggestions={shouldShowSuggestions}
+        suggestionsRef={suggestionsRef}
+        suggestions={suggestions}
+        isFetchingSuggestions={isFetchingSuggestions}
+        selectedIndex={selectedIndex}
+        onSuggestionClick={onSuggestionClick}
+      />
+    </form>
+  );
+}
+
+export default function SearchBar({ sheetAsMobile = false }: SearchBarProps) {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const suggestionsRef = useRef<HTMLDivElement | null>(null);
   const { handleSearch, isLoading, isFetching } = useCardRoute({
@@ -19,7 +139,6 @@ export default function SearchBar() {
 
   const showLoading = isLoading || isFetching;
 
-  // Debounce the query for autocomplete
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(query);
@@ -31,9 +150,6 @@ export default function SearchBar() {
     useAutocomplete(debouncedQuery, {
       enabled: debouncedQuery.length >= 2,
     });
-
-  const shouldShowSuggestions =
-    showSuggestions && suggestions.length > 0 && debouncedQuery.length >= 2;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -62,26 +178,28 @@ export default function SearchBar() {
       if (uuidRegex.test(trimmed)) {
         handleSearch({ id: trimmed });
         setShowSuggestions(false);
+        setSheetOpen(false);
         return;
       }
 
-      if (shouldShowSuggestions) {
+      if (suggestions.length > 0) {
         handleSearch({ name: suggestions[0] });
         setQuery(suggestions[0]);
-        setShowSuggestions(false);
       } else if (trimmed.length > 0) {
         handleSearch({ name: trimmed });
-        setShowSuggestions(false);
       }
+      setShowSuggestions(false);
+      setSheetOpen(false);
     },
-    [shouldShowSuggestions, suggestions, handleSearch, query],
+    [suggestions, handleSearch, query],
   );
 
   const handleSuggestionClick = useCallback(
     (suggestion: string) => {
-      setQuery(suggestion);
       handleSearch({ name: suggestion });
+      setQuery(suggestion);
       setShowSuggestions(false);
+      setSheetOpen(false);
     },
     [handleSearch],
   );
@@ -117,75 +235,49 @@ export default function SearchBar() {
     [showSuggestions, suggestions, selectedIndex, handleSuggestionClick],
   );
 
-  const clearInput = useCallback(() => {
-    setQuery("");
-    setShowSuggestions(false);
-    inputRef.current?.focus();
-  }, []);
+  const searchFormProps = {
+    query,
+    setQuery,
+    showSuggestions,
+    setShowSuggestions,
+    suggestions,
+    isFetchingSuggestions,
+    selectedIndex,
+    setSelectedIndex,
+    inputRef,
+    suggestionsRef,
+    onSubmit: handleSubmit,
+    onKeyDown: handleKeyDown,
+    onSuggestionClick: handleSuggestionClick,
+    showLoading,
+  };
 
   return (
-    <div className="w-full max-w-2xl mx-auto relative ">
-      <form onSubmit={handleSubmit} className="relative">
-        <div className="relative flex items-center">
-          <Search className="absolute left-4 w-5 h-5 text-[--clr-dark-a0] pointer-events-none" />
-          <Input
-            id="search-bar"
-            ref={inputRef}
-            type="text"
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setSelectedIndex(-1);
-              if (e.target.value.length >= 2) {
-                setShowSuggestions(true);
-              }
-            }}
-            onKeyDown={handleKeyDown}
-            onFocus={() => query.length >= 2 && setShowSuggestions(true)}
-            placeholder="Search for a MTG card..."
-            className="pl-5 pr-28 h-14 text-base md:text-lg bg-[--clr-surface-a20] backdrop-blur rounded-2xl shadow-lg shadow-[--clr-surface-a0]/50 focus:shadow-xl focus:shadow-[--clr-primary-a0]/10 transition-all duration-300"
-            aria-label="Search for Magic: The Gathering cards"
-            aria-describedby="search-hint"
-            aria-autocomplete="list"
-            aria-controls="suggestions-list"
-          />
-          {query && (
-            <button
-              type="button"
-              onClick={clearInput}
-              className="absolute right-20 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
-              aria-label="Clear search"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          )}
-          <Button
-            type="submit"
-            disabled={showLoading || !query.trim()}
-            className="absolute right-2"
-          >
-            {showLoading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              "Search"
-            )}
-          </Button>
+    <>
+      {sheetAsMobile && (
+        <div className="relative lg:hidden">
+          <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+            <SheetTrigger asChild>
+              <Button className="px-2 py-1 rounded border border-border rounded-full">
+                <SearchIcon />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="top">
+              <SheetHeader>
+                <SheetTitle>Search for a MTG Card</SheetTitle>
+                <SheetDescription asChild>
+                  <SearchForm {...searchFormProps} />
+                </SheetDescription>
+              </SheetHeader>
+            </SheetContent>
+          </Sheet>
         </div>
-        <p id="search-hint" className="sr-only">
-          Type at least 2 characters for autocomplete suggestions
-        </p>
-      </form>
-
-      <Suggestions
-        shouldShowSuggestions={shouldShowSuggestions}
-        suggestionsRef={suggestionsRef}
-        suggestions={suggestions}
-        isFetchingSuggestions={isFetchingSuggestions}
-        selectedIndex={selectedIndex}
-        setQuery={setQuery}
-        onSearch={handleSearch}
-        setShowSuggestions={setShowSuggestions}
-      />
-    </div>
+      )}
+      <div
+        className={`w-full max-w-2xl mx-auto relative ${sheetAsMobile ? "hidden lg:block" : ""}`}
+      >
+        <SearchForm id="search-bar-desktop" {...searchFormProps} />
+      </div>
+    </>
   );
 }

@@ -27,7 +27,7 @@ export default function NavigationBar({
         <div className="flex items-center gap-2">
           {showSearchBar && (
             <div className="flex items-center gap-4">
-              <SearchBar />
+              <SearchBar sheetAsMobile />
             </div>
           )}
 
