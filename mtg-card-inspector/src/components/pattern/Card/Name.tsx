@@ -1,5 +1,4 @@
 import { CardFace, ScryfallCard } from "@/types/scryfall";
-import { ManaSymbol } from "../CardDisplayLegacy/ManaSymbol";
 import { getTypeLine } from "@/lib/card/utils";
 
 export default function Name({
@@ -19,7 +18,6 @@ export default function Name({
             {nameLabel || card.name}
           </h2>
         </div>
-        <ManaSymbol card={card} face={activeFace} />
       </div>
       <div className="flex items-center gap-2 flex-wrap">
         <i>{getTypeLine(activeFace || card)}</i>

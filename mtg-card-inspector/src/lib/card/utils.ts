@@ -116,3 +116,20 @@ export function sanitizeSymbol(manaCost?: string): string[] {
 
   return matches;
 }
+
+export const getRarityColor = (rarity: string) => {
+  switch (rarity) {
+    case "uncommon":
+      return "text-[--clr-rarity-uncommon]";
+    case "rare":
+      return "text-[--clr-rarity-rare]";
+    case "mythic":
+      return "text-[--clr-rarity-mythic]";
+    case "special":
+      return "text-[--clr-rarity-special]";
+    case "bonus":
+      return "text-[--clr-rarity-bonus]";
+    default:
+      return "text-[--clr-rarity-common]";
+  }
+};
