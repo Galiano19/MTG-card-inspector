@@ -4,6 +4,7 @@ import { useState } from "react";
 import { getHasMultipleFaces } from "@/lib/card/utils";
 import Info from "./Info";
 import Printings from "./printings/Printings";
+import Price from "./Price";
 
 export default function Card({ card }: { card: ScryfallCard }) {
   const [activeFace, setActiveFace] = useState<CardFace | undefined>(undefined);
@@ -22,7 +23,7 @@ export default function Card({ card }: { card: ScryfallCard }) {
         </div>
       </div>
 
-      <div className="flex-1">
+      <div className="flex flex-col flex-1 gap-4">
         {!displayName ? (
           <Info card={card} face={activeFace} />
         ) : (
@@ -32,6 +33,10 @@ export default function Card({ card }: { card: ScryfallCard }) {
             </div>
           ))
         )}
+        <Price {...card} />
+        <div className="lg:hidden">
+          <Printings card={card} />
+        </div>
       </div>
     </div>
   );
