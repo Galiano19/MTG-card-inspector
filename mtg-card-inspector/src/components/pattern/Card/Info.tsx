@@ -2,6 +2,7 @@ import { CardFace, ScryfallCard } from "@/types/scryfall";
 import Name from "./Name";
 import MetaInfo from "./MetaInfo";
 import Text from "./Text";
+import Legalities from "./Legalities";
 
 interface InfoProps {
   nameLabel?: string;

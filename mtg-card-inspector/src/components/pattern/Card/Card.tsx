@@ -5,6 +5,7 @@ import { getHasMultipleFaces } from "@/lib/card/utils";
 import Info from "./Info";
 import Printings from "./printings/Printings";
 import Price from "./Price";
+import Legalities from "./Legalities";
 
 export default function Card({ card }: { card: ScryfallCard }) {
   const [activeFace, setActiveFace] = useState<CardFace | undefined>(undefined);
@@ -37,6 +38,7 @@ export default function Card({ card }: { card: ScryfallCard }) {
         <div className="lg:hidden">
           <Printings card={card} />
         </div>
+        <Legalities legalities={card.legalities} />
       </div>
     </div>
   );
