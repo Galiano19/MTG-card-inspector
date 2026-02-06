@@ -9,9 +9,9 @@ import {
 import { useTrendingCards } from "@/hooks/useCardSearch";
 import { ScryfallCard } from "@/types/scryfall";
 import Image from "next/image";
-import FoilEffect from "../CardDisplayLegacy/FoilEffect";
+import FoilEffect from "../Card/FoilEffect";
 import { TrendingUp } from "lucide-react";
-import LoadingSkeleton from "../RelatedCardArtworksLegacy/LoadingSkeleton";
+import LoadingSkeleton from "./Loading";
 import { scrollToTop } from "@/lib/utils";
 
 function Wrapper({ children }: { children: React.ReactNode }) {
