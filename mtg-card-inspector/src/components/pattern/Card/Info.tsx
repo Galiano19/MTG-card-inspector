@@ -2,6 +2,7 @@ import { CardFace, ScryfallCard } from "@/types/scryfall";
 import Name from "./Name";
 import MetaInfo from "./MetaInfo";
 import Text from "./Text";
+import Price from "./Price";
 
 interface InfoProps {
   nameLabel?: string;
@@ -15,6 +16,7 @@ export default function Info({ nameLabel, face, card }: InfoProps) {
       <Name nameLabel={nameLabel || undefined} card={card} activeFace={face} />
       <MetaInfo card={card} face={face} />
       <Text face={face} card={card} />
+      <Price {...card} />
     </div>
   );
 }
