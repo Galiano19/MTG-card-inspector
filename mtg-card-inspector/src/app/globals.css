@@ -213,7 +213,7 @@ code {
   background: linear-gradient(
     120deg,
     transparent 0%,
-    rgba(54, 207, 228, 0.6),
+    rgba(54, 207, 228, 0.5),
     transparent 100%
   );
   background-size: 200% 200%;
@@ -226,7 +226,7 @@ code {
   background: linear-gradient(
     120deg,
     transparent 0%,
-    rgba(228, 54, 207, 0.6),
+    rgba(228, 54, 207, 0.5),
     transparent 100%
   );
   background-size: 200% 200%;
