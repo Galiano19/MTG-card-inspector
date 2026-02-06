@@ -3,6 +3,7 @@ import Name from "./Name";
 import MetaInfo from "./MetaInfo";
 import Text from "./Text";
 import Price from "./Price";
+import Printings from "./printings/Printings";
 
 interface InfoProps {
   nameLabel?: string;
@@ -17,6 +18,9 @@ export default function Info({ nameLabel, face, card }: InfoProps) {
       <MetaInfo card={card} face={face} />
       <Text face={face} card={card} />
       <Price {...card} />
+      <div className="lg:hidden">
+        <Printings card={card} />
+      </div>
     </div>
   );
 }

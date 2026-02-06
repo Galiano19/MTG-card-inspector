@@ -1,9 +1,9 @@
 import { CardFace, ScryfallCard } from "@/types/scryfall";
 import Image from "./Image";
 import { useState } from "react";
-import Name from "./Name";
 import { getHasMultipleFaces } from "@/lib/card/utils";
 import Info from "./Info";
+import Printings from "./printings/Printings";
 
 export default function Card({ card }: { card: ScryfallCard }) {
   const [activeFace, setActiveFace] = useState<CardFace | undefined>(undefined);
@@ -11,11 +11,17 @@ export default function Card({ card }: { card: ScryfallCard }) {
 
   return (
     <div className="flex flex-col lg:flex-row gap-6">
-      <Image
-        card={card}
-        activeFace={activeFace}
-        setActiveFace={setActiveFace}
-      />
+      <div className="flex flex-col gap-4 lg:w-[320px] flex-shrink-0">
+        <Image
+          card={card}
+          activeFace={activeFace}
+          setActiveFace={setActiveFace}
+        />
+        <div className="hidden lg:block">
+          <Printings card={card} showHeader={false} />
+        </div>
+      </div>
+
       <div className="flex-1">
         {!displayName ? (
           <Info card={card} face={activeFace} />

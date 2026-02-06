@@ -57,7 +57,7 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
       {isFoil && (
         <div className="rounded-xl overflow-hidden">
           <div
-            className="absolute inset-0 rounded-xl mix-blend-multiply"
+            className="absolute inset-0 rounded-xl mix-blend-multiply "
             style={{
               background:
                 "linear-gradient(135deg, #fcf4c9 10%, #fee3e2, #fbcdf2, #e8befa, #abbfff, #bbf3c0 90%)",
@@ -82,7 +82,7 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
   return (
     <div
       id="image-section"
-      className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center bg-cover bg-center rounded-xl h-full"
+      className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center bg-cover bg-center rounded-xl h-auto "
       style={{
         backgroundImage: `linear-gradient(to right, var(--clr-surface-a30), rgba(0,0,0,0)), url('${
           activeFace
