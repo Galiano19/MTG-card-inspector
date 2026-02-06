@@ -156,9 +156,9 @@ function Content({ data, currentCardId }: ContentProps) {
                   onClick={() => setSheetOpen(true)}
                   className="relative rounded-lg overflow-hidden hover:scale-105 transition-transform duration-200 w-[167px] h-[233px] bg-[--clr-surface-a20] flex items-center justify-center border-2 border-dashed border-[--clr-primary-a0]"
                 >
-                  <div className="text-center flex flex-col items-center gap-2">
+                  <div className="text-center flex flex-col items-center gap-1">
                     <span className="text-sm font-bold">See all</span>
-                    <span className="text-xs text-[--clr-surface-tonal-a30]">
+                    <span className="text-xs ">
                       +{data.length - MAX_CAROUSEL_ITEMS} more
                     </span>
                   </div>
