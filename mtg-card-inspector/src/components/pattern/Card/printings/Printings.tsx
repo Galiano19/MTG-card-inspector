@@ -20,6 +20,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Loading from "./Loading";
 
 interface ContentProps {
   data: ScryfallCard[];
@@ -222,7 +223,21 @@ export default function Printings({
   }
 
   if (isLoading || isFetching) {
-    return null;
+    return (
+      <div className="flex flex-col rounded-xl  bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30">
+        {showHeader && (
+          <div className="flex items-center gap-2 p-4">
+            <GalleryHorizontalEnd className="w-4 h-4 md:w-5 md:h-5" />
+            <div className="font-bold uppercase">Other printings</div>
+          </div>
+        )}
+        <div
+          className={`  bg-[--clr-surface-a10] ${showHeader ? "rounded-b-xl" : "rounded-xl"} p-2 overflow-hidden`}
+        >
+          <Loading />
+        </div>
+      </div>
+    );
   }
 
   return (
