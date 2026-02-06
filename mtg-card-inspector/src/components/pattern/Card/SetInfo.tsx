@@ -4,25 +4,9 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { getRarityColor } from "@/lib/card/utils";
 
 export default function SetInfo(card: ScryfallCard) {
-  const getRarityColor = (rarity: string) => {
-    switch (rarity) {
-      case "uncommon":
-        return "text-[--clr-rarity-uncommon]";
-      case "rare":
-        return "text-[--clr-rarity-rare]";
-      case "mythic":
-        return "text-[--clr-rarity-mythic]";
-      case "special":
-        return "text-[--clr-rarity-special]";
-      case "bonus":
-        return "text-[--clr-rarity-bonus]";
-      default:
-        return "text-[--clr-rarity-common]";
-    }
-  };
-
   return (
     <>
       <div id="set-info">
@@ -33,14 +17,12 @@ export default function SetInfo(card: ScryfallCard) {
                 className={`ss ss-${
                   card.set
                 } [-webkit-text-stroke:1px_rgba(0,0,0,0.3)] text-2xl ${getRarityColor(
-                  card.rarity
+                  card.rarity,
                 )}`}
               ></i>
             </TooltipTrigger>
             <TooltipContent>
-              <span className="text-sm uppercase font-bold">
-                {card.set} - {card.rarity}
-              </span>
+              <span className="text-sm uppercase font-bold">{card.set}</span>
             </TooltipContent>
           </Tooltip>
 
