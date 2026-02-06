@@ -6,17 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Brush, RefreshCw } from "lucide-react";
 import { getIsTransformable } from "@/lib/card/utils";
 
-interface CardImageProps {
+interface ImageProps {
   card: ScryfallCard;
   activeFace: CardFace | undefined;
   setActiveFace: (face: CardFace | undefined) => void;
 }
 
-export default function CardImage({
-  card,
-  activeFace,
-  setActiveFace,
-}: CardImageProps) {
+export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
   if (!card) {
     return null;
   }
