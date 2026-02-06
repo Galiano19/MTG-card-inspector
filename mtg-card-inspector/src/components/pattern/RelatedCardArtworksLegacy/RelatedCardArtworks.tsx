@@ -13,7 +13,7 @@ import {
 } from "@/hooks/useCardSearch";
 import { ScryfallCard } from "@/types/scryfall";
 import Image from "next/image";
-import FoilEffect from "../CardDisplay/FoilEffect";
+import FoilEffect from "../CardDisplayLegacy/FoilEffect";
 import { GalleryHorizontalEnd } from "lucide-react";
 import LoadingSkeleton from "./LoadingSkeleton";
 import NoRelatedArtworks from "./NoRelatedArtworks";
@@ -123,7 +123,7 @@ export default function RelatedCardArtworks({
   onSearch: (query: QueryCardSearchInput) => void;
 }) {
   const { data, isLoading, isFetching } = useRelatedCards(
-    card.prints_search_uri
+    card.prints_search_uri,
   );
 
   if (!data || data.length <= 1) {

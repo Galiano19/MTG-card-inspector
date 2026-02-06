@@ -9,7 +9,7 @@ import {
   PriceComparison,
 } from "@/components/pattern";
 import useCardRoute from "@/hooks/useCardRoute";
-import RelatedCardArtworks from "@/components/pattern/RelatedCardArtworks/RelatedCardArtworks";
+import RelatedCardArtworks from "@/components/pattern/RelatedCardArtworksLegacy/RelatedCardArtworks";
 import LayoutPage from "@/components/pattern/LayoutPage/LayoutPage";
 import LayoutItem from "@/components/ui/layoutItem";
 
