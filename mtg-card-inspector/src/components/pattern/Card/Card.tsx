@@ -3,6 +3,7 @@ import Image from "./Image";
 import { useState } from "react";
 import Name from "./Name";
 import { getHasMultipleFaces } from "@/lib/card/utils";
+import Info from "./Info";
 
 export default function Card({ card }: { card: ScryfallCard }) {
   const [activeFace, setActiveFace] = useState<CardFace | undefined>(undefined);
@@ -17,15 +18,11 @@ export default function Card({ card }: { card: ScryfallCard }) {
       />
       <div className="flex-1">
         {!displayName ? (
-          <Name card={card} activeFace={activeFace} />
+          <Info card={card} face={activeFace} />
         ) : (
           card.card_faces?.map((face, index) => (
             <div key={index} className=" flex flex-col gap-2">
-              <Name
-                nameLabel={face?.name || ""}
-                card={card}
-                activeFace={face}
-              />
+              <Info nameLabel={face?.name || ""} card={card} face={face} />
             </div>
           ))
         )}

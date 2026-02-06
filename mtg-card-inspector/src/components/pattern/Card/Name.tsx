@@ -1,6 +1,6 @@
 import { CardFace, ScryfallCard } from "@/types/scryfall";
 import { ManaSymbol } from "../CardDisplayLegacy/ManaSymbol";
-import { getHasMultipleFaces, getTypeLine } from "@/lib/card/utils";
+import { getTypeLine } from "@/lib/card/utils";
 
 export default function Name({
   nameLabel,
