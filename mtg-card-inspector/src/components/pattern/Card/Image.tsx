@@ -82,7 +82,7 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
   return (
     <div
       id="image-section"
-      className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center bg-cover bg-center rounded-xl"
+      className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center bg-cover bg-center rounded-xl h-full"
       style={{
         backgroundImage: `linear-gradient(to right, var(--clr-surface-a30), rgba(0,0,0,0)), url('${
           activeFace
