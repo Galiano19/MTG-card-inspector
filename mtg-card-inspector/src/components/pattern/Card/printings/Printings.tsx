@@ -165,9 +165,9 @@ function Content({ data, currentCardId }: ContentProps) {
               </CarouselItem>
             )}
           </CarouselContent>
-          <div className="pointer-events-none absolute left-0 top-0 h-full w-6 md:w-8 bg-gradient-to-r from-[--clr-surface-a10] to-transparent"></div>
+          <div className="pointer-events-none absolute left-0 top-0 h-full w-4 bg-gradient-to-r from-[--clr-surface-a10] to-transparent"></div>
           <div
-            className="pointer-events-none absolute right-0 top-0 h-full w-6 md:w-8
+            className="pointer-events-none absolute right-0 top-0 h-full w-4
                 bg-gradient-to-l from-[--clr-surface-a10] to-transparent"
           ></div>
         </div>
