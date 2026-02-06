@@ -7,7 +7,7 @@ export default function Price(card: ScryfallCard) {
   }
 
   return (
-    <div className="flex flex-col rounded-xl  bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30">
+    <div className="flex flex-col rounded-xl  bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30 border">
       <div className="flex items-center gap-2 p-4">
         <DollarSign className="w-4 h-4 md:w-5 md:h-5" />
         <div className="font-bold uppercase">Market Prices</div>

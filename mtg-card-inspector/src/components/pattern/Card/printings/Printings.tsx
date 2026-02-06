@@ -224,7 +224,7 @@ export default function Printings({
 
   if (isLoading || isFetching) {
     return (
-      <div className="flex flex-col rounded-xl  bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30">
+      <div className="flex flex-col rounded-xl  bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30 border">
         {showHeader && (
           <div className="flex items-center gap-2 p-4">
             <GalleryHorizontalEnd className="w-4 h-4 md:w-5 md:h-5" />
@@ -241,7 +241,7 @@ export default function Printings({
   }
 
   return (
-    <div className="flex flex-col rounded-xl  bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30">
+    <div className="flex flex-col rounded-xl  bg-[--clr-surface-a20] backdrop-blur shadow-xl shadow-[--clr-surface-a0]/30 border">
       {showHeader && (
         <div className="flex items-center gap-2 p-4">
           <GalleryHorizontalEnd className="w-4 h-4 md:w-5 md:h-5" />
