@@ -88,7 +88,13 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
     if (deltaY < -50 && deltaTime < 300) setDialogOpen(false);
   };
 
-  const CardWithFoil = ({ maxHeight, disableFoil = false }: { maxHeight: string; disableFoil?: boolean }) => (
+  const CardWithFoil = ({
+    maxHeight,
+    disableFoil = false,
+  }: {
+    maxHeight: string;
+    disableFoil?: boolean;
+  }) => (
     <>
       {isFoil && !disableFoil && <FoilOverlay />}
       <CardImage
@@ -181,7 +187,7 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
                   glare-mask-mode={isFoil ? "alpha" : "luminosity"}
                   exit-delay="500"
                 >
-                  <CardWithFoil maxHeight="md:max-h-[70vh]" disableFoil />
+                  <CardWithFoil maxHeight="md:max-h-[70vh]" />
                   {/* @ts-ignore */}
                 </hover-tilt>
               </Dialog.Content>
