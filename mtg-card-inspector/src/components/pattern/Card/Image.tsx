@@ -1,6 +1,6 @@
 // @ts-ignore
 import { CardFace, ScryfallCard } from "@/types/scryfall";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Brush, RefreshCw } from "lucide-react";
 import { getIsTransformable } from "@/lib/card/utils";
@@ -13,7 +13,8 @@ interface ImageProps {
   setActiveFace: (face: CardFace | undefined) => void;
 }
 
-const FOIL_GRADIENT = "linear-gradient(135deg, #fcf4c9 10%, #fee3e2, #fbcdf2, #e8befa, #abbfff, #bbf3c0 90%)";
+const FOIL_GRADIENT =
+  "linear-gradient(135deg, #fcf4c9 10%, #fee3e2, #fbcdf2, #e8befa, #abbfff, #bbf3c0 90%)";
 
 const FoilOverlay = () => (
   <div className="rounded-2xl overflow-hidden">
@@ -25,14 +26,15 @@ const FoilOverlay = () => (
   </div>
 );
 
-const CardImage = ({ src, alt, className }: { src: string | undefined; alt: string; className: string }) => (
-  <img
-    src={src}
-    alt={alt}
-    className={className}
-    loading="lazy"
-  />
-);
+const CardImage = ({
+  src,
+  alt,
+  className,
+}: {
+  src: string | undefined;
+  alt: string;
+  className: string;
+}) => <img src={src} alt={alt} className={className} loading="lazy" />;
 
 export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
   if (!card) {
@@ -41,6 +43,8 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
 
   const [isClient, setIsClient] = useState(false);
   const [showBackFace, setShowBackFace] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const touchStartY = useRef(0);
   const isTransformable = getIsTransformable(card);
   const isFoil = card.foil;
 
@@ -72,6 +76,15 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
     }
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+    if (deltaY < -300) setDialogOpen(false);
+  };
+
   const CardWithFoil = ({ maxHeight }: { maxHeight: string }) => (
     <>
       {isFoil && <FoilOverlay />}
@@ -97,7 +110,9 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
       className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center bg-cover bg-center rounded-2xl h-auto"
       style={{
         backgroundImage: `linear-gradient(to right, var(--clr-surface-a30), rgba(0,0,0,0)), url('${
-          activeFace ? activeFace.image_uris?.art_crop : card.image_uris?.art_crop
+          activeFace
+            ? activeFace.image_uris?.art_crop
+            : card.image_uris?.art_crop
         }')`,
       }}
       role="region"
@@ -105,9 +120,12 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
     >
       <div className="relative group flex flex-col h-full w-full gap-2">
         <div className="flex self-center">
-          <Dialog.Root>
+          <Dialog.Root open={dialogOpen} onOpenChange={setDialogOpen}>
             <Dialog.Trigger asChild>
-              <button aria-label="View card image in full size">
+              <button
+                aria-label="View card image in full size"
+                onClick={() => setDialogOpen(true)}
+              >
                 <div className="hidden md:block">
                   {/* @ts-ignore */}
                   <hover-tilt
@@ -117,7 +135,9 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
                     shadow
                     shadowBlur={30}
                     glare-intensity={isFoil ? "1.5" : "0.5"}
-                    glare-mask={isFoil ? "url(/img/foil/cosmos-middle-trans.png)" : ""}
+                    glare-mask={
+                      isFoil ? "url(/img/foil/cosmos-middle-trans.png)" : ""
+                    }
                     glare-mask-mode={isFoil ? "alpha" : "luminosity"}
                     exit-delay="500"
                   >
@@ -131,10 +151,15 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
               </button>
             </Dialog.Trigger>
             <Dialog.Portal>
-              <Dialog.Overlay className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out" />
+              <Dialog.Overlay
+                className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out"
+                onClick={() => setDialogOpen(false)}
+              />
               <Dialog.Content
-                className="fixed z-50 max-h-[calc(100%-2rem)] ring-foreground/10 ring-1 outline-none w-[90vw] md:w-auto h-auto data-[state=open]:animate-[slideInFromBottom_0.3s_ease-out_forwards] data-[state=closed]:animate-[slideOutToBottom_0.3s_ease-in_forwards]"
+                className="fixed z-50 max-h-[calc(100%-2rem)] ring-foreground/10 ring-1 outline-none w-[90vw] md:w-auto h-auto data-[state=open]:animate-[slideInFromBottom_0.3s_ease-out_forwards] data-[state=closed]:animate-[slideOutToTop_0.3s_ease-in_forwards]"
                 aria-describedby="card-image-dialog-description"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
               >
                 <span id="card-image-dialog-description" className="sr-only">
                   Full size view of {card.name}
@@ -147,7 +172,9 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
                   shadow
                   shadowBlur={30}
                   glare-intensity={isFoil ? "1.5" : "0.5"}
-                  glare-mask={isFoil ? "url(/img/foil/cosmos-middle-trans.png)" : ""}
+                  glare-mask={
+                    isFoil ? "url(/img/foil/cosmos-middle-trans.png)" : ""
+                  }
                   glare-mask-mode={isFoil ? "alpha" : "luminosity"}
                   exit-delay="500"
                 >
@@ -175,13 +202,21 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
         )}
         <div className="mt-auto">
           <div className="flex items-end gap-2 justify-between">
-            <div className="flex items-center gap-2" role="contentinfo" aria-label="Card artist">
+            <div
+              className="flex items-center gap-2"
+              role="contentinfo"
+              aria-label="Card artist"
+            >
               <Brush className="w-4 h-4" aria-hidden="true" />
               <span className="tracking-wide">
                 <i>{card.artist}</i>
               </span>
             </div>
-            <div className="flex flex-col items-end text-xs" role="contentinfo" aria-label="Card details">
+            <div
+              className="flex flex-col items-end text-xs"
+              role="contentinfo"
+              aria-label="Card details"
+            >
               <span className="leading-[0.9]">
                 <i>#{card.collector_number}</i>
               </span>
@@ -196,7 +231,11 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
       </div>
 
       {isTransformable && (
-        <div className="absolute bottom-2 left-0 right-0 text-center" role="status" aria-live="polite">
+        <div
+          className="absolute bottom-2 left-0 right-0 text-center"
+          role="status"
+          aria-live="polite"
+        >
           <span className="text-xs bg-[--clr-surface-a10] px-3 py-1 rounded-full">
             {showBackFace ? "Back Face" : "Front Face"}
           </span>
