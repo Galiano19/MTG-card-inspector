@@ -42,6 +42,7 @@ export interface ScryfallCard {
   mtgo_id?: number;
   multiverse_ids: number[];
   name: string;
+  curated_name: string;
   nonfoil: boolean;
   object: string;
   oracle_id: string;
@@ -72,6 +73,7 @@ export interface ScryfallCard {
   set_search_uri: string;
   set_type: string;
   set_uri: string;
+  similar_cards?: string[];
   story_spotlight: boolean;
   tcgplayer_id?: number;
   textless: boolean;

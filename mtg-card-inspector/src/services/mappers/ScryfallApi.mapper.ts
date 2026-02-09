@@ -47,6 +47,7 @@ export default function mapScryfallCardToInternal(response: any): ScryfallCard {
     mtgo_id: response.mtgo_id,
     multiverse_ids: response.multiverse_ids,
     name: response.name,
+    curated_name: curateName(response.name),
     nonfoil: response.nonfoil,
     object: response.object,
     oracle_id: response.oracle_id,
@@ -73,6 +74,7 @@ export default function mapScryfallCardToInternal(response: any): ScryfallCard {
     set_type: response.set_type,
     set_uri: response.set_uri,
     set: response.set,
+    similar_cards: response.similar_cards,
     story_spotlight: response.story_spotlight,
     tcgplayer_id: response.tcgplayer_id,
     type_line: response.type_line,
@@ -83,6 +85,10 @@ export default function mapScryfallCardToInternal(response: any): ScryfallCard {
     uri: response.uri,
     variation: response.variation,
   };
+}
+
+export function curateName(name: string): string {
+  return name.replace(/\s+/g, "-").toLowerCase();
 }
 
 export function mapMarketPrices(

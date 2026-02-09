@@ -11,7 +11,6 @@ import { scrollToTop } from "@/lib/utils";
 import { ScryfallCard } from "@/types/scryfall";
 import { GalleryHorizontalEnd } from "lucide-react";
 import { memo, useState } from "react";
-import FoilEffect from "../FoilEffect";
 import Image from "next/image";
 import {
   Sheet,
@@ -21,6 +20,7 @@ import {
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Loading from "./Loading";
+import FoilEffect from "@/lib/card/FoilEffect";
 
 interface ContentProps {
   data: ScryfallCard[];
