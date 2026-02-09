@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Brush, RefreshCw } from "lucide-react";
 import { getIsTransformable } from "@/lib/card/utils";
 import FoilEffect from "@/lib/card/FoilEffect";
+import { Dialog } from "radix-ui";
 
 interface ImageProps {
   card: ScryfallCard;
@@ -52,37 +53,37 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
     }
   };
 
-  const imageContent = (
-    <>
-      {isFoil && (
-        <div className="rounded-xl overflow-hidden">
-          <div
-            className="absolute inset-0 rounded-xl mix-blend-multiply "
-            style={{
-              background:
-                "linear-gradient(135deg, #fcf4c9 10%, #fee3e2, #fbcdf2, #e8befa, #abbfff, #bbf3c0 90%)",
-            }}
-          />
-          <FoilEffect />
-        </div>
-      )}
-      <img
-        src={getImageUrl()}
-        alt={card.name}
-        className="w-full max-w-[280px] rounded-xl shadow-2xl transition-transform duration-500 self-center"
-        loading="lazy"
-      />
-    </>
-  );
-
   if (!isClient) {
-    return <div className="flex self-center">{imageContent}</div>;
+    return (
+      <div className="flex self-center">
+        <>
+          {isFoil && (
+            <div className="rounded-2xl overflow-hidden">
+              <div
+                className="absolute inset-0 rounded-2xl mix-blend-multiply "
+                style={{
+                  background:
+                    "linear-gradient(135deg, #fcf4c9 10%, #fee3e2, #fbcdf2, #e8befa, #abbfff, #bbf3c0 90%)",
+                }}
+              />
+              <FoilEffect />
+            </div>
+          )}
+          <img
+            src={getImageUrl()}
+            alt={card.name}
+            className="rounded-2xl shadow-2xl transition-transform duration-500 self-center md:max-h-[70vh]"
+            loading="lazy"
+          />
+        </>
+      </div>
+    );
   }
 
   return (
     <div
       id="image-section"
-      className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center bg-cover bg-center rounded-xl h-auto "
+      className="relative lg:w-[320px] flex-shrink-0 bg-[--clr-surface-a30] p-4 md:p-6 flex items-center justify-center bg-cover bg-center rounded-2xl h-auto "
       style={{
         backgroundImage: `linear-gradient(to right, var(--clr-surface-a30), rgba(0,0,0,0)), url('${
           activeFace
@@ -93,21 +94,123 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
     >
       <div className="relative group flex flex-col h-full w-full gap-2">
         <div className="flex self-center">
-          {/* @ts-ignore */}
-          <hover-tilt
-            tilt-factor="1.5"
-            scale-factor="1.2"
-            class="[&::part(container)]:rounded-xl"
-            shadow
-            shadowBlur={30}
-            glare-intensity={isFoil ? "1.5" : "0.5"}
-            glare-mask={isFoil ? "url(/img/foil/cosmos-middle-trans.png)" : ""}
-            glare-mask-mode={isFoil ? "alpha" : "luminosity"}
-            exit-delay="500"
-          >
-            {imageContent}
-            {/* @ts-ignore */}
-          </hover-tilt>
+          <Dialog.Root>
+            <Dialog.Trigger asChild>
+              <button>
+                <div className="hidden md:block">
+                  {/* @ts-ignore */}
+                  <hover-tilt
+                    tilt-factor="1.5"
+                    scale-factor="1.2"
+                    class="[&::part(container)]:rounded-2xl"
+                    shadow
+                    shadowBlur={30}
+                    glare-intensity={isFoil ? "1.5" : "0.5"}
+                    glare-mask={
+                      isFoil ? "url(/img/foil/cosmos-middle-trans.png)" : ""
+                    }
+                    glare-mask-mode={isFoil ? "alpha" : "luminosity"}
+                    exit-delay="500"
+                  >
+                    <>
+                      {isFoil && (
+                        <div className="rounded-2xl overflow-hidden">
+                          <div
+                            className="absolute inset-0 rounded-2xl mix-blend-multiply "
+                            style={{
+                              background:
+                                "linear-gradient(135deg, #fcf4c9 10%, #fee3e2, #fbcdf2, #e8befa, #abbfff, #bbf3c0 90%)",
+                            }}
+                          />
+                          <FoilEffect />
+                        </div>
+                      )}
+                      <img
+                        src={getImageUrl()}
+                        alt={card.name}
+                        className="rounded-2xl shadow-2xl transition-transform duration-500 self-center md:max-h-[450px]"
+                        loading="lazy"
+                      />
+                    </>
+                    {/* @ts-ignore */}
+                  </hover-tilt>
+                </div>
+                <div className="block md:hidden relative">
+                  <div>
+                    <>
+                      {isFoil && (
+                        <div className="rounded-2xl overflow-hidden">
+                          <div
+                            className="absolute inset-0 rounded-2xl mix-blend-multiply "
+                            style={{
+                              background:
+                                "linear-gradient(135deg, #fcf4c9 10%, #fee3e2, #fbcdf2, #e8befa, #abbfff, #bbf3c0 90%)",
+                            }}
+                          />
+                          <FoilEffect />
+                        </div>
+                      )}
+                      <img
+                        src={getImageUrl()}
+                        alt={card.name}
+                        className="rounded-2xl shadow-2xl transition-transform duration-500 self-center md:max-h-[350px]"
+                        loading="lazy"
+                      />
+                    </>
+                  </div>
+                </div>
+              </button>
+            </Dialog.Trigger>
+            <Dialog.Portal>
+              <Dialog.Overlay />
+              <Dialog.Content
+                className="data-open:animate-in 
+              data-closed:animate-out data-closed:fade-out-0 
+              data-open:fade-in-0 data-closed:zoom-out-95 
+              data-open:zoom-in-95 ring-foreground/10 
+              fixed top-1/2 left-1/2 z-50 grid max-h-[calc(100%-2rem)] 
+              -translate-x-1/2 -translate-y-1/2 
+              ring-1 duration-100 outline-none w-[90vw] md:w-auto h-auto"
+              >
+                {/* @ts-ignore */}
+                <hover-tilt
+                  tilt-factor="1.5"
+                  scale-factor="1.2"
+                  class="[&::part(container)]:rounded-2xl"
+                  shadow
+                  shadowBlur={30}
+                  glare-intensity={isFoil ? "1.5" : "0.5"}
+                  glare-mask={
+                    isFoil ? "url(/img/foil/cosmos-middle-trans.png)" : ""
+                  }
+                  glare-mask-mode={isFoil ? "alpha" : "luminosity"}
+                  exit-delay="500"
+                >
+                  <>
+                    {isFoil && (
+                      <div className="rounded-2xl overflow-hidden">
+                        <div
+                          className="absolute inset-0 rounded-2xl mix-blend-multiply "
+                          style={{
+                            background:
+                              "linear-gradient(135deg, #fcf4c9 10%, #fee3e2, #fbcdf2, #e8befa, #abbfff, #bbf3c0 90%)",
+                          }}
+                        />
+                        <FoilEffect />
+                      </div>
+                    )}
+                    <img
+                      src={getImageUrl()}
+                      alt={card.name}
+                      className="rounded-2xl shadow-2xl transition-transform duration-500 self-center md:max-h-[70vh]"
+                      loading="lazy"
+                    />
+                  </>
+                  {/* @ts-ignore */}
+                </hover-tilt>
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
         </div>
         {isTransformable && (
           <Button
