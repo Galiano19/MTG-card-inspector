@@ -45,6 +45,7 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
   const [showBackFace, setShowBackFace] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const touchStartY = useRef(0);
+  const touchStartTime = useRef(0);
   const isTransformable = getIsTransformable(card);
   const isFoil = card.foil;
 
@@ -78,11 +79,13 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartY.current = e.touches[0].clientY;
+    touchStartTime.current = Date.now();
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     const deltaY = e.changedTouches[0].clientY - touchStartY.current;
-    if (deltaY < -300) setDialogOpen(false);
+    const deltaTime = Date.now() - touchStartTime.current;
+    if (deltaY < -50 && deltaTime < 300) setDialogOpen(false);
   };
 
   const CardWithFoil = ({ maxHeight }: { maxHeight: string }) => (
