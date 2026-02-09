@@ -1,5 +1,7 @@
 import { RelatedArt, ScryfallCard } from "@/types/scryfall";
-import mapScryfallCardToInternal from "./mappers/ScryfallApi.mapper";
+import mapScryfallCardToInternal, {
+  mapRulingsOfCard,
+} from "./mappers/ScryfallApi.mapper";
 
 const SCRYFALL_BASE_URL = "https://api.scryfall.com";
 
@@ -19,6 +21,10 @@ export const fetchCardByName = async (cardName: string) => {
   }
 
   const data = await response.json();
+
+  const rulings = await fetchRulingOfTheCard(data.rulings_uri).catch(() => []);
+  data.rulings = rulings;
+
   return mapScryfallCardToInternal(data);
 };
 
@@ -36,6 +42,10 @@ export const fetchCardById = async (id: string) => {
   }
 
   const data = await response.json();
+
+  const rulings = await fetchRulingOfTheCard(data.rulings_uri).catch(() => []);
+  data.rulings = rulings;
+
   return mapScryfallCardToInternal(data);
 };
 
@@ -95,4 +105,19 @@ export const fetchTrendingCards = async (limit = 100) => {
     .slice(0, limit)
     .map((item: any) => mapScryfallCardToInternal(item));
   return items;
+};
+
+/**
+ * Fetch ruling of the card by provided URI
+ * @param {string} query - The URI to fetch ruling of the card from
+ * @returns {Promise<RelatedArt[]>} - Array of ruling data
+ */
+export const fetchRulingOfTheCard = async (query: string) => {
+  const response = await fetch(query);
+  if (!response.ok) {
+    throw new Error("Failed to fetch ruling of the card");
+  }
+
+  const data = await response.json();
+  return mapRulingsOfCard(data.data || []);
 };

@@ -3,6 +3,7 @@ import {
   Prices,
   purchaseUris,
   ScryfallCard,
+  ScryfallCardRuling,
 } from "@/types/scryfall";
 
 export default function mapScryfallCardToInternal(response: any): ScryfallCard {
@@ -65,6 +66,7 @@ export default function mapScryfallCardToInternal(response: any): ScryfallCard {
     reprint: response.reprint,
     reserved: response.reserved,
     rulings_uri: response.rulings_uri,
+    rulings: mapRulingsOfCard(response.rulings || []),
     scryfall_uri: response.scryfall_uri,
     set_name: response.set_name,
     set_search_uri: response.set_search_uri,
@@ -85,7 +87,7 @@ export default function mapScryfallCardToInternal(response: any): ScryfallCard {
 
 export function mapMarketPrices(
   prices: Prices,
-  purchaseUris: purchaseUris
+  purchaseUris: purchaseUris,
 ): MarketPrice[] | undefined {
   if (!prices || !purchaseUris) return [];
 
@@ -138,4 +140,12 @@ export function mapMarketPrices(
   }
 
   return result;
+}
+
+export function mapRulingsOfCard(
+  rulings: ScryfallCardRuling[],
+): ScryfallCardRuling[] {
+  return rulings.map((ruling) => ({
+    ...ruling,
+  }));
 }

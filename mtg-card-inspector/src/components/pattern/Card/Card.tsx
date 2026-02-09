@@ -11,6 +11,8 @@ export default function Card({ card }: { card: ScryfallCard }) {
   const [activeFace, setActiveFace] = useState<CardFace | undefined>(undefined);
   const displayName = getHasMultipleFaces(card); // if the card has multiple faces, we want to display the name of the active face instead of the card name
 
+  console.log("card", card);
+
   return (
     <div className="flex flex-col lg:flex-row gap-6">
       <div className="flex flex-col gap-4 lg:w-[320px] flex-shrink-0">

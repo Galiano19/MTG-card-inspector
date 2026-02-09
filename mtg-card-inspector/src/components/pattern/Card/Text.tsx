@@ -8,6 +8,7 @@ import { renderOracleText } from "@/lib/card/renderOracleText";
 import { getFlavorText, getOracleText } from "@/lib/card/utils";
 import { CardFace, ScryfallCard } from "@/types/scryfall";
 import { BookOpen, Sparkles } from "lucide-react";
+import Rulings from "./Rulings";
 
 interface TextProps {
   face?: CardFace;
@@ -46,6 +47,7 @@ export default function Text({ face, card }: TextProps) {
           </AccordionContent>
         </AccordionItem>
       )}
+      <Rulings card={card} />
     </Accordion>
   );
 }
