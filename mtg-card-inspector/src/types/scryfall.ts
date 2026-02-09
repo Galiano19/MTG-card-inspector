@@ -62,6 +62,7 @@ export interface ScryfallCard {
   reprint: boolean;
   reserved: boolean;
   rulings_uri: string;
+  rulings?: ScryfallCardRuling[];
   scryfall_set_uri: string;
   scryfall_uri: string;
   security_stamp?: string;
@@ -196,4 +197,12 @@ export interface ScryfallLegalities {
   standardbrawl: "not_legal" | "legal" | "banned" | "restricted";
   timeless: "not_legal" | "legal" | "banned" | "restricted";
   vintage: "not_legal" | "legal" | "banned" | "restricted";
+}
+
+export interface ScryfallCardRuling {
+  object: "ruling";
+  oracle_id: string;
+  source: string;
+  published_at: string;
+  comment: string;
 }
