@@ -1,4 +1,5 @@
 import { Loader2, Search } from "lucide-react";
+import { useRef } from "react";
 
 interface SuggestionsProps {
   shouldShowSuggestions: boolean;
@@ -17,6 +18,8 @@ export function Suggestions({
   selectedIndex,
   onSuggestionClick,
 }: SuggestionsProps) {
+  const touchStartY = useRef<number>(0);
+
   if (!shouldShowSuggestions) {
     return null;
   }
@@ -26,7 +29,7 @@ export function Suggestions({
       ref={suggestionsRef}
       id="suggestions-list"
       role="listbox"
-      className="absolute top-full left-0 right-0 mt-2 bg-[--clr-surface-a30] rounded-xl shadow-xl shadow-[--clr-surface-a0]/50 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200"
+      className="absolute top-full left-0 right-0 mt-2 bg-[--clr-surface-a30] rounded-xl shadow-xl shadow-[--clr-surface-a0]/50 overflow-y-auto max-h-[60vh] z-50 animate-in fade-in slide-in-from-top-2 duration-200"
     >
       {isFetchingSuggestions && (
         <div className="px-4 py-2 text-sm flex items-center gap-2">
@@ -43,9 +46,16 @@ export function Suggestions({
             onSuggestionClick(suggestion);
           }}
           onTouchStart={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onSuggestionClick(suggestion);
+            touchStartY.current = e.touches[0].clientY;
+          }}
+          onTouchEnd={(e) => {
+            const touchEndY = e.changedTouches[0].clientY;
+            const diff = Math.abs(touchEndY - touchStartY.current);
+            if (diff < 10) {
+              e.preventDefault();
+              e.stopPropagation();
+              onSuggestionClick(suggestion);
+            }
           }}
           className={`w-full px-4 py-3 text-left flex items-center gap-3 min-h-[48px] ${
             index === selectedIndex ? "bg-teal-50" : ""
