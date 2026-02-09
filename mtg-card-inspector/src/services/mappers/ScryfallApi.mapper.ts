@@ -88,7 +88,13 @@ export default function mapScryfallCardToInternal(response: any): ScryfallCard {
 }
 
 export function curateName(name: string): string {
-  return name.replace(/\s+/g, "-").toLowerCase();
+  return name
+    .normalize("NFD") // split accented letters (é → e + ́)
+    .replace(/[\u0300-\u036f]/g, "") // remove accents
+    .replace(/[^a-zA-Z0-9\s-]/g, "") // remove special chars (', , !, etc.)
+    .trim()
+    .replace(/\s+/g, "-")
+    .toLowerCase();
 }
 
 export function mapMarketPrices(
