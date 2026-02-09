@@ -98,7 +98,7 @@ function Content({ data, currentCardId }: ContentProps) {
     const cardUsdPrice = isFoil ? card.prices?.usd_foil : card.prices?.usd;
 
     const handleOnClick = () => {
-      handleSearch({ id: card.id });
+      handleSearch({ name: card.name, id: card.id });
       scrollToTop();
     };
 
@@ -193,7 +193,7 @@ function Content({ data, currentCardId }: ContentProps) {
                   card={card}
                   currentCardId={currentCardId}
                   onCardClick={() => {
-                    handleSearch({ id: card.id });
+                    handleSearch({ name: card.name, id: card.id });
                     scrollToTop();
                     setSheetOpen(false);
                   }}

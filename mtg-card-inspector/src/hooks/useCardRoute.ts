@@ -44,35 +44,22 @@ export default function useCardRoute({
 
   const handleSearch = useCallback(
     (query: QueryCardSearchInput) => {
-      if (typeof query === "object" && query.id) {
-        const params = new URLSearchParams(
-          Array.from(searchParams?.entries() || []),
-        );
-        params.set("id", query.id);
-
-        if (navigateToCardOnId) {
-          router.push(`/card?${params.toString()}`);
-        } else {
-          // stay on the same page and update the query params
-          router.replace(`${pathname}?${params.toString()}`);
-        }
+      if (typeof query === "object" && query.name) {
+        const slug = query.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        const url = query.id ? `/card/${slug}?id=${query.id}` : `/card/${slug}`;
+        router.push(url);
         return;
       }
 
       if (typeof query === "string") {
-        const params = new URLSearchParams(
-          Array.from(searchParams?.entries() || []),
-        );
-        params.set("name", query);
-        params.delete("id");
-        router.replace(`${pathname}?${params.toString()}`);
-        setSearchQuery(query);
+        const slug = query.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        router.push(`/card/${slug}`);
         return;
       }
 
       setSearchQuery(query);
     },
-    [router, searchParams, navigateToCardOnId, pathname],
+    [router],
   );
 
   useEffect(() => {

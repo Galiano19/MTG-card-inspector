@@ -68,7 +68,7 @@ export default function Similar({ card }: { card: ScryfallCard }) {
     const cardEurPrice = isFoil ? card.prices?.eur_foil : card.prices?.eur;
 
     const handleOnClick = () => {
-      handleSearch({ id: card.id });
+      handleSearch({ name: card.name });
       scrollToTop();
     };
 

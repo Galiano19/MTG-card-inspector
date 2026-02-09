@@ -60,7 +60,7 @@ export default function TrendingCards() {
     const cardEurPrice = isFoil ? card.prices?.eur_foil : card.prices?.eur;
 
     const handleOnClick = () => {
-      handleSearch({ id: card.id });
+      handleSearch({ name: card.name });
       scrollToTop();
     };
 

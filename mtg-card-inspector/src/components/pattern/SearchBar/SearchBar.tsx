@@ -172,36 +172,26 @@ export default function SearchBar({ sheetAsMobile = false }: SearchBarProps) {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const trimmed = query.trim();
-      const uuidRegex =
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-      if (uuidRegex.test(trimmed)) {
-        handleSearch({ id: trimmed });
-        setShowSuggestions(false);
-        setSheetOpen(false);
-        return;
-      }
-
-      if (suggestions.length > 0) {
-        handleSearch({ name: suggestions[0] });
-        setQuery(suggestions[0]);
-      } else if (trimmed.length > 0) {
-        handleSearch({ name: trimmed });
+      const cardName = suggestions.length > 0 ? suggestions[0] : trimmed;
+      if (cardName) {
+        const slug = cardName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        window.location.href = `/card/${slug}`;
       }
       setShowSuggestions(false);
       setSheetOpen(false);
     },
-    [suggestions, handleSearch, query],
+    [suggestions, query],
   );
 
   const handleSuggestionClick = useCallback(
     (suggestion: string) => {
-      handleSearch({ name: suggestion });
+      const slug = suggestion.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      window.location.href = `/card/${slug}`;
       setQuery(suggestion);
       setShowSuggestions(false);
       setSheetOpen(false);
     },
-    [handleSearch],
+    [],
   );
 
   const handleKeyDown = useCallback(
