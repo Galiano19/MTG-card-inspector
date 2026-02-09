@@ -168,11 +168,12 @@ export const fetchSimilarCardsIds = async (query: string) => {
 
   // EDHREC responses have varied shapes across environments; be defensive.
   // Accept any of: data.similar, data.data.similar, or top-level similar arrays.
-  const candidatesData = data?.similar ?? data?.data?.similar ?? [];
+  const rawCandidates = data?.similar ?? data?.data?.similar ?? [];
+  const candidatesData = Array.isArray(rawCandidates) ? rawCandidates : [];
   const candidatesId = candidatesData
     .map((item: any) => item.id)
     .filter((id: any) => typeof id === "string");
-  return Array.isArray(candidatesId) ? candidatesId : [];
+  return candidatesId;
 };
 
 /**
