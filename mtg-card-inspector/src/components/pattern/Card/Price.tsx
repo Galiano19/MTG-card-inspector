@@ -2,7 +2,7 @@ import { ScryfallCard } from "@/types/scryfall";
 import { DollarSign, ExternalLink } from "lucide-react";
 
 export default function Price(card: ScryfallCard) {
-  if (!card.market_prices) {
+  if (!card.market_prices || card.market_prices.length === 0) {
     return null;
   }
 
@@ -20,6 +20,7 @@ export default function Price(card: ScryfallCard) {
             target="_blank"
             rel="noopener noreferrer"
             style={{ backgroundColor: market.color, filter: "saturate(0.3)" }}
+            key={market.key}
           >
             <div className="flex items-center text-white ">
               <span className="text-xs md:text-sm font-medium truncate">

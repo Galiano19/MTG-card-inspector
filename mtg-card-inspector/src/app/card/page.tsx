@@ -5,9 +5,11 @@ import LayoutPage from "@/components/pattern/LayoutPage/LayoutPage";
 import LayoutItem from "@/components/ui/layoutItem";
 import Card from "@/components/pattern/Card/Card";
 import { ErrorState } from "@/components/pattern";
+import Similar from "@/components/pattern/Card/Similar";
+import { Separator } from "@/components/ui/separator";
 
 export default function CardPage() {
-  const { handleSearch, handleRetry, card, isLoading, error } = useCardRoute({
+  const { card, isLoading, error } = useCardRoute({
     navigateToCardOnId: false,
   });
 
@@ -46,6 +48,16 @@ export default function CardPage() {
   return (
     <LayoutPage>
       <LayoutItem>{showCard && <Card card={card} />}</LayoutItem>
+      {showCard && (
+        <>
+          <LayoutItem>
+            <Separator />
+          </LayoutItem>
+          <LayoutItem isFullWidth>
+            <Similar card={card} />
+          </LayoutItem>
+        </>
+      )}
     </LayoutPage>
   );
 }

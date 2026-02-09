@@ -5,6 +5,7 @@ import {
   fetchRelatedCards,
   fetchCardById,
   fetchTrendingCards,
+  fetchSimilarCardsContent,
 } from "../services/scryfallApi";
 
 export const cardQueryKeys = {
@@ -110,6 +111,21 @@ export const useTrendingCards = (limit = 20, options = {}) => {
     queryKey: [...cardQueryKeys.all, "trending", limit],
     queryFn: () => fetchTrendingCards(limit),
     enabled: Boolean(limit > 0),
+    staleTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 30 * 60 * 1000,
+    retry: (failureCount, error) => {
+      if (error.message.includes("not found")) return false;
+      return failureCount < 2;
+    },
+    ...options,
+  });
+};
+
+export const useSimilarCards = (ids: string[], options = {}) => {
+  return useQuery({
+    queryKey: [...cardQueryKeys.all, "similar", ids],
+    queryFn: () => fetchSimilarCardsContent(ids),
+    enabled: Boolean(ids && ids.length > 0),
     staleTime: 10 * 60 * 1000, // 10 minutes
     gcTime: 30 * 60 * 1000,
     retry: (failureCount, error) => {

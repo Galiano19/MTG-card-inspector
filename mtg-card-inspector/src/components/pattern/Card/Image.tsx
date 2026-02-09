@@ -1,10 +1,10 @@
 // @ts-ignore
 import { CardFace, ScryfallCard } from "@/types/scryfall";
-import FoilEffect from "./FoilEffect";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Brush, RefreshCw } from "lucide-react";
 import { getIsTransformable } from "@/lib/card/utils";
+import FoilEffect from "@/lib/card/FoilEffect";
 
 interface ImageProps {
   card: ScryfallCard;

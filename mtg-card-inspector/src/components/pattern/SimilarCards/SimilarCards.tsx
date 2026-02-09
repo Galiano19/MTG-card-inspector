@@ -1,4 +1,3 @@
-import React, { memo } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -6,14 +5,14 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useTrendingCards } from "@/hooks/useCardSearch";
-import { ScryfallCard } from "@/types/scryfall";
-import Image from "next/image";
-import { TrendingUp } from "lucide-react";
-import LoadingSkeleton from "./Loading";
-import { scrollToTop } from "@/lib/utils";
-import FoilEffect from "@/lib/card/FoilEffect";
 import useCardRoute from "@/hooks/useCardRoute";
+import { useSimilarCards } from "@/hooks/useCardSearch";
+import { scrollToTop } from "@/lib/utils";
+import { ScryfallCard } from "@/types/scryfall";
+import { ArrowRightLeft } from "lucide-react";
+import { memo } from "react";
+import Image from "next/image";
+import FoilEffect from "@/lib/card/FoilEffect";
 
 function Wrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -22,9 +21,9 @@ function Wrapper({ children }: { children: React.ReactNode }) {
         <div className="flex items-center justify-between flex-wrap gap-3 md:gap-4 pb-2">
           <div className="flex items-center gap-2 md:gap-3 px-4">
             <div className="p-1.5 md:p-2 bg-[--clr-primary-a0] rounded-lg md:rounded-xl">
-              <TrendingUp className="w-4 h-4 md:w-5 md:h-5" />
+              <ArrowRightLeft className="w-4 h-4 md:w-5 md:h-5" />
             </div>
-            <div className="text-lg md:text-xl font-bold ">Trending Cards</div>
+            <div className="text-lg md:text-xl font-bold ">Similar Cards</div>
           </div>
         </div>
         <div>{children}</div>
@@ -33,8 +32,10 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function TrendingCards() {
-  const { data, isLoading, isFetching, error } = useTrendingCards(50);
+export default function SimilarCards({ card }: { card: ScryfallCard }) {
+  const { data, isLoading, isFetching, error } = useSimilarCards(
+    card.similar_cards || [],
+  );
   const { handleSearch } = useCardRoute({
     navigateToCardOnId: true,
   });
@@ -43,7 +44,14 @@ export default function TrendingCards() {
     return (
       <Wrapper>
         <div className="px-2 py-2 overflow-x-hidden">
-          <LoadingSkeleton />
+          <div className="animate-pulse flex gap-2">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="rounded-lg bg-[--clr-surface-a20] min-h-[310px] min-w-[223px]"
+              />
+            ))}
+          </div>
         </div>
       </Wrapper>
     );

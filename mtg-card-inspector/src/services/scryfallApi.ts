@@ -1,9 +1,38 @@
-import { RelatedArt, ScryfallCard } from "@/types/scryfall";
+import { RelatedArt, ScryfallCard, ScryfallCardRuling } from "@/types/scryfall";
 import mapScryfallCardToInternal, {
   mapRulingsOfCard,
 } from "./mappers/ScryfallApi.mapper";
 
 const SCRYFALL_BASE_URL = "https://api.scryfall.com";
+const EDHREC_BASE_URL = "https://json.edhrec.com/pages";
+
+/**
+ * Sleep for a given number of milliseconds
+ * @param {number} ms - Milliseconds to sleep
+ * @returns {Promise<void>}
+ */
+const delay = (ms: number): Promise<void> => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+/**
+ * Enrich card data by fetching rulings and similar cards
+ * @param {ScryfallCard} mapData - The mapped card data
+ * @returns {Promise<ScryfallCard>} - Enriched card data
+ */
+const enrichCardData = async (mapData: ScryfallCard): Promise<ScryfallCard> => {
+  const rulings = await fetchRulingOfTheCard(mapData.rulings_uri).catch(
+    () => [],
+  );
+  mapData.rulings = rulings;
+
+  const similarCards = await fetchSimilarCardsIds(mapData.curated_name).catch(
+    () => [],
+  );
+  mapData.similar_cards = similarCards;
+
+  return mapData;
+};
 
 /**
  * Fetch a single card by name using fuzzy search
@@ -20,12 +49,11 @@ export const fetchCardByName = async (cardName: string) => {
     throw new Error(errorData.details || `Card not found: ${cardName}`);
   }
 
+  await delay(50);
+
   const data = await response.json();
-
-  const rulings = await fetchRulingOfTheCard(data.rulings_uri).catch(() => []);
-  data.rulings = rulings;
-
-  return mapScryfallCardToInternal(data);
+  const mapData = mapScryfallCardToInternal(data);
+  return enrichCardData(mapData);
 };
 
 /**
@@ -41,12 +69,11 @@ export const fetchCardById = async (id: string) => {
     throw new Error(errorData.details || `Card not found by ID: ${id}`);
   }
 
+  await delay(50);
+
   const data = await response.json();
-
-  const rulings = await fetchRulingOfTheCard(data.rulings_uri).catch(() => []);
-  data.rulings = rulings;
-
-  return mapScryfallCardToInternal(data);
+  const mapData = mapScryfallCardToInternal(data);
+  return enrichCardData(mapData);
 };
 
 /**
@@ -110,7 +137,7 @@ export const fetchTrendingCards = async (limit = 100) => {
 /**
  * Fetch ruling of the card by provided URI
  * @param {string} query - The URI to fetch ruling of the card from
- * @returns {Promise<RelatedArt[]>} - Array of ruling data
+ * @returns {Promise<ScryfallCardRuling[]>} - Array of ruling data
  */
 export const fetchRulingOfTheCard = async (query: string) => {
   const response = await fetch(query);
@@ -120,4 +147,43 @@ export const fetchRulingOfTheCard = async (query: string) => {
 
   const data = await response.json();
   return mapRulingsOfCard(data.data || []);
+};
+
+/**
+ * Fetch similar cards by provided curated name
+ * @param {string} query - The curated name to fetch similar cards from
+ * @returns {Promise<string[]>} - Array of similar card IDs
+ */
+export const fetchSimilarCardsIds = async (query: string) => {
+  if (!query) return [];
+
+  const response = await fetch(
+    `${EDHREC_BASE_URL}/cards/${encodeURIComponent(query)}.json`,
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch similar cards");
+  }
+
+  const data = await response.json();
+
+  // EDHREC responses have varied shapes across environments; be defensive.
+  // Accept any of: data.similar, data.data.similar, or top-level similar arrays.
+  const candidatesData = data?.similar ?? data?.data?.similar ?? [];
+  const candidatesId = candidatesData
+    .map((item: any) => item.id)
+    .filter((id: any) => typeof id === "string");
+  return Array.isArray(candidatesId) ? candidatesId : [];
+};
+
+/**
+ * Fetch similar cards by provided ids array
+ * @param {string[]} ids - Array of card IDs to fetch
+ * @returns {Promise<ScryfallCard[]>} - Array of cards data
+ */
+export const fetchSimilarCardsContent = async (
+  ids: string[],
+): Promise<ScryfallCard[]> => {
+  if (!ids || ids.length === 0) return [];
+
+  return Promise.all(ids.map((id) => fetchCardById(id)));
 };
