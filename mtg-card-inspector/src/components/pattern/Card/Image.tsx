@@ -131,9 +131,9 @@ export default function Image({ card, activeFace, setActiveFace }: ImageProps) {
               </button>
             </Dialog.Trigger>
             <Dialog.Portal>
-              <Dialog.Overlay className="fixed inset-0 bg-black/50 z-40" />
+              <Dialog.Overlay className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out" />
               <Dialog.Content
-                className="data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 ring-foreground/10 fixed top-1/2 left-1/2 z-50 grid max-h-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 ring-1 duration-100 outline-none w-[90vw] md:w-auto h-auto"
+                className="fixed z-50 max-h-[calc(100%-2rem)] ring-foreground/10 ring-1 outline-none w-[90vw] md:w-auto h-auto data-[state=open]:animate-[slideInFromBottom_0.3s_ease-out_forwards] data-[state=closed]:animate-[slideOutToBottom_0.3s_ease-in_forwards]"
                 aria-describedby="card-image-dialog-description"
               >
                 <span id="card-image-dialog-description" className="sr-only">

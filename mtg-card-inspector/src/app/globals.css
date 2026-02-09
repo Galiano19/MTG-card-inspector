@@ -252,3 +252,33 @@ code {
     background-position: 200% 200%;
   }
 }
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  to {
+    opacity: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes slideOutToBottom {
+  from {
+    opacity: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  to {
+    opacity: 0;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
