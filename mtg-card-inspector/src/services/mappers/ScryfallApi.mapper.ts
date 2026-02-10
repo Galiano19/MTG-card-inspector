@@ -121,7 +121,7 @@ export function mapMarketPrices(
     {
       keys: ["tix"],
       currency: "tix",
-      color: "#00897b",
+      color: "#024A42",
       url: purchaseUris.cardhoarder,
       name: "Cardhoarder (MTGO)",
     },

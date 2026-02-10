@@ -73,7 +73,7 @@ function AccordionContent({
     >
       <div
         className={cn(
-          "p-6 flex flex-col gap-4 text-sm leading-relaxed text-[#d1d1e6] [&_p:not(:last-child)]:mb-4",
+          "p-6 flex flex-col gap-4 text-sm leading-relaxed [&_p:not(:last-child)]:mb-4",
           className,
         )}
       >

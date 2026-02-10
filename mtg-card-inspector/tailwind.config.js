@@ -62,7 +62,7 @@ module.exports = {
           foreground: "var(--clr-light-a0)",
         },
         danger: {
-          DEFAULT: "var(--clr-danger-a10)",
+          DEFAULT: "var(--clr-danger-a0)",
           foreground: "var(--clr-light-a0)",
         },
       },

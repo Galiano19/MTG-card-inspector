@@ -19,7 +19,7 @@ export default function Price(card: ScryfallCard) {
             href={market.url}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ backgroundColor: market.color, filter: "saturate(0.3)" }}
+            style={{ backgroundColor: market.color }}
             key={market.key}
           >
             <div className="flex items-center text-white ">
