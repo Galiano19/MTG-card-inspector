@@ -1,9 +1,11 @@
 import {
+  InternalSet,
   MarketPrice,
   Prices,
   purchaseUris,
   ScryfallCard,
   ScryfallCardRuling,
+  ScryfallSet,
 } from "@/types/scryfall";
 
 export default function mapScryfallCardToInternal(response: any): ScryfallCard {
@@ -160,4 +162,31 @@ export function mapRulingsOfCard(
   return rulings.map((ruling) => ({
     ...ruling,
   }));
+}
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* SETS */
+
+export function mapScryfallSetsToInternal(
+  response: ScryfallSet[],
+): InternalSet[] {
+  if (!response || typeof response !== "object") {
+    throw new Error("Invalid Scryfall API response");
+  }
+
+  const mappedSets = response.map((set: ScryfallSet) => {
+    return {
+      id: set.id,
+      name: set.name,
+      code: set.code,
+      uri: set.uri,
+      scryfall_uri: set.scryfall_uri,
+      search_uri: set.search_uri,
+      released_at: set.released_at,
+      parent_set_code: set.parent_set_code,
+      icon_svg_uri: set.icon_svg_uri,
+    };
+  });
+
+  return mappedSets;
 }

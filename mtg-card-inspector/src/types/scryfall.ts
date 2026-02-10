@@ -208,3 +208,33 @@ export interface ScryfallCardRuling {
   published_at: string;
   comment: string;
 }
+
+export interface ScryfallSet {
+  card_count: number;
+  code: string;
+  digital: boolean;
+  foil_only: boolean;
+  icon_svg_uri: string;
+  id: string;
+  name: string;
+  nonfoil_only: boolean;
+  object: string;
+  parent_set_code: string;
+  released_at: string;
+  scryfall_uri: string;
+  search_uri: string;
+  set_type: string;
+  uri: string;
+}
+
+export interface InternalSet {
+  code: string;
+  icon_svg_uri: string;
+  id: string;
+  name: string;
+  parent_set_code: string;
+  released_at: string;
+  scryfall_uri: string;
+  search_uri: string;
+  uri: string;
+}
