@@ -12,7 +12,7 @@ export default function SetInfo(card: ScryfallCard) {
       <div id="set-info">
         <div className="flex items-center gap-2">
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger aria-label={`Cards of ${card.set} set`}>
               <i
                 className={`ss ss-${
                   card.set

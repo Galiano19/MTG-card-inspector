@@ -28,6 +28,7 @@ export function Suggestions({
     <div
       ref={suggestionsRef}
       id="suggestions-list"
+      aria-label="Suggestions list"
       role="listbox"
       className="absolute top-full left-0 right-0 mt-2 bg-[--clr-surface-a30] rounded-xl shadow-xl shadow-[--clr-surface-a0]/50 overflow-y-auto max-h-[60vh] z-50 animate-in fade-in slide-in-from-top-2 duration-200"
     >
@@ -58,7 +59,7 @@ export function Suggestions({
             }
           }}
           className={`w-full px-4 py-3 text-left flex items-center gap-3 min-h-[48px] ${
-            index === selectedIndex ? "bg-teal-50" : ""
+            index === selectedIndex ? "bg-[--clr-surface-a20]" : ""
           }`}
           role="option"
           aria-selected={index === selectedIndex}
