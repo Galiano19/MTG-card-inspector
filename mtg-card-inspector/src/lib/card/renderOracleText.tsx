@@ -8,7 +8,9 @@ export const renderOracleText = (text: string): ReactElement[] => {
       const innerParts = innerText.split(/(\{[^}]+\})/);
       const renderedInner = innerParts.map((innerPart, innerIndex) => {
         if (innerPart.match(/\{[^}]+\}/)) {
-          const symbol = innerPart.slice(1, -1).toLowerCase().replace("/", "");
+          const symbol = curateSymbol(
+            innerPart.slice(1, -1).toLowerCase().replace("/", ""),
+          );
           return <i key={innerIndex} className={`ms ms-${symbol} ms-cost`} />;
         }
         return <span key={innerIndex}>{innerPart}</span>;
@@ -22,7 +24,9 @@ export const renderOracleText = (text: string): ReactElement[] => {
       const subParts = part.split(/(\{[^}]+\})/);
       return subParts.map((subPart, subIndex) => {
         if (subPart.match(/\{[^}]+\}/)) {
-          const symbol = subPart.slice(1, -1).toLowerCase().replace("/", "");
+          const symbol = curateSymbol(
+            subPart.slice(1, -1).toLowerCase().replace("/", ""),
+          );
           return (
             <i
               key={`${index}-${subIndex}`}
@@ -35,3 +39,13 @@ export const renderOracleText = (text: string): ReactElement[] => {
     }
   });
 };
+
+function curateSymbol(symbol: string) {
+  const symbolMap = {
+    t: "tap",
+  };
+
+  const curated = symbolMap[symbol as keyof typeof symbolMap] || symbol;
+
+  return curated;
+}
