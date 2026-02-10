@@ -22,12 +22,12 @@ describe("renderOracleText", () => {
 
   it("renders text with parentheses", () => {
     const { container } = render(
-      <>{renderOracleText("Text (in parentheses)")}</>
+      <>{renderOracleText("Text (in parentheses)")}</>,
     );
 
     expect(container.textContent).toBe("Text ( in parentheses )");
     expect(container.querySelector(".italic")).toHaveTextContent(
-      "in parentheses"
+      "in parentheses",
     );
   });
 
@@ -46,7 +46,7 @@ describe("renderOracleText", () => {
     const { container } = render(<>{renderOracleText("{T}")}</>);
 
     const icon = container.querySelector("i");
-    expect(icon).toHaveClass("ms-t", "ms-cost");
+    expect(icon).toHaveClass("ms-tap", "ms-cost");
   });
 
   it("handles hybrid mana symbols", () => {
@@ -68,7 +68,7 @@ describe("renderOracleText", () => {
     expect(icons[2]).toHaveClass("ms-g", "ms-cost");
     expect(icons[3]).toHaveClass("ms-u", "ms-cost");
     expect(container.textContent).toBe(
-      ": Add . (  ): Target creature gains flying until end of turn."
+      ": Add . (  ): Target creature gains flying until end of turn.",
     );
     expect(container.querySelector(".italic")).toBeTruthy();
   });
