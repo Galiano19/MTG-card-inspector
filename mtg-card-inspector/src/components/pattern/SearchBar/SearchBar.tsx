@@ -86,7 +86,9 @@ function SearchForm({
           aria-label="Search for Magic: The Gathering cards"
           aria-describedby="search-hint"
           aria-autocomplete="list"
-          aria-controls="suggestions-list"
+          {...(shouldShowSuggestions && {
+            "aria-controls": "suggestions-list",
+          })}
         />
         {query && (
           <button
@@ -174,7 +176,10 @@ export default function SearchBar({ sheetAsMobile = false }: SearchBarProps) {
       const trimmed = query.trim();
       const cardName = suggestions.length > 0 ? suggestions[0] : trimmed;
       if (cardName) {
-        const slug = cardName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        const slug = cardName
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "");
         window.location.href = `/card/${slug}`;
       }
       setShowSuggestions(false);
@@ -183,16 +188,16 @@ export default function SearchBar({ sheetAsMobile = false }: SearchBarProps) {
     [suggestions, query],
   );
 
-  const handleSuggestionClick = useCallback(
-    (suggestion: string) => {
-      const slug = suggestion.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-      window.location.href = `/card/${slug}`;
-      setQuery(suggestion);
-      setShowSuggestions(false);
-      setSheetOpen(false);
-    },
-    [],
-  );
+  const handleSuggestionClick = useCallback((suggestion: string) => {
+    const slug = suggestion
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+    window.location.href = `/card/${slug}`;
+    setQuery(suggestion);
+    setShowSuggestions(false);
+    setSheetOpen(false);
+  }, []);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
