@@ -19,6 +19,7 @@ export function ThemeToggle() {
     <Button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       className="px-2 py-1 rounded border border-border rounded-full"
+      aria-label="Theme toggle"
     >
       {theme === "dark" ? (
         <Sun className="w-4 h-4" />
