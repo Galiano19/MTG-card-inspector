@@ -63,7 +63,7 @@ describe("renderOracleText", () => {
 
     const icons = container.querySelectorAll("i");
     expect(icons).toHaveLength(4);
-    expect(icons[0]).toHaveClass("ms-t", "ms-cost");
+    expect(icons[0]).toHaveClass("ms-tap", "ms-cost");
     expect(icons[1]).toHaveClass("ms-w", "ms-cost");
     expect(icons[2]).toHaveClass("ms-g", "ms-cost");
     expect(icons[3]).toHaveClass("ms-u", "ms-cost");
