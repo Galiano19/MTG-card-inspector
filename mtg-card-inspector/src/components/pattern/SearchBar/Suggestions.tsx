@@ -59,7 +59,7 @@ export function Suggestions({
             }
           }}
           className={`w-full px-4 py-3 text-left flex items-center gap-3 min-h-[48px] ${
-            index === selectedIndex ? "bg-teal-50" : ""
+            index === selectedIndex ? "bg-[--clr-surface-a20]" : ""
           }`}
           role="option"
           aria-selected={index === selectedIndex}
