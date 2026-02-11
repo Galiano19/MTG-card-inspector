@@ -185,6 +185,7 @@ export function mapScryfallSetsToInternal(
       released_at: set.released_at,
       parent_set_code: set.parent_set_code,
       icon_svg_uri: set.icon_svg_uri,
+      card_count: set.card_count,
     };
   });
 
@@ -208,6 +209,7 @@ export function mapScryfallSetToInternal(
     released_at: response.released_at,
     parent_set_code: response.parent_set_code,
     icon_svg_uri: response.icon_svg_uri,
+    card_count: response.card_count,
     cards: response.cards,
   };
 }

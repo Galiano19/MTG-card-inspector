@@ -15,7 +15,7 @@ export default function Home() {
       <LayoutItem>
         <MTGCardSearch />
       </LayoutItem>
-      <LayoutItem isFullWidth>
+      <LayoutItem isFullWidthMobile>
         <TrendingCards />
       </LayoutItem>
     </LayoutPage>

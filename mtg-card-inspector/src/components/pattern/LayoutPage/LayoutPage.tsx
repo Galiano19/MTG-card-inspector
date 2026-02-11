@@ -6,12 +6,14 @@ interface LayoutPageProps {
   children: React.ReactNode;
   showSearchBar?: boolean;
   showNavigationBorder?: boolean;
+  hasHero?: boolean;
 }
 
 export default function LayoutPage({
   children,
   showSearchBar = true,
   showNavigationBorder = true,
+  hasHero = false,
 }: LayoutPageProps) {
   return (
     <main className="min-h-full">
@@ -19,7 +21,7 @@ export default function LayoutPage({
         showSearchBar={showSearchBar}
         showBorder={showNavigationBorder}
       />
-      <div className="max-w-6xl mx-auto">
+      <div className={`${hasHero ? "pt-0" : "pt-6"}`}>
         <div className="relative">
           <BackgroundDecoration />
           <div className="relative z-10 flex flex-col">

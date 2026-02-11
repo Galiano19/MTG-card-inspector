@@ -18,12 +18,18 @@ export default function CardPage() {
   const cardName = slug.replace(/-/g, " ");
   const cardId = searchParams.get("id");
 
-  const { data: card, isLoading, error } = useCardSearch(
-    cardId ? { id: cardId } : cardName
-  );
+  const {
+    data: card,
+    isLoading,
+    error,
+  } = useCardSearch(cardId ? { id: cardId } : cardName);
 
   useEffect(() => {
-    if (card && cardId && card.name.toLowerCase().replace(/[^a-z0-9]+/g, "-") !== slug) {
+    if (
+      card &&
+      cardId &&
+      card.name.toLowerCase().replace(/[^a-z0-9]+/g, "-") !== slug
+    ) {
       router.replace(`/card/${slug}`);
     }
   }, [card, cardId, slug, router]);
@@ -58,12 +64,14 @@ export default function CardPage() {
 
   return (
     <LayoutPage>
-      <LayoutItem><Card card={card} /></LayoutItem>
+      <LayoutItem>
+        <Card card={card} />
+      </LayoutItem>
       <>
         <LayoutItem>
           <Separator />
         </LayoutItem>
-        <LayoutItem isFullWidth>
+        <LayoutItem isFullWidthMobile>
           <Similar card={card} />
         </LayoutItem>
       </>
