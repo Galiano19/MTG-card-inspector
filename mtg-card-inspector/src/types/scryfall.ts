@@ -237,4 +237,5 @@ export interface InternalSet {
   scryfall_uri: string;
   search_uri: string;
   uri: string;
+  cards?: ScryfallCard[];
 }

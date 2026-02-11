@@ -2,6 +2,7 @@ import { RelatedArt, ScryfallCard, ScryfallCardRuling } from "@/types/scryfall";
 import mapScryfallCardToInternal, {
   mapRulingsOfCard,
   mapScryfallSetsToInternal,
+  mapScryfallSetToInternal,
 } from "./mappers/ScryfallApi.mapper";
 
 const SCRYFALL_BASE_URL = "https://api.scryfall.com";
@@ -195,7 +196,7 @@ export const fetchSimilarCardsContent = async (
 
 /**
  * Fetch set list from Scryfall API
- * @returns {Promise<any[]>}
+ * @returns {Promise<InternalSet[]>}
  */
 export const fetchSetList = async () => {
   const response = await fetch(`${SCRYFALL_BASE_URL}/sets/`);
@@ -209,5 +210,48 @@ export const fetchSetList = async () => {
 
   const data = await response.json();
   const mappedData = mapScryfallSetsToInternal(data.data || []);
+  return mappedData;
+};
+
+/**
+ * Fetch set info from Scryfall API
+ * @returns {Promise<any{}>}
+ */
+export const fetchSet = async (setCode: string) => {
+  const response = await fetch(`${SCRYFALL_BASE_URL}/sets/${setCode}`);
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.details || `No set found`);
+  }
+
+  await delay(50);
+
+  const data = await response.json();
+
+  if (data && data?.object !== "error") {
+    const responseSetCards = await fetchSetCards(data.search_uri);
+
+    responseSetCards && (data.cards = responseSetCards);
+  }
+
+  return mapScryfallSetToInternal(data || {});
+};
+
+/**
+ * Fetch set cards by provided URI
+ * @param {string} query - The URI to fetch set cards from
+ * @returns {Promise<ScryfallCard[]>} - Array of set cards
+ */
+export const fetchSetCards = async (query: string) => {
+  const response = await fetch(query);
+  if (!response.ok) {
+    throw new Error("Failed to fetch set cards");
+  }
+
+  const data = await response.json();
+  const mappedData = data.data.map((card: any) =>
+    mapScryfallCardToInternal(card),
+  );
   return mappedData;
 };

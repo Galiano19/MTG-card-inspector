@@ -190,3 +190,24 @@ export function mapScryfallSetsToInternal(
 
   return mappedSets;
 }
+
+export function mapScryfallSetToInternal(
+  response: ScryfallSet & { cards?: ScryfallCard[] },
+): InternalSet {
+  if (!response || typeof response !== "object") {
+    throw new Error("Invalid Scryfall API response");
+  }
+
+  return {
+    id: response.id,
+    name: response.name,
+    code: response.code,
+    uri: response.uri,
+    scryfall_uri: response.scryfall_uri,
+    search_uri: response.search_uri,
+    released_at: response.released_at,
+    parent_set_code: response.parent_set_code,
+    icon_svg_uri: response.icon_svg_uri,
+    cards: response.cards,
+  };
+}
