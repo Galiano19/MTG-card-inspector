@@ -14,8 +14,6 @@ export default function SetPage() {
 
   const { data, isLoading, isError } = useSet(slug);
 
-  console.log(data);
-
   if (isLoading) {
     return (
       <LayoutPage>
