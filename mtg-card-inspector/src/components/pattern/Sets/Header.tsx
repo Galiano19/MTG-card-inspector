@@ -31,7 +31,7 @@ export default function Header({ data }: { data: InternalSet }) {
         }}
       ></div>
       <div className="absolute inset-0"></div>
-      <div className="relative layout-container w-full px-6 md:px-40 pb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="relative layout-container w-full px-6  pb-10 flex flex-col md:flex-row md:items-center justify-between gap-6 max-w-6xl mx-auto">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
             <span className="text-4xl text-primary">

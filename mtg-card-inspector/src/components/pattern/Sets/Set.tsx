@@ -8,7 +8,11 @@ export default function Set({ data }: { data: InternalSet }) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
       {data.cards.map((card) => (
-        <a key={card.id} href={`/card/${card.curated_name}?id=${card.id}`}>
+        <a
+          key={card.id}
+          href={`/card/${card.curated_name}?id=${card.id}`}
+          className="rounded-lg overflow-hidden hover:scale-105 transition-transform duration-200"
+        >
           <img
             src={
               !getIsTransformable(card)
