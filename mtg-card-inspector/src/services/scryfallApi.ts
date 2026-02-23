@@ -230,7 +230,7 @@ export const fetchSet = async (setCode: string) => {
   const data = await response.json();
 
   if (data && data?.object !== "error") {
-    const responseSetCards = await fetchSetCards(data.search_uri);
+    const responseSetCards = await fetchSetCards(data.code);
 
     responseSetCards && (data.cards = responseSetCards);
   }
@@ -244,7 +244,9 @@ export const fetchSet = async (setCode: string) => {
  * @returns {Promise<ScryfallCard[]>} - Array of set cards
  */
 export const fetchSetCards = async (query: string) => {
-  const response = await fetch(query);
+  const response = await fetch(
+    `${SCRYFALL_BASE_URL}/cards/search?q=e%3A${encodeURIComponent(query)}&include_extras=true&include_variations=true&unique=prints`,
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch set cards");
   }
