@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { ErrorState } from "@/components/pattern";
 import LayoutPage from "@/components/pattern/LayoutPage/LayoutPage";
 import Header from "@/components/pattern/Sets/Header";
@@ -8,6 +7,7 @@ import Set from "@/components/pattern/Sets/Set";
 import LayoutItem from "@/components/ui/layoutItem";
 import { useSetCards } from "@/hooks/useSets";
 import { useParams } from "next/navigation";
+import Sentinel from "@/components/pattern/Shared/Sentinel";
 
 export default function SetPage() {
   const params = useParams();
@@ -21,34 +21,6 @@ export default function SetPage() {
     hasNextPage,
     isFetchingNextPage,
   } = useSetCards(slug);
-
-  const loadMoreRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const node = loadMoreRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const first = entries[0];
-
-        if (first.isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      {
-        root: null,
-        rootMargin: "200px", // preload before reaching exact bottom
-        threshold: 0,
-      },
-    );
-
-    observer.observe(node);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   if (isLoading) {
     return (
@@ -83,22 +55,16 @@ export default function SetPage() {
       <LayoutItem isFullWidth>
         <Header data={data.pages[0]} />
       </LayoutItem>
-
       <LayoutItem>
         <Set data={cards} />
-
-        {/* 👇 Sentinel element */}
         {hasNextPage && (
-          <div
-            ref={loadMoreRef}
-            className="h-10 flex items-center justify-center"
-          >
+          <Sentinel onIntersect={() => fetchNextPage()}>
             {isFetchingNextPage && (
               <span className="text-sm text-[--clr-surface-tonal-a20]">
                 Loading more...
               </span>
             )}
-          </div>
+          </Sentinel>
         )}
       </LayoutItem>
     </LayoutPage>
