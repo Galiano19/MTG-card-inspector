@@ -13,6 +13,10 @@ export default function Breadcrumb(card: ScryfallCard) {
           <ChevronRight size={16} />
         </li>
         <li className="flex gap-1 items-center">
+          <a href="/sets">Sets</a>
+          <ChevronRight size={16} />
+        </li>
+        <li className="flex gap-1 items-center">
           <a href={`/sets/${card.set}`}>{card.set_name}</a>
           <ChevronRight size={16} />
         </li>
