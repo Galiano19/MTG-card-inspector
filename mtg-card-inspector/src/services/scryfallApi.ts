@@ -1,6 +1,14 @@
-import { RelatedArt, ScryfallCard, ScryfallCardRuling } from "@/types/scryfall";
+import {
+  InternalSet,
+  InternalSetInfo,
+  RelatedArt,
+  ScryfallCard,
+  ScryfallCardRuling,
+} from "@/types/scryfall";
 import mapScryfallCardToInternal, {
   mapRulingsOfCard,
+  mapScryfallSetsToInternal,
+  mapScryfallSetToInternal,
 } from "./mappers/ScryfallApi.mapper";
 
 const SCRYFALL_BASE_URL = "https://api.scryfall.com";
@@ -187,4 +195,74 @@ export const fetchSimilarCardsContent = async (
   if (!ids || ids.length === 0) return [];
 
   return Promise.all(ids.map((id) => fetchCardById(id)));
+};
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* SETS */
+
+/**
+ * Fetch set list from Scryfall API
+ * @returns {Promise<InternalSet[]>}
+ */
+export const fetchSetList = async () => {
+  const response = await fetch(`${SCRYFALL_BASE_URL}/sets/`);
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.details || `No sets found`);
+  }
+
+  await delay(50);
+
+  const data = await response.json();
+  const mappedData = mapScryfallSetsToInternal(data.data || []);
+  return mappedData;
+};
+
+/**
+ * Fetch set info from Scryfall API
+ * @returns {Promise<InternalSetInfo>}
+ */
+export const fetchSet = async (setCode: string): Promise<InternalSetInfo> => {
+  const response = await fetch(`${SCRYFALL_BASE_URL}/sets/${setCode}`);
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.details || `No set found`);
+  }
+
+  await delay(50);
+
+  const data = await response.json();
+
+  return mapScryfallSetToInternal(data || {});
+};
+
+/**
+ * Fetch set cards by provided URI
+ * @param {string} query - The URI to fetch set cards from
+ * @param {number} page - The page number
+ * @returns {Promise<InternalSet>} - Array of set cards
+ */
+export const fetchSetCards = async (
+  query: string,
+  page: number,
+): Promise<InternalSet> => {
+  const response = await fetch(
+    `${SCRYFALL_BASE_URL}/cards/search?q=e%3A${encodeURIComponent(query)}&include_extras=true&include_variations=true&unique=art&order=set&page=${page}`,
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch set cards");
+  }
+
+  const data = await response.json();
+  const setInfo = await fetchSet(query);
+  const mappedCards = data.data.map((card: any) =>
+    mapScryfallCardToInternal(card),
+  );
+  return {
+    setInfo,
+    cards: mappedCards,
+    hasMore: data.has_more,
+  };
 };

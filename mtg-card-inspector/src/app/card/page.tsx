@@ -53,7 +53,7 @@ export default function CardPage() {
           <LayoutItem>
             <Separator />
           </LayoutItem>
-          <LayoutItem isFullWidth>
+          <LayoutItem isFullWidthMobile>
             <Similar card={card} />
           </LayoutItem>
         </>

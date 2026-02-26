@@ -11,7 +11,7 @@ export default function NavigationBar({
 }) {
   return (
     <nav
-      className={` from-slate-50 via-white to-teal-50 transition-all duration-500 ease-in-out mb-6 min-h-[80px] flex items-center w-full ${showBorder ? "border-b border-slate-200/50 dark:border-slate-700/50" : ""}`}
+      className={` from-slate-50 via-white to-teal-50 transition-all duration-500 ease-in-out min-h-[80px] flex items-center w-full ${showBorder ? "border-b border-slate-200/50 dark:border-slate-700/50" : ""}`}
     >
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between w-full">
         <a
@@ -24,6 +24,11 @@ export default function NavigationBar({
             Inspector
           </span>
         </a>
+        <div className="flex flex-1 px-4 items-center justify-end">
+          <a href="/sets" className="font-bold uppercase">
+            Sets
+          </a>
+        </div>
         <div className="flex items-center gap-2">
           {showSearchBar && (
             <div className="flex items-center gap-4">

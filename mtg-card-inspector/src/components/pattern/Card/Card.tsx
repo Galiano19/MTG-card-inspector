@@ -7,6 +7,7 @@ import Printings from "./printings/Printings";
 import Price from "./Price";
 import Legalities from "./Legalities";
 import Similar from "./Similar";
+import Breadcrumb from "./Breadcrumb";
 
 export default function Card({ card }: { card: ScryfallCard }) {
   const [activeFace, setActiveFace] = useState<CardFace | undefined>(undefined);
@@ -14,6 +15,7 @@ export default function Card({ card }: { card: ScryfallCard }) {
 
   return (
     <>
+      <Breadcrumb {...card} />
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex flex-col gap-4 lg:w-[320px] flex-shrink-0">
           <Image
