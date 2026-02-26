@@ -1,4 +1,10 @@
-import { RelatedArt, ScryfallCard, ScryfallCardRuling } from "@/types/scryfall";
+import {
+  InternalSet,
+  InternalSetInfo,
+  RelatedArt,
+  ScryfallCard,
+  ScryfallCardRuling,
+} from "@/types/scryfall";
 import mapScryfallCardToInternal, {
   mapRulingsOfCard,
   mapScryfallSetsToInternal,
@@ -215,9 +221,9 @@ export const fetchSetList = async () => {
 
 /**
  * Fetch set info from Scryfall API
- * @returns {Promise<any{}>}
+ * @returns {Promise<InternalSetInfo>}
  */
-export const fetchSet = async (setCode: string) => {
+export const fetchSet = async (setCode: string): Promise<InternalSetInfo> => {
   const response = await fetch(`${SCRYFALL_BASE_URL}/sets/${setCode}`);
 
   if (!response.ok) {
@@ -229,31 +235,34 @@ export const fetchSet = async (setCode: string) => {
 
   const data = await response.json();
 
-  if (data && data?.object !== "error") {
-    const responseSetCards = await fetchSetCards(data.code);
-
-    responseSetCards && (data.cards = responseSetCards);
-  }
-
   return mapScryfallSetToInternal(data || {});
 };
 
 /**
  * Fetch set cards by provided URI
  * @param {string} query - The URI to fetch set cards from
- * @returns {Promise<ScryfallCard[]>} - Array of set cards
+ * @param {number} page - The page number
+ * @returns {Promise<InternalSet>} - Array of set cards
  */
-export const fetchSetCards = async (query: string) => {
+export const fetchSetCards = async (
+  query: string,
+  page: number,
+): Promise<InternalSet> => {
   const response = await fetch(
-    `${SCRYFALL_BASE_URL}/cards/search?q=e%3A${encodeURIComponent(query)}&include_extras=true&include_variations=true&unique=prints`,
+    `${SCRYFALL_BASE_URL}/cards/search?q=e%3A${encodeURIComponent(query)}&include_extras=true&include_variations=true&unique=art&order=set&page=${page}`,
   );
   if (!response.ok) {
     throw new Error("Failed to fetch set cards");
   }
 
   const data = await response.json();
-  const mappedData = data.data.map((card: any) =>
+  const setInfo = await fetchSet(query);
+  const mappedCards = data.data.map((card: any) =>
     mapScryfallCardToInternal(card),
   );
-  return mappedData;
+  return {
+    setInfo,
+    cards: mappedCards,
+    hasMore: data.has_more,
+  };
 };

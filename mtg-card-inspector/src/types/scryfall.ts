@@ -227,7 +227,7 @@ export interface ScryfallSet {
   uri: string;
 }
 
-export interface InternalSet {
+export interface InternalSetInfo {
   code: string;
   icon_svg_uri: string;
   id: string;
@@ -238,5 +238,10 @@ export interface InternalSet {
   search_uri: string;
   uri: string;
   card_count: number;
-  cards?: ScryfallCard[];
+}
+
+export interface InternalSet {
+  setInfo: InternalSetInfo;
+  cards: ScryfallCard[];
+  hasMore: boolean;
 }

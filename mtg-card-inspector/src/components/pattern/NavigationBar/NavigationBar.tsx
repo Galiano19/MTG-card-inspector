@@ -25,7 +25,9 @@ export default function NavigationBar({
           </span>
         </a>
         <div className="flex flex-1 px-4 items-center justify-end">
-          <a href="/sets">Sets</a>
+          <a href="/sets" className="font-bold uppercase">
+            Sets
+          </a>
         </div>
         <div className="flex items-center gap-2">
           {showSearchBar && (

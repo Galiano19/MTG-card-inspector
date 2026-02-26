@@ -9,8 +9,8 @@ export default function Header({ data }: { data: InternalSet }) {
     if (navigator.share) {
       navigator
         .share({
-          title: `${data.name} set - MTG Inspector`,
-          text: `Check out this Magic set: ${data.name} in MTG Inspector`,
+          title: `${data.setInfo.name} set - MTG Inspector`,
+          text: `Check out this Magic set: ${data.setInfo.name} in MTG Inspector`,
           url: window.location.href,
         })
         .catch(console.error);
@@ -37,29 +37,29 @@ export default function Header({ data }: { data: InternalSet }) {
             <span className="text-4xl text-primary">
               <i
                 className={`ss ss-${
-                  data.code
+                  data.setInfo.code
                 } [-webkit-text-stroke:1px_rgba(0,0,0,0.3)] `}
               />
             </span>
             <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white uppercase">
-              {data.name}
+              {data.setInfo.name}
             </h1>
           </div>
           <div className="flex items-center gap-4 font-medium">
             <span className="bg-[--clr-surface-a20] px-2 py-1 rounded text-sm text-white border uppercase">
-              {data.code}
+              {data.setInfo.code}
             </span>
             <span className="flex items-center gap-2">
               <span className=" text-sm">
                 <Calendar />
               </span>
-              {data.released_at}
+              {data.setInfo.released_at}
             </span>
             <span className="flex items-center gap-2">
               <span className="text-sm">
                 <Database />
               </span>
-              {data.card_count}
+              {data.setInfo.card_count}
             </span>
           </div>
         </div>

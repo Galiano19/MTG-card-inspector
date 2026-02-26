@@ -1,5 +1,6 @@
 import {
   InternalSet,
+  InternalSetInfo,
   MarketPrice,
   Prices,
   purchaseUris,
@@ -169,7 +170,7 @@ export function mapRulingsOfCard(
 
 export function mapScryfallSetsToInternal(
   response: ScryfallSet[],
-): InternalSet[] {
+): InternalSetInfo[] {
   if (!response || typeof response !== "object") {
     throw new Error("Invalid Scryfall API response");
   }
@@ -193,8 +194,8 @@ export function mapScryfallSetsToInternal(
 }
 
 export function mapScryfallSetToInternal(
-  response: ScryfallSet & { cards?: ScryfallCard[] },
-): InternalSet {
+  response: ScryfallSet,
+): InternalSetInfo {
   if (!response || typeof response !== "object") {
     throw new Error("Invalid Scryfall API response");
   }
@@ -210,6 +211,5 @@ export function mapScryfallSetToInternal(
     parent_set_code: response.parent_set_code,
     icon_svg_uri: response.icon_svg_uri,
     card_count: response.card_count,
-    cards: response.cards,
   };
 }

@@ -1,13 +1,13 @@
 import { getIsTransformable } from "@/lib/card/utils";
-import { InternalSet } from "@/types/scryfall";
+import { ScryfallCard } from "@/types/scryfall";
 
-export default function Set({ data }: { data: InternalSet }) {
-  if (!data?.cards) {
+export default function Set({ data }: { data: ScryfallCard[] }) {
+  if (!data) {
     return null;
   }
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-      {data.cards.map((card) => (
+      {data.map((card) => (
         <a
           key={card.id}
           href={`/card/${card.curated_name}?id=${card.id}`}
