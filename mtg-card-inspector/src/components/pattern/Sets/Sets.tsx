@@ -1,6 +1,6 @@
-import { InternalSet } from "@/types/scryfall";
+import { InternalSetInfo } from "@/types/scryfall";
 
-export default function Sets({ data }: { data: InternalSet[] }) {
+export default function Sets({ data }: { data: InternalSetInfo[] }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {data.map((set) => (
