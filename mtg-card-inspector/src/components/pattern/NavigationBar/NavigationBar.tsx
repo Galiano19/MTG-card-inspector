@@ -24,6 +24,9 @@ export default function NavigationBar({
             Inspector
           </span>
         </a>
+        <div className="flex flex-1 px-4 items-center justify-end">
+          <a href="/sets">Sets</a>
+        </div>
         <div className="flex items-center gap-2">
           {showSearchBar && (
             <div className="flex items-center gap-4">
